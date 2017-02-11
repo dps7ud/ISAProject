@@ -1,0 +1,26 @@
+[
+  {
+    "model": "home.review",
+    "pk": 1,
+    "fields": {
+      "title": "What a terrible programmer",
+      "body": "He couldn't spell his own name",
+      "score": 0.42,
+      "task_id": 1,
+      "poster_user_id": 1,
+      "postee_user_id": 2
+    }
+  },
+  {
+    "model": "home.review",
+    "pk": 2,
+    "fields": {
+      "title": "Absolute God",
+      "body": "Definitely knows what he is doing",
+      "score": 5,
+      "task_id": 1,
+      "poster_user_id": 2,
+      "postee_user_id": 1
+    }
+  }
+]
