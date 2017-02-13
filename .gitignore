@@ -45,3 +45,22 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+# =========================
+# Excess python
+# =========================
+
+# django stuff
+*.log
+*.pot
+
+# compiled python
+*.pyc
+*.pyo
+
+# pycache
+__pycache__/
+
+# vim swap files
+*.swp

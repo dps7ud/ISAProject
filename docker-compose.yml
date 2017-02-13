@@ -1,5 +1,6 @@
 models:
     image: tp33/django
+    container_name: isa
     external_links:
       -  mysql:db
     volumes:
