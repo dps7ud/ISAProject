@@ -74,3 +74,17 @@ def review_create(request):
 	except :
 		data = "ERROR: Wrong data type inputs"
 	return HttpResponse(data)
+
+#@csrf_exempt
+#def task(request):
+#    if request.method == 'POST':
+#        task_obj = Task()
+#	    body_unicode = request.body.decode('utf-8')
+#	    json_data = json.loads(body_unicode)
+#    elif request.method == 'GET':
+#        pass
+#    return 0
+
+    
+
+
