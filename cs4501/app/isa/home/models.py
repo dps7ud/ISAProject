@@ -43,3 +43,19 @@ class TaskSkills(models.Model):
 class Worker(models.Model):
     user_id = models.IntegerField()
     task_id = models.IntegerField()
+
+class Users(models.Model):
+	fname = models.CharField(max_length=25)
+	lname = models.CharField(max_length=50)
+	email = models.CharField(max_length=50)
+	bio = models.CharField(max_length=500)
+	pw = models.CharField(max_length=50)
+	location = models.CharField(max_length=50)
+
+class UserSkills(models.Model):
+	user_id = models.IntegerField()
+	skill = models.CharField(max_length=25)
+
+class UserLanguages(models.Model):
+	user_id = models.IntegerField()
+	spoken_language = models.CharField(max_length=50)
