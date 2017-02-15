@@ -1,4 +1,6 @@
 # Windows image file caches
+//            printf("%d\n", tokens->lino);
+//            printf("%s\n", tokens->head);
 Thumbs.db
 ehthumbs.db
 
@@ -60,7 +62,7 @@ Temporary Items
 *.pyo
 
 # pycache
-__pycache__/
+__pycache__
 
 # vim swap files
 *.swp

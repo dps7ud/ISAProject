@@ -7,4 +7,4 @@ models:
       - ./cs4501/app:/app
     ports:
       - "8001:8000"
-    command: bash -c "cd isa && python manage.py makemigrations home && python manage.py migrate && python manage.py loaddata db.json && cd .. && mod_wsgi-express start-server --working-directory /app/isa --reload-on-changes /app/isa/isa/wsgi.py"
+    command: bash -c "cd isa && python manage.py makemigrations home && python manage.py migrate && python manage.py loaddata db.json && cd .. && mod_wsgi-express start-server --log-to-terminal --working-directory /app/isa --reload-on-changes /app/isa/isa/wsgi.py"
