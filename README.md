@@ -14,11 +14,11 @@ Members of the Team
 API Service Endpoints
 -------------
 
-  - /api/v1/review/<review_id>/
-    -Used to retrieve or update a review which is already created
-    -GET: Returns information for the review with a primary key of <review_id> if it exists, and return an error otherwise
-    -POST: Updates fields specified in the body of the request for the review with a primary key of <review_id> or creates a new instance in the database if that review doesn't exist
-      -Body of Request: Required, should be in json form
+  - /api/v1/review/(review_id)/
+    - Used to retrieve or update a review which is already created
+    - GET: Returns information for the review with a primary key of review_id if it exists, and return an error otherwise
+    - POST: Updates fields specified in the body of the request for the review with a primary key of review_id or creates a new instance in the database if that review doesn't exist
+      - Body of Request: Required, should be in json form
   - /api/v1/review/create/
-    -POST: Used to create a new database review entry, using the information specified in the body of request
-      -Body of Request: Should be in json format
+    - POST: Used to create a new database review entry, using the information specified in the body of request
+      - Body of Request: Required, Should be in json format
