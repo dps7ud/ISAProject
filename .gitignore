@@ -56,6 +56,7 @@ Temporary Items
 # django stuff
 *.log
 *.pot
+**/migrations/**
 
 # compiled python
 *.pyc
