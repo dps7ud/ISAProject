@@ -50,6 +50,12 @@ Temporary Items
 
 
 # =========================
+# database files I think we don't need
+# =========================
+*.frm
+
+
+# =========================
 # Excess python
 # =========================
 
@@ -61,9 +67,6 @@ Temporary Items
 # compiled python
 *.pyc
 *.pyo
-
-# pycache
-__pycache__
 
 # vim swap files
 *.swp

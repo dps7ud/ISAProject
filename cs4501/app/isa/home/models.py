@@ -22,6 +22,7 @@ class Task(models.Model):
     task_id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
+    #Not nullable, use ""
     location = models.CharField(max_length=200)
     time_to_live = models.DateField()
     post_date = models.DateField()
@@ -45,7 +46,6 @@ class Owner(models.Model):
 
 class TaskSkills(models.Model):
     task_id = models.IntegerField()
-    # Synch max_len according to User class
     skill = models.CharField(max_length=20)
 
 class UserLanguages(models.Model):
