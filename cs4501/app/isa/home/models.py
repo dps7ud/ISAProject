@@ -31,6 +31,14 @@ class Task(models.Model):
     pricing_type = models.BooleanField()
     pricing_info = models.FloatField()
 
+class Users(models.Model):
+    fname = models.CharField(max_length=25)
+    lname = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    bio = models.CharField(max_length=500)
+    pw = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+
 class Owner(models.Model):
     user_id = models.IntegerField()
     task_id = models.IntegerField()
@@ -39,6 +47,14 @@ class TaskSkills(models.Model):
     task_id = models.IntegerField()
     # Synch max_len according to User class
     skill = models.CharField(max_length=20)
+
+class UserLanguages(models.Model):
+    user_id = models.IntegerField()
+    spoken_language = models.CharField(max_length=50)
+
+class UserSkills(models.Model):
+    user_id = models.IntegerField()
+    skill = models.CharField(max_length=25)
 
 class Worker(models.Model):
     user_id = models.IntegerField()

@@ -56,5 +56,30 @@
       "pricing_type": true,
       "pricing_info": 0.0
     }
+  },
+  {
+    "model": "home.users",
+    "pk": 1,
+    "fields": {
+      "fname": "TDawg",
+      "lname": "Pinckney",
+      "email": "fake@gmail.com",
+      "bio": "I like to program",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
+  },
+  {
+    "model": "home.users",
+    "pk": 2,
+    "fields": {
+      "fname": "Ian",
+      "lname": "Zheng",
+      "email": "ian@gmail.com",
+      "bio": "I like to program well",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
   }
+
 ]
