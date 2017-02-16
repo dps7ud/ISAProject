@@ -23,6 +23,16 @@ API Service Endpoints
   - /api/v1/review/create/
     - POST: Used to create a new database review entry, using the information specified in the body of request
       - Body of Request: Required, Should be in json format
+      
+ - /api/v1/user/(user_id)/
+    - Used to retrieve or update a user which is already created
+    - GET: Returns information for the user with a primary key of user_id if it exists, and return an error otherwise
+    - POST: Updates fields specified in the body of the request for the user with a primary key of user_id or creates a new instance in the database if that user doesn't exist
+      - Body of Request: Required, should be in json form
+
+  - /api/v1/user/create/
+    - POST: Used to create a new database user entry, using the information specified in the body of request
+      - Body of Request: Required, Should be in json format
 
   -api/v1/task/info/(task_id)/$
     - GET: Returns Task model instance in json format.
