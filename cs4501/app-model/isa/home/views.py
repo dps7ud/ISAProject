@@ -9,6 +9,11 @@ from .models import Review, Task, Users
 
 import json
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 def index(request):
     template = loader.get_template('home/index.html')
@@ -30,12 +35,13 @@ def review(request, review_id):
             reviewObj.title = json_data['title']
         if 'score' in json_data:
             reviewObj.score = json_data['score']
-        if 'task_id' in json_data:
-            review.task_id = json_data['task_id']
-        if 'poster_user_id' in json_data:
-            reviewObj.poster_user_id = json_data['poster_user_id']
-        if 'postee_user_id' in json_data:
-            reviewObj.postee_user_id = json_data['postee_user_id']
+        if 'task' in json_data:
+            reviewObj.task = Task.objects.get(pk=json_data['task'])
+        if 'poster_user' in json_data:
+            reviewObj.poster_user = Users.objects.get(pk=json_data['poster_user'])
+        if 'postee_user' in json_data:
+            key = json_data['postee_user']
+            reviewObj.postee_user = Users.objects.get(pk=key)
         try:
             reviewObj.save()
             data = serializers.serialize("json", [reviewObj])
@@ -63,17 +69,21 @@ def review_create(request):
         reviewObj.title = json_data['title']
     if 'score' in json_data:
         reviewObj.score = json_data['score']
-    if 'task_id' in json_data:
-        review.task_id = json_data['task_id']
-    if 'poster_user_id' in json_data:
-        reviewObj.poster_user_id = json_data['poster_user_id']
-    if 'postee_user_id' in json_data:
-        reviewObj.postee_user_id = json_data['postee_user_id']
-    try:
-        reviewObj.save()
-        data = serializers.serialize("json", [reviewObj])
-    except :
-        data = "ERROR: Wrong data type inputs"
+    if 'task' in json_data:
+        reviewObj.task = Task.objects.get(pk=json_data['task'])
+    if 'poster_user' in json_data:
+        reviewObj.poster_user = Users.objects.get(pk=json_data['poster_user'])
+    if 'postee_user' in json_data:
+        key = json_data['postee_user']
+        reviewObj.postee_user = Users.objects.get(pk=key)
+        # logger.error(key)
+        # logger.error(Users.objects.get(pk=key))
+        #reviewObj.postee_user = json_data['postee_user']
+    #try:
+    reviewObj.save()
+    data = serializers.serialize("json", [reviewObj])
+    #except :
+    #    data = "ERROR: Wrong data type inputs"
     return HttpResponse(data)
 
 @csrf_exempt
@@ -212,3 +222,29 @@ def user_create(request):
     except :
         data = "ERROR: Wrong data type inputs"
     return HttpResponse(data)
+
+def get_user_rating(user):
+    reviews = Review.objects.filter(postee_user=user.id)
+    count = 0;
+    total = 0;
+    for i in reviews:
+        count += 1;
+        total += i.score
+    if count == 0:
+        return 0
+    else:
+        return total/count
+
+def get_top_users(request):
+    users = Users.objects.all()
+    users = sorted(users, key=get_user_rating, reverse=True)
+    data = serializers.serialize("json", users[:5])
+    return HttpResponse(data)
+
+def get_recent_listings(request):
+    latest_listings = Task.objects.order_by('-post_date')[:5]
+    data = serializers.serialize("json", latest_listings)
+    return HttpResponse(data)
+
+
+

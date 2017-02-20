@@ -11,4 +11,10 @@ urlpatterns = [
     url(r'^api/v1/task/query', views.task, name='task'),
     url(r'^api/v1/user/(?P<user_id>[0-9]+)/$', views.user, name='user'),
     url(r'^api/v1/user/create/$', views.user_create, name='user_create'),
+    url(r'^topUsers/$', views.get_top_users, name='get_top_five_users'),
+    url(r'^recentListings/$', views.get_recent_listings, name='get_recent_listings'),
+
+
+
+
 ]
