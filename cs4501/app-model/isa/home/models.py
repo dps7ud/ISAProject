@@ -7,14 +7,6 @@ TASK_STATUS_CHOICES = (
 )
 
 # Create your models here.
-class Review(models.Model):
-    title = models.CharField(max_length=200, default="Title")
-    body = models.CharField(max_length=200, default="Body")
-    score = models.FloatField(default=0) 
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
-    poster_user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    postee_user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-
 class Task(models.Model):
     """Task models individual jobs (past, present or future) that
     exist within our system.
@@ -40,22 +32,31 @@ class Users(models.Model):
     pw = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
 
+class Review(models.Model):
+    title = models.CharField(max_length=200, default="Title")
+    body = models.CharField(max_length=200, default="Body")
+    score = models.FloatField(default=0) 
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    poster_user = models.ForeignKey(Users, related_name='%(class)s_poster')
+    postee_user = models.ForeignKey(Users, related_name='%(class)s_postee')
+
+
 class Owner(models.Model):
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
 class TaskSkills(models.Model):
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     skill = models.CharField(max_length=20)
 
 class UserLanguages(models.Model):
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
     spoken_language = models.CharField(max_length=50)
 
 class UserSkills(models.Model):
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
     skill = models.CharField(max_length=25)
 
 class Worker(models.Model):
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
