@@ -1,0 +1,18 @@
+{% if top_users_list %}
+    <ul>
+    {% for user in top_users_list %}
+        <li><a href="/user/{{ user.pk }}/">{{ user.fields.fname }} {{user.fields.lname}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No users are available.</p>
+{% endif %}
+{% if recent_listings_list %}
+    <ul>
+    {% for task in recent_listings_list %}
+        <li><a href="/task/{{ task.id }}/">{{ task.fields.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tasks are available.</p>
+{% endif %}
