@@ -4,5 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^home/$', views.home, name='home'),
+    url(r'^review/(?P<review_id>[0-9]+)/$', views.review, name='review'),
+
     
 ]
