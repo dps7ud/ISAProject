@@ -17,6 +17,16 @@ urlpatterns = [
     url(r'^api/v1/taskOwners/(?P<task_id>[0-9]+)/$', views.task_owners, name='task_owners'),
     url(r'^api/v1/taskWorkers/(?P<task_id>[0-9]+)/$', views.task_workers, name='task_workers'),
     url(r'^api/v1/taskReviews/(?P<task_id>[0-9]+)/$', views.task_reviews, name='task_reviews'),
+    url(r'^api/v1/userLanguages/(?P<user_id>[0-9]+)/$', views.user_languages, name='user_languages'),
+    url(r'^api/v1/userSkills/(?P<user_id>[0-9]+)/$', views.user_skills, name='user_skills'),
+    url(r'^api/v1/userOwnerTasks/(?P<user_id>[0-9]+)/$', views.user_owner_tasks, name='user_owner_tasks'),
+    url(r'^api/v1/userWorkerTasks/(?P<user_id>[0-9]+)/$', views.user_worker_tasks, name='user_worker_tasks'),
+    url(r'^api/v1/userReviews/(?P<user_id>[0-9]+)/$', views.user_reviews, name='user_reviews'),
+    url(r'^api/v1/userReviewed/(?P<user_id>[0-9]+)/$', views.user_reviewed, name='user_reviewed'),
+
+
+
+
 
 
 

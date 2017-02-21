@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Review, Task, Users, TaskSkills, Owner, Worker
+from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
 
 import json
 
@@ -266,6 +266,35 @@ def task_reviews(request, task_id):
     data = serializers.serialize("json", reviews)
     return HttpResponse(data)
 
+def user_languages(request, user_id):
+    languages = UserLanguages.objects.filter(user=user_id)
+    data = serializers.serialize("json", languages)
+    return HttpResponse(data)
+
+def user_skills(request, user_id):
+    skills = UserSkills.objects.filter(user=user_id)
+    data = serializers.serialize("json", skills)
+    return HttpResponse(data)
+
+def user_owner_tasks(request, user_id):
+    tasks = Task.objects.filter(owner__user=user_id)
+    data = serializers.serialize("json", tasks)
+    return HttpResponse(data)
+
+def user_worker_tasks(request, user_id):
+    tasks = Task.objects.filter(worker__user=user_id)
+    data = serializers.serialize("json", tasks)
+    return HttpResponse(data)
+
+def user_reviews(request, user_id):
+    reviews = Review.objects.filter(poster_user=user_id)
+    data = serializers.serialize("json", reviews)
+    return HttpResponse(data)
+
+def user_reviewed(request, user_id):
+    reviews = Review.objects.filter(postee_user=user_id)
+    data = serializers.serialize("json", reviews)
+    return HttpResponse(data)
 
 
 

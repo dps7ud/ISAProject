@@ -59,3 +59,20 @@ def task(request, task_id):
 		'reviews': resp[4]
 	}
 	return render(request, 'web/task.html', context)
+
+def user(request, user_id):
+	logger.error("In user method")
+	req = urllib.request.Request('http://exp-api:8000/user/' + user_id + '/')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	context = {
+		'user': resp[0][0],
+		'languages': resp[1],
+		'skills': resp[2],
+		'owner': resp[3],
+		'worker': resp[4],
+		'reviewer': resp[5],
+		'reviewee': resp[6]
+	}
+	return render(request, 'web/user.html', context)
