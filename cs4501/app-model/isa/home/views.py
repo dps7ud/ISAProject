@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Review, Task, Users
+from .models import Review, Task, Users, TaskSkills, Owner, Worker
 
 import json
 
@@ -245,6 +245,29 @@ def get_recent_listings(request):
     latest_listings = Task.objects.order_by('-post_date')[:5]
     data = serializers.serialize("json", latest_listings)
     return HttpResponse(data)
+
+def task_skills(request, task_id):
+    skills = TaskSkills.objects.filter(task=task_id)
+    data = serializers.serialize("json", skills)
+    return HttpResponse(data)
+
+def task_owners(request, task_id):
+    owners = Users.objects.filter(owner__task=task_id)
+    data = serializers.serialize("json", owners)
+    return HttpResponse(data)
+
+def task_workers(request, task_id):
+    workers = Users.objects.filter(worker__task=task_id)
+    data = serializers.serialize("json", workers)
+    return HttpResponse(data)
+
+def task_reviews(request, task_id):
+    reviews = Review.objects.filter(task=task_id)
+    data = serializers.serialize("json", reviews)
+    return HttpResponse(data)
+
+
+
 
 
 

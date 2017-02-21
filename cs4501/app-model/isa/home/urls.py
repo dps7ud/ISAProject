@@ -13,6 +13,13 @@ urlpatterns = [
     url(r'^api/v1/user/create/$', views.user_create, name='user_create'),
     url(r'^topUsers/$', views.get_top_users, name='get_top_five_users'),
     url(r'^recentListings/$', views.get_recent_listings, name='get_recent_listings'),
+    url(r'^api/v1/taskSkills/(?P<task_id>[0-9]+)/$', views.task_skills, name='task_skills'),
+    url(r'^api/v1/taskOwners/(?P<task_id>[0-9]+)/$', views.task_owners, name='task_owners'),
+    url(r'^api/v1/taskWorkers/(?P<task_id>[0-9]+)/$', views.task_workers, name='task_workers'),
+    url(r'^api/v1/taskReviews/(?P<task_id>[0-9]+)/$', views.task_reviews, name='task_reviews'),
+
+
+
 
 
 

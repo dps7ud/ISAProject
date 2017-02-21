@@ -44,3 +44,18 @@ def review(request, review_id):
 	}
 	return render(request, 'web/review.html', context)
 	# return HttpResponse(resp[2][0])
+
+def task(request, task_id):
+	logger.error("In task method")
+	req = urllib.request.Request('http://exp-api:8000/task/' + task_id + '/')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	context = {
+		'task': resp[0][0],
+		'owners': resp[1],
+		'workers': resp[2],
+		'skills': resp[3],
+		'reviews': resp[4]
+	}
+	return render(request, 'web/task.html', context)

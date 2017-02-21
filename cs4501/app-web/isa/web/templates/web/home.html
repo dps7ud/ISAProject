@@ -10,7 +10,7 @@
 {% if recent_listings_list %}
     <ul>
     {% for task in recent_listings_list %}
-        <li><a href="/task/{{ task.id }}/">{{ task.fields.title }}</a></li>
+        <li><a href="/task/{{ task.pk }}/">{{ task.fields.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
