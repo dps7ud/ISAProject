@@ -121,7 +121,7 @@ def task_create(request):
     }
     """
     if request.method == "POST":
-        required = tuple(field.name for field in Task._meta.get_fields())
+        required = tuple(field.name for field in Task._meta.fields)
         try:
             request_body = request.body.decode('utf-8')
             request_data = json.loads(request_body)
