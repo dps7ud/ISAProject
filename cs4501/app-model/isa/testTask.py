@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from home.models import Task
+from home.models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
 
 import json
 
@@ -48,7 +48,83 @@ class TestTask(TestCase):
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json[:14], 'Created object')
 
-        
+    # -----------------------Testing "task_skills" ------------------------------
+    def test_post_task_skills(self):
+        response = self.client.post(reverse('task_skills', args=[1]), {})
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept GET requests")
+
+    def test_get_task_skills_no_task(self):
+        response = self.client.get(reverse('task_skills', args=[40])) 
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json, [])
+
+    def test_get_task_skills_correct(self):
+        response = self.client.get(reverse('task_skills', args=[1]))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        skillFields = tuple(field.name for field in TaskSkills._meta.fields)
+        for i in resp_json:
+            for j in skillFields:
+                self.assertEquals(j in i, True)
+
+    # -----------------------Testing "task_owners" ------------------------------
+    def test_post_task_owners(self):
+        response = self.client.post(reverse('task_owners', args=[1]))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept GET requests")
+
+    def test_get_task_owners_no_task(self):
+        response = self.client.get(reverse('task_owners', args=[40])) 
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json, [])
+
+    def test_get_task_owners_correct(self):
+        response = self.client.get(reverse('task_owners', args=[1]))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        userFields = tuple(field.name for field in Users._meta.fields)
+        for i in resp_json:
+            for j in userFields:
+                self.assertEquals(j in i, True)
+
+    # -----------------------Testing "task_workers" ------------------------------
+    def test_post_task_workers(self):
+        response = self.client.post(reverse('task_workers', args=[1]))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept GET requests")
+
+    def test_get_task_workers_no_task(self):
+        response = self.client.get(reverse('task_workers', args=[40])) 
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json, [])
+
+    def test_get_task_workers_correct(self):
+        response = self.client.get(reverse('task_workers', args=[1]))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        userFields = tuple(field.name for field in Users._meta.fields)
+        for i in resp_json:
+            for j in userFields:
+                self.assertEquals(j in i, True)
+
+    # -----------------------Testing "task_reviews" ------------------------------
+    def test_post_task_reviews(self):
+        response = self.client.post(reverse('task_reviews', args=[1]))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept GET requests")
+
+    def test_get_task_reviews_no_user(self):
+        response = self.client.get(reverse('task_reviews', args=[40])) 
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json, [])
+
+    def test_get_task_reviews_correct(self):
+        response = self.client.get(reverse('task_reviews', args=[1]))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        reviewFields = tuple(field.name for field in Review._meta.fields)
+        for i in resp_json:
+            for j in reviewFields:
+                self.assertEquals(j in i, True)
+
+    
 
     #tearDown method is called after each test
     def tearDown(self):

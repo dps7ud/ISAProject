@@ -70,6 +70,12 @@ def review_create(request):
 
         reviewObj = Review()
         json_data = request.POST
+        if 'task' not in json_data:
+            return HttpResponse("ERROR: Task field must be specified for Review Creation")
+        if 'poster_user' not in json_data:
+            return HttpResponse("ERROR: Poster_User field must be specified for Review Creation")
+        if 'postee_user' not in json_data:
+            return HttpResponse("ERROR: Postee_user field must be specified for Review creation")
         #Any field not specified in the body of the request will use the default value of the review
         if 'body' in json_data:
             reviewObj.body = json_data['body']
@@ -102,7 +108,7 @@ def review_create(request):
         except:
             return HttpResponse("ERROR: Wrong data type inputs")  
     else:
-        return HttpResponse("ERROR: Cannot GET a task created") 
+        return HttpResponse("ERROR: Review Creation endpoint must be POSTed") 
 
 @csrf_exempt
 def task(request):
