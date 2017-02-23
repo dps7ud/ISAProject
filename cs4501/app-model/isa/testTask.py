@@ -21,7 +21,7 @@ class TestTask(TestCase):
         print(response)
         print(resp_json)
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(resp_json[0]['pk'], 1)
+        self.assertEquals(resp_json['task_id'], 1)
 
     def test_get_task_info_incorrect_url(self):
         response = self.client.get('/task/info/')
@@ -48,20 +48,7 @@ class TestTask(TestCase):
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json[:14], 'Created object')
 
-
-
-    # def success_response(self):
-    #     #assumes user with id 1 is stored in db
-    #     response = self.client.get(reverse('all_orders_list', kwargs={'user_id':1}))
-
-    #     #checks that response contains parameter order list & implicitly
-    #     # checks that the HTTP status code is 200
-    #     self.assertContains(response, 'order_list')
-
-    # #user_id not given in url, so error
-    # def fails_invalid(self):
-    #     response = self.client.get(reverse('all_orders_list'))
-    #     self.assertEquals(response.status_code, 404)
+        
 
     #tearDown method is called after each test
     def tearDown(self):

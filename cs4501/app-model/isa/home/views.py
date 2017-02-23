@@ -194,7 +194,7 @@ def user(request, user_id):
         if 'email' in json_data:
             userObj.email = json_data['email']
         if 'bio' in json_data:
-            user.bio = json_data['bio']
+            userObj.bio = json_data['bio']
         if 'pw' in json_data:
             userObj.pw = json_data['pw']
         if 'location' in json_data:
@@ -225,7 +225,7 @@ def user_create(request):
         if 'email' in json_data:
             userObj.email = json_data['email']
         if 'bio' in json_data:
-            user.bio = json_data['bio']
+            userObj.bio = json_data['bio']
         if 'pw' in json_data:
             userObj.pw = json_data['pw']
         if 'location' in json_data:
