@@ -24,8 +24,8 @@ def home(request):
 	for j in resp[1]:
 		latestListings.append(j)
 	context = {
-		'top_users_list': topUsers,
-		'recent_listings_list': latestListings
+		'top_users_list': resp[0],
+		'recent_listings_list': resp[1]
 	}
 	# return HttpResponse(topUsers)
 	return render(request, 'web/home.html', context)
@@ -35,12 +35,12 @@ def review(request, review_id):
 	req = urllib.request.Request('http://exp-api:8000/review/' + review_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
-
+	logger.error(resp)
 	context = {
-		'review': resp[0][0],
-		'postee': resp[1][0],
-		'poster': resp[2][0],
-		'task': resp[3][0]
+		'review': resp[0],
+		'postee': resp[1],
+		'poster': resp[2],
+		'task': resp[3]
 	}
 	return render(request, 'web/review.html', context)
 	# return HttpResponse(resp[2][0])
@@ -52,7 +52,7 @@ def task(request, task_id):
 	resp = json.loads(resp_json)
 
 	context = {
-		'task': resp[0][0],
+		'task': resp[0],
 		'owners': resp[1],
 		'workers': resp[2],
 		'skills': resp[3],
@@ -67,7 +67,7 @@ def user(request, user_id):
 	resp = json.loads(resp_json)
 
 	context = {
-		'user': resp[0][0],
+		'user': resp[0],
 		'languages': resp[1],
 		'skills': resp[2],
 		'owner': resp[3],

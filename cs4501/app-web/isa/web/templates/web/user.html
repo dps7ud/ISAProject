@@ -1,10 +1,10 @@
 <h1> User </h1>
-<h2> {{ user.fields.fname}} {{user.fields.lname}} </h2>
+<h2> {{ user.fname}} {{user.lname}} </h2>
 <h2> Spoken Languages </h2>
 {% if languages %}
     <ul>
     {% for i in languages %}
-        <li>{{ i.fields.spoken_language }}</li>
+        <li>{{ i.spoken_language }}</li>
     {% endfor %}
     </ul>
 {% else %}
@@ -14,7 +14,7 @@
 {% if skills %}
     <ul>
     {% for i in skills %}
-        <li>{{ i.fields.skill }}</li>
+        <li>{{ i.skill }}</li>
     {% endfor %}
     </ul>
 {% else %}
@@ -24,7 +24,7 @@
 {% if owner %}
     <ul>
     {% for task in owner %}
-        <li><a href="/task/{{ task.pk }}/">{{ task.fields.description }}</a></li>
+        <li><a href="/task/{{ task.task_id }}/">{{ task.description }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -34,7 +34,7 @@
 {% if worker %}
     <ul>
     {% for task in worker %}
-        <li><a href="/task/{{ task.pk }}/">{{ task.fields.description }}</a></li>
+        <li><a href="/task/{{ task.task_id }}/">{{ task.description }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -44,7 +44,7 @@
 {% if reviewer %}
     <ul>
     {% for review in reviewer %}
-        <li><a href="/review/{{ review.pk }}/">{{ review.fields.title }}</a></li>
+        <li><a href="/review/{{ review.id }}/">{{ review.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -54,7 +54,7 @@
 {% if reviewee %}
     <ul>
     {% for review in reviewee %}
-        <li><a href="/review/{{ review.pk }}/">{{ review.fields.title }}</a></li>
+        <li><a href="/review/{{ review.id }}/">{{ review.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

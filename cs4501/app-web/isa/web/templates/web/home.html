@@ -1,7 +1,7 @@
 {% if top_users_list %}
     <ul>
     {% for user in top_users_list %}
-        <li><a href="/user/{{ user.pk }}/">{{ user.fields.fname }} {{user.fields.lname}}</a></li>
+        <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -10,7 +10,7 @@
 {% if recent_listings_list %}
     <ul>
     {% for task in recent_listings_list %}
-        <li><a href="/task/{{ task.pk }}/">{{ task.fields.title }}</a></li>
+        <li><a href="/task/{{ task.task_id }}/">{{ task.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

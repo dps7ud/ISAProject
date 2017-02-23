@@ -1,10 +1,10 @@
 <h1> Task </h1>
-<h2> {{task.fields.description}} </h2>
+<h2> {{task.description}} </h2>
 <h2> Owners </h2>
 {% if owners %}
     <ul>
     {% for user in owners %}
-        <li><a href="/user/{{ user.pk }}/">{{ user.fields.fname }} {{user.fields.lname}}</a></li>
+        <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -14,7 +14,7 @@
 {% if workers %}
     <ul>
     {% for user in workers %}
-        <li><a href="/user/{{ user.pk }}/">{{ user.fields.fname }} {{user.fields.lname}}</a></li>
+        <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -24,7 +24,7 @@
 {% if skills %}
     <ul>
     {% for i in skills %}
-        <li>{{ i.fields.skill }}</li>
+        <li>{{ i.skill }}</li>
     {% endfor %}
     </ul>
 {% else %}
@@ -34,7 +34,7 @@
 {% if reviews %}
     <ul>
     {% for review in reviews %}
-        <li><a href="/review/{{ review.pk }}/">{{ review.fields.title }}</a></li>
+        <li><a href="/review/{{ review.id }}/">{{ review.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
 
@@ -27,64 +29,80 @@ def review(request, review_id):
             reviewObj = Review.objects.get(pk=review_id)
         except Review.DoesNotExist:
             reviewObj = Review()
-        body_unicode = request.body.decode('utf-8')
-        json_data = json.loads(body_unicode)
+        # body_unicode = request.body.decode('utf-8')
+        json_data = request.POST
         if 'body' in json_data:
             reviewObj.body = json_data['body']
         if 'title' in json_data:
             reviewObj.title = json_data['title']
         if 'score' in json_data:
-            reviewObj.score = json_data['score']
+            reviewObj.score = float(json_data['score'])
         if 'task' in json_data:
-            reviewObj.task = Task.objects.get(pk=json_data['task'])
+            try:
+                reviewObj.task = Task.objects.get(pk=json_data['task'])
+            except Task.DoesNotExist:
+                return HttpResponse("ERROR: Task object does not exist")
         if 'poster_user' in json_data:
-            reviewObj.poster_user = Users.objects.get(pk=json_data['poster_user'])
+            try:
+                reviewObj.poster_user = Users.objects.get(pk=json_data['poster_user'])
+            except Users.DoesNotExist:
+                return HttpResponse("ERROR: Poster User does not exist")
         if 'postee_user' in json_data:
-            key = json_data['postee_user']
-            reviewObj.postee_user = Users.objects.get(pk=key)
+            try:
+                reviewObj.postee_user = Users.objects.get(pk=json_data['postee_user'])
+            except Users.DoesNotExist:
+                return HttpResponse("ERROR: Postee User does not exist")
         try:
             reviewObj.save()
-            data = serializers.serialize("json", [reviewObj])
+            return JsonResponse(model_to_dict(reviewObj))
         except:
-            data = "ERROR: Wrong data type inputs"      
-        return HttpResponse(data)
+            return HttpResponse("ERROR: Wrong data type inputs")      
     else:
         try:
             reviewObj = Review.objects.get(pk=review_id)
-            data = serializers.serialize("json", [reviewObj])
+            return JsonResponse(model_to_dict(reviewObj))
         except Review.DoesNotExist:
-            data = "ERROR: Review with that id does not exist"
-        return HttpResponse(data)
+            return HttpResponse("ERROR: Review with that id does not exist")
 
 @csrf_exempt
 def review_create(request):
-    reviewObj = Review()
-    #count = Review.objects.get().count()
-    #reviewObj.review_id = count+1
-    body_unicode = request.body.decode('utf-8')
-    json_data = json.loads(body_unicode)
-    if 'body' in json_data:
-        reviewObj.body = json_data['body']
-    if 'title' in json_data:
-        reviewObj.title = json_data['title']
-    if 'score' in json_data:
-        reviewObj.score = json_data['score']
-    if 'task' in json_data:
-        reviewObj.task = Task.objects.get(pk=json_data['task'])
-    if 'poster_user' in json_data:
-        reviewObj.poster_user = Users.objects.get(pk=json_data['poster_user'])
-    if 'postee_user' in json_data:
-        key = json_data['postee_user']
-        reviewObj.postee_user = Users.objects.get(pk=key)
-        # logger.error(key)
-        # logger.error(Users.objects.get(pk=key))
-        #reviewObj.postee_user = json_data['postee_user']
-    #try:
-    reviewObj.save()
-    data = serializers.serialize("json", [reviewObj])
-    #except :
-    #    data = "ERROR: Wrong data type inputs"
-    return HttpResponse(data)
+    if request.method == 'POST':
+
+        reviewObj = Review()
+        json_data = request.POST
+        #Any field not specified in the body of the request will use the default value of the review
+        if 'body' in json_data:
+            reviewObj.body = json_data['body']
+        if 'title' in json_data:
+            reviewObj.title = json_data['title']
+        if 'score' in json_data:
+            reviewObj.score = float(json_data['score'])
+        if 'task' in json_data:
+            try:
+                reviewObj.task = Task.objects.get(pk=json_data['task'])
+            except Task.DoesNotExist:
+                return HttpResponse("ERROR: Task object does not exist")
+        if 'poster_user' in json_data:
+            try:
+                reviewObj.poster_user = Users.objects.get(pk=json_data['poster_user'])
+            except Users.DoesNotExist:
+                return HttpResponse("ERROR: Poster User does not exist")
+        if 'postee_user' in json_data:
+            try:
+                reviewObj.postee_user = Users.objects.get(pk=json_data['postee_user'])
+            except Users.DoesNotExist:
+                return HttpResponse("ERROR: Postee User does not exist")
+            # logger.error(key)
+            # logger.error(Users.objects.get(pk=key))
+            #reviewObj.postee_user = json_data['postee_user']
+        #try:
+        try:
+            reviewObj.save()
+            return JsonResponse(model_to_dict(reviewObj))
+        except:
+            return HttpResponse("ERROR: Wrong data type inputs")  
+    else:
+        return HttpResponse("ERROR: Cannot GET a task created") 
 
 @csrf_exempt
 def task(request):
@@ -146,8 +164,7 @@ def task_info(request, task_id):
     except Task.DoesNotExist:
         return HttpResponse(False)
     if request.method == "GET":
-        data = serializers.serialize("json", [task_obj])
-        return HttpResponse(data)
+        return JsonResponse(model_to_dict(task_obj))
     elif request.method == "POST":
         request_body = request.body.decode('utf-8')
         try:
@@ -167,9 +184,9 @@ def user(request, user_id):
         try:
             userObj = Users.objects.get(pk=user_id)
         except Users.DoesNotExist:
-            userObj = Users()
-        body_unicode = request.body.decode('utf-8')
-        json_data = json.loads(body_unicode)
+            return HttpResponse("ERROR: User with that id does not exist")
+        # body_unicode = request.body.decode('utf-8')
+        json_data = request.POST
         if 'fname' in json_data:
             userObj.fname = json_data['fname']
         if 'lname' in json_data:
@@ -184,45 +201,44 @@ def user(request, user_id):
             userObj.location = json_data['location']
         try:
             userObj.save()
-            data = serializers.serialize("json", [userObj])
+            return JsonResponse(model_to_dict(userObj))
         except:
-            data = "ERROR: Wrong data type inputs"      
-        return HttpResponse(data)
+            return HttpResponse("ERROR: Wrong data type inputs")  
     else:
         try:
             userObj = Users.objects.get(pk=user_id)
-            data = serializers.serialize("json", [userObj])
+            return JsonResponse(model_to_dict(userObj))
         except Users.DoesNotExist:
-            data = "ERROR: User with that id does not exist"
-            #return HttpResponse("You're looking at User %s." % User_id)
-        return HttpResponse(data)
+            return HttpResponse("ERROR: User with that id does not exist")
 
 @csrf_exempt
 def user_create(request):
-    userObj = Users()
-    #count = User.objects.get().count()
-    #UserObj.User_id = count+1
-    body_unicode = request.body.decode('utf-8')
-    json_data = json.loads(body_unicode)
-    if 'fname' in json_data:
-        userObj.fname = json_data['fname']
-    if 'lname' in json_data:
-        userObj.lname = json_data['lname']
-    if 'email' in json_data:
-        userObj.email = json_data['email']
-    if 'bio' in json_data:
-        user.bio = json_data['bio']
-    if 'pw' in json_data:
-        userObj.pw = json_data['pw']
-    if 'location' in json_data:
-        userObj.location = json_data['location']
-    try:
-        userObj.save()
-        data = serializers.serialize("json", [userObj])
-    except :
-        data = "ERROR: Wrong data type inputs"
-    return HttpResponse(data)
+    if request.method == 'POST':
+        userObj = Users()
+        #count = User.objects.get().count()
+        #UserObj.User_id = count+1
+        json_data = request.POST
+        if 'fname' in json_data:
+            userObj.fname = json_data['fname']
+        if 'lname' in json_data:
+            userObj.lname = json_data['lname']
+        if 'email' in json_data:
+            userObj.email = json_data['email']
+        if 'bio' in json_data:
+            user.bio = json_data['bio']
+        if 'pw' in json_data:
+            userObj.pw = json_data['pw']
+        if 'location' in json_data:
+            userObj.location = json_data['location']
+        try:
+            userObj.save()
+            return JsonResponse(model_to_dict(userObj))
+        except:
+            return HttpResponse("ERROR: Wrong data type inputs")
+    else:
+        return HttpResponse("ERROR: User creation endpoint must be posted")
 
+# ----------------------- For Project 3 ------------------------------------
 def get_user_rating(user):
     reviews = Review.objects.filter(postee_user=user.id)
     count = 0;
@@ -236,65 +252,130 @@ def get_user_rating(user):
         return total/count
 
 def get_top_users(request):
-    users = Users.objects.all()
-    users = sorted(users, key=get_user_rating, reverse=True)
-    data = serializers.serialize("json", users[:5])
-    return HttpResponse(data)
+    if request.method == 'GET':
+        users = Users.objects.all()
+        users = (sorted(users, key=get_user_rating, reverse=True))[:5]
+        usersList = []
+        for i in users:
+            usersList.append(model_to_dict(i))
+        return JsonResponse(usersList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+    
 
 def get_recent_listings(request):
-    latest_listings = Task.objects.order_by('-post_date')[:5]
-    data = serializers.serialize("json", latest_listings)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        latest_listings = Task.objects.order_by('-post_date')[:5]
+        listingsList = []
+        for i in latest_listings:
+            listingsList.append(model_to_dict(i))
+        return JsonResponse(listingsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+    
 
 def task_skills(request, task_id):
-    skills = TaskSkills.objects.filter(task=task_id)
-    data = serializers.serialize("json", skills)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        skills = TaskSkills.objects.filter(task=task_id)
+        skillsList = []
+        for i in skills:
+            skillsList.append(model_to_dict(i))
+        return JsonResponse(skillsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 def task_owners(request, task_id):
-    owners = Users.objects.filter(owner__task=task_id)
-    data = serializers.serialize("json", owners)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        owners = Users.objects.filter(owner__task=task_id)
+        ownersList = []
+        for i in owners:
+            ownersList.append(model_to_dict(i))
+        return JsonResponse(ownersList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+    
 
 def task_workers(request, task_id):
-    workers = Users.objects.filter(worker__task=task_id)
-    data = serializers.serialize("json", workers)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        workers = Users.objects.filter(worker__task=task_id)
+        workersList = []
+        for i in workers:
+            workersList.append(model_to_dict(i))
+        return JsonResponse(workersList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 def task_reviews(request, task_id):
-    reviews = Review.objects.filter(task=task_id)
-    data = serializers.serialize("json", reviews)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        reviews = Review.objects.filter(task=task_id)
+        reviewsList = []
+        for i in reviews:
+            reviewsList.append(model_to_dict(i))
+        return JsonResponse(reviewsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 def user_languages(request, user_id):
-    languages = UserLanguages.objects.filter(user=user_id)
-    data = serializers.serialize("json", languages)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        languages = UserLanguages.objects.filter(user=user_id)
+        languagesList = []
+        for i in languages:
+            languagesList.append(model_to_dict(i))
+        return JsonResponse(languagesList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+    
 
 def user_skills(request, user_id):
-    skills = UserSkills.objects.filter(user=user_id)
-    data = serializers.serialize("json", skills)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        skills = UserSkills.objects.filter(user=user_id)
+        skillsList = []
+        for i in skills:
+            skillsList.append(model_to_dict(i))
+        return JsonResponse(skillsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 def user_owner_tasks(request, user_id):
-    tasks = Task.objects.filter(owner__user=user_id)
-    data = serializers.serialize("json", tasks)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        tasks = Task.objects.filter(owner__user=user_id)
+        tasksList = []
+        for i in tasks:
+            tasksList.append(model_to_dict(i))
+        return JsonResponse(tasksList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 def user_worker_tasks(request, user_id):
-    tasks = Task.objects.filter(worker__user=user_id)
-    data = serializers.serialize("json", tasks)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        tasks = Task.objects.filter(worker__user=user_id)
+        tasksList = []
+        for i in tasks:
+            tasksList.append(model_to_dict(i))
+        return JsonResponse(tasksList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 def user_reviews(request, user_id):
-    reviews = Review.objects.filter(poster_user=user_id)
-    data = serializers.serialize("json", reviews)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        reviews = Review.objects.filter(poster_user=user_id)
+        reviewsList = []
+        for i in reviews:
+            reviewsList.append(model_to_dict(i))
+        return JsonResponse(reviewsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+    
 
 def user_reviewed(request, user_id):
-    reviews = Review.objects.filter(postee_user=user_id)
-    data = serializers.serialize("json", reviews)
-    return HttpResponse(data)
+    if request.method == 'GET':
+        reviews = Review.objects.filter(postee_user=user_id)
+        reviewsList = []
+        for i in reviews:
+            reviewsList.append(model_to_dict(i))
+        return JsonResponse(reviewsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
 
 
 
