@@ -245,7 +245,7 @@ def user_create(request):
         return HttpResponse("ERROR: User creation endpoint must be posted")
 
 # ----------------------- For Project 3 ------------------------------------
-def get_user_rating(user):
+def user_rating(user):
     reviews = Review.objects.filter(postee_user=user.id)
     count = 0;
     total = 0;
@@ -257,10 +257,26 @@ def get_user_rating(user):
     else:
         return total/count
 
+def get_user_rating(request, user_id):
+    if request.method == 'GET':
+        reviews = Review.objects.filter(postee_user=user_id)
+        count = 0;
+        total = 0;
+        for i in reviews:
+            count += 1;
+            total += i.score
+        if count == 0:
+            return JsonResponse({"rating": 0})
+        else:
+            return JsonResponse({"rating": total/count})
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")       
+
+
 def get_top_users(request):
     if request.method == 'GET':
         users = Users.objects.all()
-        users = (sorted(users, key=get_user_rating, reverse=True))[:5]
+        users = (sorted(users, key=user_rating, reverse=True))[:5]
         usersList = []
         for i in users:
             usersList.append(model_to_dict(i))
