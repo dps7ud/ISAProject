@@ -93,6 +93,30 @@ class TestReview(TestCase):
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Poster User does not exist")
 
+    def test_delete_review(self):
+        response = self.client.post(reverse('review_create'), {
+                "title": "1",
+                "body": "2",
+                "score": 3,
+                "task": 2,
+                "poster_user": 3,
+                "postee_user": 4
+            })
+        resp_json = json.loads((response.content).decode("utf-8"))
+        print(resp_json)
+
+        response2 = self.client.delete(reverse('review', args=[resp_json['id']]))
+        resp2 = (response2.content).decode("utf-8")
+        self.assertEquals(resp2, "Deleted Review with ID: " + str(resp_json['id']))
+
+        response3 = self.client.get(reverse('review', args=[resp_json['id']]))
+        resp3 = (response3.content).decode("utf-8")
+        self.assertEquals(resp3, "ERROR: Review with that id does not exist")
+
+    def test_delete_review_no_review(self):
+        response = self.client.delete(reverse('review', args=[60]))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Review with that id does not exist")
 
     # ------------------ Testing "review_create" --------------------------
     def test_post_review_create_correct(self):
@@ -185,6 +209,8 @@ class TestReview(TestCase):
         response = self.client.get(reverse('review_create'))
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Review Creation endpoint must be POSTed")
+
+    
 
 
 

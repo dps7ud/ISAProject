@@ -66,6 +66,23 @@ class TestUser(TestCase):
                 "location": "Virginia"
             })
 
+    def test_delete_user(self):
+        response = self.client.post(reverse('user_create'), {})
+        resp_json = json.loads((response.content).decode("utf-8"))
+
+        response2 = self.client.delete(reverse('user', args=[resp_json['id']]))
+        resp2 = (response2.content).decode("utf-8")
+        self.assertEquals(resp2, "Deleted User with ID: " + str(resp_json['id']))
+
+        response3 = self.client.get(reverse('user', args=[resp_json['id']]))
+        resp3 = (response3.content).decode("utf-8")
+        self.assertEquals(resp3, "ERROR: User with that id does not exist")
+
+    def test_delete_user_no_user(self):
+        response = self.client.delete(reverse('user', args=[60]))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: User with that id does not exist")
+
     # ------------------ Testing "user_create" --------------------------
     def test_post_create_user_no_fields(self):
         response = self.client.post(reverse('user_create'), {})
