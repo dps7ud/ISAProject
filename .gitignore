@@ -54,6 +54,18 @@ Temporary Items
 # =========================
 *.frm
 *.ibd
+*.MYD
+*.MYI
+
+ib_buffer_pool
+ib_logfile*
+ibdata*
+ibtmp*
+auto.cnf
+
+db.opt
+
+*.TRG
 
 
 # =========================
