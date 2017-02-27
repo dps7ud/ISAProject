@@ -129,7 +129,7 @@ def review_create(request):
 #         return HttpResponse("ERROR: Review deletion endpoint only accepts DELETE requests")
 
 @csrf_exempt
-def task(request):
+def task_query(request):
     """ Allows GET requests to access model instances by filtering"""
     if request.method == 'GET':
         query_dict = { key:request.GET[key] for key in request.GET}
@@ -142,7 +142,7 @@ def task(request):
             data = "Lets pretend this is graceful"
         return HttpResponse(data)
     else:
-        return HttpResponse(False)
+        return HttpResponse("ERROR: Posted to task_query")
 
 @csrf_exempt
 def task_create(request):
@@ -177,7 +177,7 @@ def task_create(request):
         task_obj.save()
         return HttpResponse("Created object with id: " + str(task_obj.task_id))
     else:
-        return HttpResponse(False)
+        return HttpResponse("ERROR: task_create must be POSTed")
 
 @csrf_exempt
 def task_info(request, task_id):
@@ -186,7 +186,7 @@ def task_info(request, task_id):
     try:
         task_obj = Task.objects.get(pk=task_id)
     except Task.DoesNotExist:
-        return HttpResponse(False)
+        return HttpResponse("ERROR: Task with that id does not exist")
     if request.method == "GET":
         return JsonResponse(model_to_dict(task_obj))
     elif request.method == "POST":
@@ -194,11 +194,11 @@ def task_info(request, task_id):
         try:
             update_data = json.loads(request_body)
         except ValueError:
-            return HttpResponse(False)
+            return HttpResponse("ERROR: Bad POST body")
         for key, value in update_data.items():
             setattr(task_obj, key, value)
         task_obj.save()
-        return HttpResponse(True)
+        return HttpResponse("Updated task with id: " + str(task_obj.task_id))
     else:
         return HttpResponse("pass\n")
 

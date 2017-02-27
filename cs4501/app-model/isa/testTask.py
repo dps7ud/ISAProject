@@ -30,23 +30,23 @@ class TestTask(TestCase):
     def test_get_task_info_not_present(self):
         response = self.client.get(reverse('task_info', args=[7]))
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, 'False')
+        self.assertEquals(resp_json, "ERROR: Task with that id does not exist")
 
     def test_post_task_info(self):
         response = self.client.post(reverse('task_info', args=[2]), '{"location":"here", "time_to_live":"2017-02-15", "post_date":"2017-02-15", "status":"OPEN", "remote":false, "pricing_type":true,"time":5}', 'raw')
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, 'True')
+        self.assertEquals(resp_json, "Updated task with id: 2")
 
     #Testing task_create
     def test_task_create_get(self):
         response = self.client.get(reverse('task_create'))
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, 'False')
+        self.assertEquals(resp_json, "ERROR: task_create must be POSTed")
 
     def test_task_create_correct(self):
-        response = self.client.post(reverse('task_create'), '{"pricing_info":"0.0", "location":"here", "time_to_live":"2017-02-15", "post_date":"2017-02-15", "status":"OPEN", "remote":false, "pricing_type":true,"time":5}', 'raw')
+        response = self.client.post(reverse('task_create'), '{"pricing_info":"0.0", "location":"here", "time_to_live":"2017-02-15", "task_id":8, "title":"A hard task", "description":"It is super hard", "post_date":"2017-02-15", "status":"OPEN", "remote":false, "pricing_type":true,"time":5}', 'raw')
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json[:14], 'Created object')
+        self.assertEquals(resp_json, 'Created object with id: 8')
 
     # -----------------------Testing "task_skills" ------------------------------
     def test_post_task_skills(self):
