@@ -53,6 +53,7 @@ Temporary Items
 # database files I think we don't need
 # =========================
 *.frm
+*.ibd
 
 
 # =========================
