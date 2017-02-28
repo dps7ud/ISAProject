@@ -12,6 +12,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Create your views here.
+def four_oh_four(request):
+    return HttpResponse("<h2>four-oh-four</h2>")
+
 def home(request):
 	logger.error("In home method")
 	req = urllib.request.Request('http://exp-api:8000/home/')
