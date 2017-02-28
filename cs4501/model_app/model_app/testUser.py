@@ -1,14 +1,14 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from home.models import Task, Review
+from model_app.models import Task, Review
 
 import json
 
 class TestUser(TestCase):
     #setUp method is called before each test in this class
     def setUp(self):
-        call_command("loaddata", "db.json")
+        call_command("loaddata", "./model_app/db.json")
         pass #nothing to set up
 
 
