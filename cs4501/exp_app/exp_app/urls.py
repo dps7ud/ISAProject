@@ -1,4 +1,4 @@
-"""isa URL Configuration
+"""exp_app URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
@@ -13,10 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import url
 from django.contrib import admin
 
 urlpatterns = [
-	url(r'^', include('exp.urls')),
+    url(r'^home/$', views.home, name='home'),
+    url(r'^review/(?P<review_id>[0-9]+)/$', views.review, name='review'),
+    url(r'^task/(?P<task_id>[0-9]+)/$', views.task, name='task'),
+    url(r'^user/(?P<user_id>[0-9]+)/$', views.user, name='user'),
     url(r'^admin/', admin.site.urls),
 ]

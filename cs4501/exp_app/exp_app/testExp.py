@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase, Client
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from exp.models import Task, Review, Users, TaskSkills
+from exp_app.models import Task, Review, Users, TaskSkills
 
 import json
 
