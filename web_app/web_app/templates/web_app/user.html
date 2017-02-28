@@ -24,7 +24,7 @@
 {% if owner %}
     <ul>
     {% for task in owner %}
-        <li><a href="/task/{{ task.task_id }}/">{{ task.description }}</a></li>
+        <li><a href="/task/{{ task.id }}/">{{ task.description }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -34,7 +34,7 @@
 {% if worker %}
     <ul>
     {% for task in worker %}
-        <li><a href="/task/{{ task.task_id }}/">{{ task.description }}</a></li>
+        <li><a href="/task/{{ task.id }}/">{{ task.description }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
