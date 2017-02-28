@@ -3,7 +3,6 @@
     "model": "model_app.task",
     "pk" : 1,
     "fields": {
-      "task_id": 1,
       "title": "Make a website",
       "description": "Using your coding skills",
       "location": "Charlottesville",
@@ -20,7 +19,6 @@
     "model": "model_app.task",
     "pk" : 2,
     "fields": {
-      "task_id": 2,
       "title": "Finish task endpoints",
       "description": "Write out api for getting and posting endpoints",
       "location": "Rice",
@@ -37,7 +35,6 @@
     "model": "model_app.task",
     "pk" : 3,
     "fields": {
-      "task_id": 3,
       "title": "Create a node app",
       "description": "Need an expert in node.js",
       "location": "Charlottesville",
@@ -54,7 +51,6 @@
     "model": "model_app.task",
     "pk" : 4,
     "fields": {
-      "task_id": 4,
       "title": "Database needs to be sharded",
       "description": "What is the best way to do this?",
       "location": "Rice",
@@ -71,7 +67,6 @@
     "model": "model_app.task",
     "pk" : 5,
     "fields": {
-      "task_id": 5,
       "title": "Help me set up this Cassandra database",
       "description": "I need to understand what consistent hashing entails",
       "location": "Rice",
