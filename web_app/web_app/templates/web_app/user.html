@@ -1,6 +1,6 @@
 <h1> User </h1>
 <h2> {{ user.fname}} {{user.lname}} </h2>
-<h2> Spoken Languages </h2>
+<h3> Spoken Languages </h3>
 {% if languages %}
     <ul>
     {% for i in languages %}
@@ -10,7 +10,7 @@
 {% else %}
     <p>No spoken languages</p>
 {% endif %} 
-<h2> User Skills </h2>
+<h3> User Skills </h3>
 {% if skills %}
     <ul>
     {% for i in skills %}
@@ -20,7 +20,7 @@
 {% else %}
     <p>This user has no skills</p>
 {% endif %}
-<h2> Projects they own </h2>
+<h3> Projects they own </h3>
 {% if owner %}
     <ul>
     {% for task in owner %}
@@ -28,9 +28,9 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>Have not worked on any tasks</p>
+    <p>No owned tasks</p>
 {% endif %}
-<h2> Projects they have worked on </h2>
+<h3> Projects they have worked on </h3>
 {% if worker %}
     <ul>
     {% for task in worker %}
@@ -38,9 +38,9 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>Have not worked on any tasks</p>
+    <p>Has not worked on any tasks</p>
 {% endif %}
-<h2> Reviews they created </h2>
+<h3> Reviews they created </h3>
 {% if reviewer %}
     <ul>
     {% for review in reviewer %}
@@ -50,7 +50,7 @@
 {% else %}
     <p>No reviews are available.</p>
 {% endif %}
-<h2> Reviews about this user </h2>
+<h3> Reviews about this user </h3>
 {% if reviewee %}
     <ul>
     {% for review in reviewee %}
