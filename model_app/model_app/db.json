@@ -1,0 +1,407 @@
+[
+  {
+    "model": "model_app.task",
+    "pk" : 1,
+    "fields": {
+      "task_id": 1,
+      "title": "Make a website",
+      "description": "Using your coding skills",
+      "location": "Charlottesville",
+      "time_to_live": "2013-03-16",
+      "post_date": "2013-03-16",
+      "status": "OPEN",
+      "remote": true,
+      "time": 0.0,
+      "pricing_type": true,
+      "pricing_info": 0.0
+    }
+  },
+  {
+    "model": "model_app.task",
+    "pk" : 2,
+    "fields": {
+      "task_id": 2,
+      "title": "Finish task endpoints",
+      "description": "Write out api for getting and posting endpoints",
+      "location": "Rice",
+      "time_to_live": "2017-02-15",
+      "post_date": "2017-02-10",
+      "status": "ACC.",
+      "remote": true,
+      "time": 9000.8,
+      "pricing_type": true,
+      "pricing_info": 0.0
+    }
+  },
+  {
+    "model": "model_app.task",
+    "pk" : 3,
+    "fields": {
+      "task_id": 3,
+      "title": "Create a node app",
+      "description": "Need an expert in node.js",
+      "location": "Charlottesville",
+      "time_to_live": "2017-02-27",
+      "post_date": "2013-03-15",
+      "status": "OPEN",
+      "remote": true,
+      "time": 0.0,
+      "pricing_type": true,
+      "pricing_info": 0.0
+    }
+  },
+  {
+    "model": "model_app.task",
+    "pk" : 4,
+    "fields": {
+      "task_id": 4,
+      "title": "Database needs to be sharded",
+      "description": "What is the best way to do this?",
+      "location": "Rice",
+      "time_to_live": "2017-02-28",
+      "post_date": "2017-02-16",
+      "status": "OPEN",
+      "remote": true,
+      "time": 9000.8,
+      "pricing_type": true,
+      "pricing_info": 0.0
+    }
+  },
+  {
+    "model": "model_app.task",
+    "pk" : 5,
+    "fields": {
+      "task_id": 5,
+      "title": "Help me set up this Cassandra database",
+      "description": "I need to understand what consistent hashing entails",
+      "location": "Rice",
+      "time_to_live": "2017-02-28",
+      "post_date": "2017-02-16",
+      "status": "OPEN",
+      "remote": true,
+      "time": 9000.8,
+      "pricing_type": true,
+      "pricing_info": 0.0
+    }
+  },
+  {
+    "model": "model_app.users",
+    "pk": 1,
+    "fields": {
+      "fname": "TDawg",
+      "lname": "Pinckney",
+      "email": "fake@gmail.com",
+      "bio": "I like to program",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
+  },
+  {
+    "model": "model_app.users",
+    "pk": 2,
+    "fields": {
+      "fname": "Ian",
+      "lname": "Zheng",
+      "email": "ian@gmail.com",
+      "bio": "I like to program well",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
+  },
+  {
+    "model": "model_app.users",
+    "pk": 3,
+    "fields": {
+      "fname": "Brandon",
+      "lname": "Whitfield",
+      "email": "brandon@gmail.com",
+      "bio": "I like to program",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
+  },
+  {
+    "model": "model_app.users",
+    "pk": 4,
+    "fields": {
+      "fname": "David",
+      "lname": "Stolz",
+      "email": "david@gmail.com",
+      "bio": "I like to program",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
+  },
+  {
+    "model": "model_app.users",
+    "pk": 5,
+    "fields": {
+      "fname": "Matt",
+      "lname": "Tillman",
+      "email": "matt@gmail.com",
+      "bio": "I like to program",
+      "pw": "password",
+      "location": "Charlottesville"
+    }
+  },
+  {
+    "model": "model_app.review",
+    "pk": 1,
+    "fields": {
+      "title": "What a terrible programmer",
+      "body": "He couldn't spell his own name",
+      "score": 0.42,
+      "task": 1,
+      "poster_user": 1,
+      "postee_user": 2
+    }
+  },
+  {
+    "model": "model_app.review",
+    "pk": 2,
+    "fields": {
+      "title": "Absolute God",
+      "body": "Definitely knows what he is doing",
+      "score": 5,
+      "task": 1,
+      "poster_user": 2,
+      "postee_user": 1
+    }
+  },
+  {
+    "model": "model_app.review",
+    "pk": 3,
+    "fields": {
+      "title": "Pretty Good",
+      "body": "Knew what he was doing",
+      "score": 2.5,
+      "task": 2,
+      "poster_user": 3,
+      "postee_user": 4
+    }
+  },
+  {
+    "model": "model_app.review",
+    "pk": 4,
+    "fields": {
+      "title": "Good Partner",
+      "body": "Would work with again",
+      "score": 4,
+      "task": 2,
+      "poster_user": 4,
+      "postee_user": 3
+    }
+  },
+  {
+    "model": "model_app.owner",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "task": 1
+    }
+  },
+  {
+    "model": "model_app.owner",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "task": 2
+    }
+  },
+  {
+    "model": "model_app.owner",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "task": 3
+    }
+  },
+  {
+    "model": "model_app.owner",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "task": 4
+    }
+  },
+  {
+    "model": "model_app.owner",
+    "pk": 5,
+    "fields": {
+      "user": 1,
+      "task": 5
+    }
+  },
+  {
+    "model": "model_app.taskskills",
+    "pk": 1,
+    "fields": {
+      "task": 1,
+      "skill": "OOP Design"
+    }
+  },
+  {
+    "model": "model_app.taskskills",
+    "pk": 2,
+    "fields": {
+      "task": 1,
+      "skill": "JavaScript"
+    }
+  },
+  {
+    "model": "model_app.taskskills",
+    "pk": 3,
+    "fields": {
+      "task": 2,
+      "skill": "OOP Design"
+    }
+  },
+  {
+    "model": "model_app.taskskills",
+    "pk": 4,
+    "fields": {
+      "task": 3,
+      "skill": "OOP Design"
+    }
+  },
+  {
+    "model": "model_app.taskskills",
+    "pk": 5,
+    "fields": {
+      "task": 4,
+      "skill": "OOP Design"
+    }
+  },
+  {
+    "model": "model_app.taskskills",
+    "pk": 6,
+    "fields": {
+      "task": 5,
+      "skill": "OOP Design"
+    }
+  },
+  {
+    "model": "model_app.userlanguages",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "spoken_language": "English"
+    }
+  },
+  {
+    "model": "model_app.userlanguages",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "spoken_language": "English"
+    }
+  },
+  {
+    "model": "model_app.userlanguages",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "spoken_language": "English"
+    }
+  },
+  {
+    "model": "model_app.userlanguages",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "spoken_language": "English"
+    }
+  },
+  {
+    "model": "model_app.userlanguages",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "spoken_language": "English"
+    }
+  },
+  {
+    "model": "model_app.userskills",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "skill": "Java"
+    }
+  },
+  {
+    "model": "model_app.userskills",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "skill": "Java"
+    }
+  },
+  {
+    "model": "model_app.userskills",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "skill": "Java"
+    }
+  },
+  {
+    "model": "model_app.userskills",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "skill": "Java"
+    }
+  },
+  {
+    "model": "model_app.userskills",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "skill": "Java"
+    }
+  },
+  {
+    "model": "model_app.worker",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "task": 1
+    }
+  },
+  {
+    "model": "model_app.worker",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "task": 2
+    }
+  },
+  {
+    "model": "model_app.worker",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "task": 3
+    }
+  },
+  {
+    "model": "model_app.worker",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "task": 4
+    }
+  },
+  {
+    "model": "model_app.worker",
+    "pk": 5,
+    "fields": {
+      "user": 2,
+      "task": 5
+    }
+  }
+
+
+
+
+]
