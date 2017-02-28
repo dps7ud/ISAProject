@@ -165,8 +165,8 @@ def task_create(request):
         required = set(field.name for field in set(Task._meta.fields).difference({'id'}))
         required.remove('id')
         try:
-            request_body = request.body.decode('utf-8')
-            request_data = json.loads(request_body)
+            # request_body = request.body.decode('utf-8')
+            request_data = request.POST
         except ValueError:
             HttpResponse("Bad json input, it's super pickey for some reason. I promise it works.")
         for requirement in required:
@@ -175,7 +175,7 @@ def task_create(request):
         primary_keys = []
         task_obj = Task(**request_data)
         task_obj.save()
-        return HttpResponse("Created object with id: " + str(task_obj.pk))
+        return JsonResponse(model_to_dict(task_obj))
     else:
         return HttpResponse("ERROR: task_create must be POSTed")
 
@@ -192,13 +192,16 @@ def task_info(request, task_id):
     elif request.method == "POST":
         request_body = request.body.decode('utf-8')
         try:
-            update_data = json.loads(request_body)
+            update_data = request.POST
         except ValueError:
             return HttpResponse("ERROR: Bad POST body")
         for key, value in update_data.items():
             setattr(task_obj, key, value)
         task_obj.save()
         return HttpResponse("Updated task with id: " + str(task_obj.pk))
+    elif request.method == "DELETE":
+        task_Obj.delete()
+        return HttpResponse("Deleted Task with ID: " + str(task_id))
     else:
         return HttpResponse("pass\n")
 

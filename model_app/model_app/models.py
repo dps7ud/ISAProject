@@ -19,7 +19,7 @@ class Task(models.Model):
     post_date = models.DateField()
     status = models.CharField(max_length=4, choices=TASK_STATUS_CHOICES)
     remote = models.BooleanField()
-    time = models.FloatField()
+    time = models.CharField(max_length=200)
     pricing_type = models.BooleanField()
     pricing_info = models.FloatField()
 
