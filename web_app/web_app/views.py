@@ -28,7 +28,7 @@ def home(request):
 		'recent_listings_list': resp[1]
 	}
 	# return HttpResponse(topUsers)
-	return render(request, 'web/home.html', context)
+	return render(request, 'web_app/home.html', context)
 
 def review(request, review_id):
 	logger.error("In review method")
@@ -42,7 +42,7 @@ def review(request, review_id):
 		'poster': resp[2],
 		'task': resp[3]
 	}
-	return render(request, 'web/review.html', context)
+	return render(request, 'web_app/review.html', context)
 	# return HttpResponse(resp[2][0])
 
 def task(request, task_id):
@@ -58,7 +58,7 @@ def task(request, task_id):
 		'skills': resp[3],
 		'reviews': resp[4]
 	}
-	return render(request, 'web/task.html', context)
+	return render(request, 'web_app/task.html', context)
 
 def user(request, user_id):
 	logger.error("In user method")
@@ -75,4 +75,4 @@ def user(request, user_id):
 		'reviewer': resp[5],
 		'reviewee': resp[6]
 	}
-	return render(request, 'web/user.html', context)
+	return render(request, 'web_app/user.html', context)
