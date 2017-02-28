@@ -164,6 +164,7 @@ def task_create(request):
     if request.method == "POST":
         required = set(field.name for field in set(Task._meta.fields).difference({'id'}))
         required.remove('id')
+
         try:
             # request_body = request.body.decode('utf-8')
             request_data = request.POST
@@ -173,7 +174,9 @@ def task_create(request):
             if requirement not in request_data:
                 return HttpResponse(str(requirement) + " is a required field.")
         primary_keys = []
-        task_obj = Task(**request_data)
+        task_obj = Task()
+        for key, value in request_data.items():
+            setattr(task_obj, key, value)        
         task_obj.save()
         return JsonResponse(model_to_dict(task_obj))
     else:
@@ -190,7 +193,7 @@ def task_info(request, task_id):
     if request.method == "GET":
         return JsonResponse(model_to_dict(task_obj))
     elif request.method == "POST":
-        request_body = request.body.decode('utf-8')
+        # request_body = request.body.decode('utf-8')
         try:
             update_data = request.POST
         except ValueError:
@@ -200,7 +203,7 @@ def task_info(request, task_id):
         task_obj.save()
         return HttpResponse("Updated task with id: " + str(task_obj.pk))
     elif request.method == "DELETE":
-        task_Obj.delete()
+        task_obj.delete()
         return HttpResponse("Deleted Task with ID: " + str(task_id))
     else:
         return HttpResponse("pass\n")

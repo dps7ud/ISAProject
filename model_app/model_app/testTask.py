@@ -92,7 +92,7 @@ class TestTask(TestCase):
         resp2 = (response2.content).decode("utf-8")
         self.assertEquals(resp2, "Deleted Task with ID: " + str(resp_json['id']))
 
-        response3 = self.client.get(reverse('review', args=[resp_json['id']]))
+        response3 = self.client.get(reverse('task_info', args=[resp_json['id']]))
         resp3 = (response3.content).decode("utf-8")
         self.assertEquals(resp3, "ERROR: Task with that id does not exist")
 
@@ -129,9 +129,9 @@ class TestTask(TestCase):
         self.assertEquals(resp_json["description"], "It is super hard")
         self.assertEquals(resp_json["post_date"], "2017-02-15")
         self.assertEquals(resp_json["status"], "OPEN")
-        self.assertEquals(resp_json["remote"], False)
-        self.assertEquals(resp_json["pricing_type"], True)
-        self.assertEquals(resp_json["time"], 5)
+        self.assertEquals(resp_json["remote"], 'False')
+        self.assertEquals(resp_json["pricing_type"], 'True')
+        self.assertEquals(resp_json["time"], '5')
 
     def test_task_create_missing_field_required(self):
         response = self.client.post(reverse('task_create'), { 
