@@ -1,19 +1,26 @@
-<h1> Review <h1>
-<h2> Poster of Review </h2>
+<h2> Review <h2>
+<h3> Reviewer</h3>
 {% if poster %}
     <a href="/user/{{ poster.id }}/">{{ poster.fname }} {{poster.lname }}</a>
 {% else %}
     <p>No Poster is available.</p>
 {% endif %}
-<h2> Postee of Review </h2>
+<h3> Review subject</h3>
 {% if postee %}
     <a href="/user/{{ postee.id }}/">{{ postee.fname }} {{postee.lname}}</a>
 {% else %}
     <p>No Postee is available.</p>
 {% endif %}
-<h2> Listing </h2>
+<h3> Task</h3>
 {% if task %}
     <a href="/task/{{ task.task_id }}/">{{ task.title }}</a>
+{% else %}
+    <p>No Task is available.</p>
+{% endif %}
+
+{% if task %}
+    <h4>{{ review.title }}</h4>
+    <p>{{review.body}}</p>
 {% else %}
     <p>No Task is available.</p>
 {% endif %}
