@@ -103,7 +103,6 @@ class TestReview(TestCase):
                 "postee_user": 4
             })
         resp_json = json.loads((response.content).decode("utf-8"))
-        print(resp_json)
 
         response2 = self.client.delete(reverse('review', args=[resp_json['id']]))
         resp2 = (response2.content).decode("utf-8")

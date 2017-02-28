@@ -149,7 +149,6 @@ def task_create(request):
     """Accepts post request containing a single json object
     to create new task model instances. Acceptable json looks like this:
     {
-        "task_id":"4",
         "pricing_info":"0.0",
         "title":"mynew_task",
         "description":"",
@@ -163,7 +162,8 @@ def task_create(request):
     }
     """
     if request.method == "POST":
-        required = tuple(field.name for field in Task._meta.fields)
+        required = set(field.name for field in set(Task._meta.fields).difference({'id'}))
+        required.remove('id')
         try:
             request_body = request.body.decode('utf-8')
             request_data = json.loads(request_body)
@@ -175,7 +175,7 @@ def task_create(request):
         primary_keys = []
         task_obj = Task(**request_data)
         task_obj.save()
-        return HttpResponse("Created object with id: " + str(task_obj.task_id))
+        return HttpResponse("Created object with id: " + str(task_obj.pk))
     else:
         return HttpResponse("ERROR: task_create must be POSTed")
 
@@ -198,7 +198,7 @@ def task_info(request, task_id):
         for key, value in update_data.items():
             setattr(task_obj, key, value)
         task_obj.save()
-        return HttpResponse("Updated task with id: " + str(task_obj.task_id))
+        return HttpResponse("Updated task with id: " + str(task_obj.pk))
     else:
         return HttpResponse("pass\n")
 

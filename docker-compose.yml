@@ -9,6 +9,7 @@ models:
       - "8001:8000"
     command: bash -c "python manage.py makemigrations model_app && python manage.py migrate && python manage.py loaddata ./model_app/db.json &&  mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/model_app/wsgi.py"
 
+#&& python manage.py loaddata ./model_app/db.json
 exp:
    image: tp33/django
    container_name: isa_exp

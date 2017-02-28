@@ -11,7 +11,7 @@ class Task(models.Model):
     """Task models individual jobs (past, present or future) that
     exist within our system.
     """
-    task_id = models.IntegerField(primary_key=True)
+#    task_id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     #Not nullable, use ""
