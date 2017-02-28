@@ -28,5 +28,5 @@ web:
    ports:
       - "8000:8000"
    volumes:
-      - ./cs4501/web:/app
-   command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app/web --reload-on-changes /app/web/wsgi.py"
+      - ./cs4501/web_app:/app
+   command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
