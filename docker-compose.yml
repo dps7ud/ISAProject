@@ -4,7 +4,7 @@ models:
     external_links:
       -  mysql:db
     volumes:
-      - ./cs4501/model_app:/app
+      - ./model_app:/app
     ports:
       - "8001:8000"
     command: bash -c "python manage.py makemigrations model_app && python manage.py migrate && python manage.py loaddata ./model_app/db.json &&  mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/model_app/wsgi.py"
@@ -17,7 +17,7 @@ exp:
    ports:
       - "8002:8000"
    volumes:
-      - ./cs4501/exp_app:/app
+      - ./exp_app:/app
    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/exp_app/wsgi.py"
 
 web:
@@ -28,5 +28,5 @@ web:
    ports:
       - "8000:8000"
    volumes:
-      - ./cs4501/web_app:/app
+      - ./web_app:/app
    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
