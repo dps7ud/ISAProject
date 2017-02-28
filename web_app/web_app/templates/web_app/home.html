@@ -1,4 +1,6 @@
+<h2>Tasktic</h2>
 {% if top_users_list %}
+<h3>Top users</h3>
     <ul>
     {% for user in top_users_list %}
         <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
@@ -8,11 +10,26 @@
     <p>No users are available.</p>
 {% endif %}
 {% if recent_listings_list %}
-    <ul>
+<center><h3>Newest tasks</h3></center>
+<table style="width:80%">
+    <tr>
+        <th>Task</th>
+        <th>Date posted</th>
+        <th>Duration estimate</th>
+    </tr>
+    {% for task in recent_listings_list %}
+    <tr>
+        <td><a href="/task/{{ task.task_id }}/">{{ task.title }}</a></td>
+        <td>{{ task.post_date }}</td>
+        <td>{{ task.time }}</td>
+    </tr>
+    {% endfor %}
+        
+<!--    <ul>
     {% for task in recent_listings_list %}
         <li><a href="/task/{{ task.task_id }}/">{{ task.title }}</a></li>
     {% endfor %}
-    </ul>
+</ul> -->
 {% else %}
     <p>No tasks are available.</p>
 {% endif %}
