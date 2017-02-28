@@ -22,7 +22,7 @@ def index(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
-@csrf_exempt
+
 def review(request, review_id):
     if request.method == 'POST':
         try:
@@ -71,7 +71,7 @@ def review(request, review_id):
         except Review.DoesNotExist:
             return HttpResponse("ERROR: Review with that id does not exist")
 
-@csrf_exempt
+
 def review_create(request):
     if request.method == 'POST':
 
@@ -128,7 +128,7 @@ def review_create(request):
 #     else :
 #         return HttpResponse("ERROR: Review deletion endpoint only accepts DELETE requests")
 
-@csrf_exempt
+
 def task_query(request):
     """ Allows GET requests to access model instances by filtering"""
     if request.method == 'GET':
@@ -144,7 +144,7 @@ def task_query(request):
     else:
         return HttpResponse("ERROR: Posted to task_query")
 
-@csrf_exempt
+
 def task_create(request):
     """Accepts post request containing a single json object
     to create new task model instances. Acceptable json looks like this:
@@ -179,7 +179,7 @@ def task_create(request):
     else:
         return HttpResponse("ERROR: task_create must be POSTed")
 
-@csrf_exempt
+
 def task_info(request, task_id):
     """Get requests return an individual object, post requests update
     an individual object and reports success of update"""
@@ -205,7 +205,7 @@ def task_info(request, task_id):
     else:
         return HttpResponse("pass\n")
 
-@csrf_exempt
+
 def user(request, user_id):
     if request.method == 'POST':
         try:
@@ -245,7 +245,7 @@ def user(request, user_id):
         except Users.DoesNotExist:
             return HttpResponse("ERROR: User with that id does not exist")
 
-@csrf_exempt
+
 def user_create(request):
     if request.method == 'POST':
         userObj = Users()
