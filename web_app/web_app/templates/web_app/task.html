@@ -1,42 +1,160 @@
-<h1> Task </h1>
-<h2> {{task.description}} </h2>
-<h2> Owners </h2>
-{% if owners %}
-    <ul>
-    {% for user in owners %}
-        <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No owners for this task</p>
-{% endif %} 
-<h2> Workers </h2>
-{% if workers %}
-    <ul>
-    {% for user in workers %}
-        <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No workers for this task</p>
-{% endif %}
-<h2> Required Skills </h2>
-{% if skills %}
-    <ul>
-    {% for i in skills %}
-        <li>{{ i.skill }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No skills for this task</p>
-{% endif %}
-<h2> Reviews </h2>
-{% if reviews %}
-    <ul>
-    {% for review in reviews %}
-        <li><a href="/review/{{ review.id }}/">{{ review.title }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No reviews are available.</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+        <link href="/static/css/project.css" rel="stylesheet">
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">TaskTic</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              
+              
+              <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#">Tasks</a></li>
+                <li><a href="/user/1/">Users</a></li>
+                <li><a href="/review/1/">Reviews</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+
+        {% if errors %}
+                <div class="alert alert-danger" role="alert" style="padding-top:70px">{{errors}}</div>
+        {% endif %}
+
+        <div class="page-header">
+            <h1>Task - {{ task.title}} </h1>
+        </div>
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <b>Description: </b> {{task.description}} <br> <br>
+                <b>Status: </b> {{task.status}}<br><br>
+                <b>Location: </b> {{task.location}}
+              </div>
+            </div>
+        </div>
+
+         
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">User Skills</h3>
+              </div>
+              
+              {% if skills %}
+                <ul class="list-group">
+                {% for i in skills %}
+                    <li class="list-group-item">{{ i.skill }}</li>
+                {% endfor %}
+                </ul>
+                {% else %}
+                <div class="panel-body">
+                    <p>This Task Requires no Skills</p>
+                </div>
+                {% endif %}
+            
+            </div>
+        </div>
+            
+        </div>
+        <div class="col-sm-12">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">User Associated with this Task</h3>
+            </div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Location</th>
+                        <th>Role</th>
+                        <th>Visit Page </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in owners %}
+                    <tr>
+                        <td> {{user.fname}} {{user.lname}}</td>
+                        <td> {{user.email}}</td>
+                        <td> {{user.location}}</td>
+                        <td> Owner </td>
+                        <td> <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a> </td>
+                    </tr>
+                {% endfor %}
+                {% for user in workers %}
+                    <tr>
+                        <td> {{user.fname}} {{user.lname}}</td>
+                        <td> {{user.email}}</td>
+                        <td> {{user.location}}</td>
+                        <td> Worker </td>
+                        <td> <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        </div>
+        <div class="col-sm-12">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">Reviews Associated with this Task</h3>
+            </div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Score</th>
+                        <th>Visit Page </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for review in reviews %}
+                    <tr>
+                        <td> {{review.title}}</td>
+                        <td> {{review.score}}</td>
+                        <td> <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button">Go</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        </div>
+
+
+
+
+
+
+
+    <script src="/static/js/bootstrap.js"></script>
+    </body>
+</html>

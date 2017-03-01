@@ -37,6 +37,10 @@
           </div><!-- /.container-fluid -->
         </nav>
 
+        {% if errors %}
+                <div class="alert alert-danger" role="alert" style="padding-top:70px">{{errors}}</div>
+        {% endif %}
+
         <div class="page-header">
             <h1>User - {{ user.fname}} {{user.lname}} </h1>
         </div>
@@ -185,56 +189,3 @@
     <script src="/static/js/bootstrap.js"></script>
     </body>
 </html>
-
-<!-- 
-<h3> User Skills </h3>
-{% if skills %}
-    <ul>
-    {% for i in skills %}
-        <li>{{ i.skill }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>This user has no skills</p>
-{% endif %}
-<h3> Projects they own </h3>
-{% if owner %}
-    <ul>
-    {% for task in owner %}
-        <li><a href="/task/{{ task.id }}/">{{ task.description }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No owned tasks</p>
-{% endif %}
-<h3> Projects they have worked on </h3>
-{% if worker %}
-    <ul>
-    {% for task in worker %}
-        <li><a href="/task/{{ task.id }}/">{{ task.description }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Has not worked on any tasks</p>
-{% endif %}
-<h3> Reviews they created </h3>
-{% if reviewer %}
-    <ul>
-    {% for review in reviewer %}
-        <li><a href="/review/{{ review.id }}/">{{ review.title }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No reviews are available.</p>
-{% endif %}
-<h3> Reviews about this user </h3>
-{% if reviewee %}
-    <ul>
-    {% for review in reviewee %}
-        <li><a href="/review/{{ review.id }}/">{{ review.title }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No reviews are available.</p>
-{% endif %} -->
-

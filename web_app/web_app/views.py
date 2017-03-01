@@ -20,30 +20,33 @@ def home(request):
 	req = urllib.request.Request('http://exp-api:8000/home/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
-	topUsers = []
-	for i in resp[0]:
-		topUsers.append(i)
-	latestListings = []
-	for j in resp[1]:
-		latestListings.append(j)
+	if resp[2] == "":
+		errorString = False
+	else:
+		errorString = resp[2]
 	context = {
 		'top_users_list': resp[0],
-		'recent_listings_list': resp[1]
+		'recent_listings_list': resp[1],
+		'errors': errorString
 	}
 	# return HttpResponse(topUsers)
-	return render(request, 'web_app/index2.html', context)
+	return render(request, 'web_app/home.html', context)
 
 def review(request, review_id):
 	logger.error("In review method")
 	req = urllib.request.Request('http://exp-api:8000/review/' + review_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
-	logger.error(resp)
+	if resp[4] == "":
+		errorString = False
+	else:
+		errorString = resp[4]
 	context = {
 		'review': resp[0],
 		'postee': resp[1],
 		'poster': resp[2],
-		'task': resp[3]
+		'task': resp[3],
+		'errors': errorString
 	}
 	return render(request, 'web_app/review.html', context)
 	# return HttpResponse(resp[2][0])
@@ -53,13 +56,17 @@ def task(request, task_id):
 	req = urllib.request.Request('http://exp-api:8000/task/' + task_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
-
+	if resp[5] == "":
+		errorString = False
+	else:
+		errorString = resp[5]
 	context = {
 		'task': resp[0],
 		'owners': resp[1],
 		'workers': resp[2],
 		'skills': resp[3],
-		'reviews': resp[4]
+		'reviews': resp[4],
+		'errors': errorString
 	}
 	return render(request, 'web_app/task.html', context)
 
@@ -68,6 +75,10 @@ def user(request, user_id):
 	req = urllib.request.Request('http://exp-api:8000/user/' + user_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
+	if resp[7] == "":
+		errorString = False
+	else:
+		errorString = resp[7]
 
 	context = {
 		'user': resp[0],
@@ -76,6 +87,7 @@ def user(request, user_id):
 		'owner': resp[3],
 		'worker': resp[4],
 		'reviewer': resp[5],
-		'reviewee': resp[6]
+		'reviewee': resp[6],
+		'errors': errorString
 	}
 	return render(request, 'web_app/user.html', context)
