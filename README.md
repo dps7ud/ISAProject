@@ -11,37 +11,108 @@ Members of the Team
   - Matthew Tillman (mst2jd)
   - Brandon Whitfield (bjw4ph)
 
-API Service Endpoints
+Models Layer Endpoints
 -------------
 
   - /api/v1/review/(review_id)/
     - Used to retrieve or update a review which is already created
     - GET: Returns information for the review with a primary key of review_id if it exists, and return an error otherwise
-    - POST: Updates fields specified in the body of the request for the review with a primary key of review_id or creates a new instance in the database if that review doesn't exist
-      - Body of Request: Required, should be in json form
+    - POST: Updates fields specified using form encoded key-value pairs in the POST body
+      - Body of POST request example:
+      ```python
+      {
+                "title": "1",
+                "body": "2",
+                "score": 3,
+                "task": 4,
+                "poster_user": 2,
+                "postee_user": 3
+       }
+       ```
+    - DELETE: Deletes task with id of review_id, and returns an error otherwise  
+      
 
   - /api/v1/review/create/
-    - POST: Used to create a new database review entry, using the information specified in the body of request
-      - Body of Request: Required, Should be in json format
+    - POST: Used to create a new database review entry, using the information specified as a form encoded key-value pairs in the POST body
+      - Body of POST request example:
+      ```python
+      {
+                "title": "1",
+                "body": "2",
+                "score": 3,
+                "task": 4,
+                "poster_user": 2,
+                "postee_user": 3
+       }
+       ```
       
- - /api/v1/user/(user_id)/
-    - Used to retrieve or update a user which is already created
+- /api/v1/user/(user_id)/
+    - Used to retrieve, update, and delete a user which is already created
     - GET: Returns information for the user with a primary key of user_id if it exists, and return an error otherwise
-    - POST: Updates fields specified in the body of the request for the user with a primary key of user_id or creates a new instance in the database if that user doesn't exist
-      - Body of Request: Required, should be in json form
+    - POST: Updates fields specified in the body of the request for the user with a primary key of user_id, and returns an error otherwise
+      - Body of POST request example:
+      ```python
+      {
+            "fname": "New",
+            "lname": "Name",
+            "email": "new@gmail.com",
+            "bio": "I make changes",
+            "pw": "secret",
+            "location": "Virginia"
+       }
+       ```
+      
+    - DELETE: Delete user with the id user_id
 
-  - /api/v1/user/create/
-    - POST: Used to create a new database user entry, using the information specified in the body of request
-      - Body of Request: Required, Should be in json format
+- /api/v1/user/create/
+  - POST: Used to create a new database user entry, using the information specified as a form encoded key-value pairs in the POST body
+    - Body of POST request example:
+    ```python
+    {
+          "fname": "New",
+          "lname": "Name",
+          "email": "new@gmail.com",
+          "bio": "I make changes",
+          "pw": "secret",
+          "location": "Virginia"
+     }
+     ```
 
-  -api/v1/task/info/(task_id)/$
-    - GET: Returns Task model instance in json format.
-    - POST: Updates url indicated Task with provided json formatted update values.
+- api/v1/task/info/(task_id)/$
+    - Used to retrieve, update, and delete task entries which are already created
+    - GET: Returns fields of task model with a primary key of task_id if it exists in json format, and returns an error otherwise
+    - POST: Updates fields specified in the body of the request for the task with a primary key of task_id, and returns an error otherwise
+       - Body of POST request example:
+       ```python
+       {
+          "pricing_info":0.0,
+          "location":"where",
+          "time_to_live":"2017-02-15", 
+          "title":"A hard task", 
+          "description":"It is super hard", 
+          "post_date":"2017-02-15", 
+          "status":"OPEN", 
+          "time":"5",
+          "remote":False, 
+          "pricing_type":True,
+      }
+      ```
+    - DELETE: Deletes task with id of task_id, and returns an error otherwise
 
-  -api/v1/task/create/
-    - GET: Rejected responds with 'False'
-    - POST: creates a new Task instance with passed values. Requires json formatting and requires all fields to be set.
-
-  -api/v1/task/query
-    -GET: Accepts url queries of the form ...query/key1=val1&key2=val2...
-    -POST: Rejected responds with 'False'
+- api/v1/task/create/
+    - POST: Used to create a new database task entry, using the information specified as a form encoded key-value pairs in the POST body
+      - Body of POST request example:
+      ```python
+       {
+          "pricing_info":0.0,
+          "location":"where",
+          "time_to_live":"2017-02-15", 
+          "title":"A hard task", 
+          "description":"It is super hard", 
+          "post_date":"2017-02-15", 
+          "status":"OPEN", 
+          "time":"5",
+          "remote":False, 
+          "pricing_type":True,
+      }
+      ```
