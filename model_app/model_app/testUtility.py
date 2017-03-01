@@ -34,7 +34,15 @@ class TestUtility(TestCase):
             rating_json = rating2_json
 
         #Add in a new user
-        response = self.client.post(reverse('user_create'), {})
+        create_json = {
+                "fname":'Dan',
+                "lname":'Theman',
+                "email":'xyz@example.com',
+                "bio":"",
+                "pw":'pas',
+                "location":'behind you',
+            }
+        response = self.client.post(reverse('user_create'), create_json)
         resp_json = json.loads((response.content).decode("utf-8"))
 
         #Add in a perfect rating for this new user
@@ -88,7 +96,15 @@ class TestUtility(TestCase):
         self.assertEquals(rating_json['rating'], 5)
 
     def test_get_user_rating_no_reviews(self):
-        response = self.client.post(reverse('user_create'), {})
+        create_json = {
+                "fname":'Dan',
+                "lname":'Theman',
+                "email":'xyz@example.com',
+                "bio":"",
+                "pw":'pas',
+                "location":'behind you',
+            }
+        response = self.client.post(reverse('user_create'), create_json)
         resp_json = json.loads((response.content).decode("utf-8"))
         responseRating = self.client.get(reverse('get_user_rating', args=[resp_json['id']]))
         rating_json = json.loads((responseRating.content).decode("utf-8"))

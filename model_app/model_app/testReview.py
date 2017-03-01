@@ -128,9 +128,9 @@ class TestReview(TestCase):
                 "postee_user": 3
             })
         resp_json = json.loads((response.content).decode("utf-8"))
-        self.assertEquals(resp_json["title"], "1")
-        self.assertEquals(resp_json["body"], "2")
-        self.assertEquals(resp_json["score"], 3)
+        self.assertEquals(resp_json["title"], '1')
+        self.assertEquals(resp_json["body"], '2')
+        self.assertEquals(resp_json["score"], '3')
         self.assertEquals(resp_json["task"], 4)
         self.assertEquals(resp_json["poster_user"], 2)
         self.assertEquals(resp_json["postee_user"], 3)
@@ -144,7 +144,7 @@ class TestReview(TestCase):
                 "postee_user": 3
             })
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, "ERROR: Task field must be specified for Review Creation")
+        self.assertTrue(resp_json.startswith("Missing required fields:"))
 
     def test_post_create_review_no_poster_user(self):
         response = self.client.post(reverse('review_create'), {
@@ -155,7 +155,7 @@ class TestReview(TestCase):
                 "postee_user": 3
             })
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, "ERROR: Poster_User field must be specified for Review Creation")
+        self.assertTrue(resp_json.startswith("Missing required fields:"))
 
     def test_post_create_review_no_postee_user(self):
         response = self.client.post(reverse('review_create'), {
@@ -166,7 +166,7 @@ class TestReview(TestCase):
                 "poster_user": 3
             })
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, "ERROR: Postee_user field must be specified for Review creation")
+        self.assertTrue(resp_json.startswith("Missing required fields:"))
 
     def test_post_review_create_task_id_doesnt_exist(self):
         response = self.client.post(reverse('review_create'), {

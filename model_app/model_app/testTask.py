@@ -146,7 +146,7 @@ class TestTask(TestCase):
             "time":"5.0",
         })
         resp_json = (response.content).decode("utf-8")
-        self.assertEquals(resp_json, "pricing_info is a required field.")
+        self.assertTrue(resp_json.startswith("Missing required fields:"))
 
 
     # -----------------------Testing "task_skills" ------------------------------
