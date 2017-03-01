@@ -75,21 +75,18 @@ def review(request, review_id):
 def review_create(request):
     if request.method == 'POST':
 
+        required = {'task','poster_user','postee_user'}
         reviewObj = Review()
         json_data = request.POST
-        if 'task' not in json_data:
-            return HttpResponse("ERROR: Task field must be specified for Review Creation")
-        if 'poster_user' not in json_data:
-            return HttpResponse("ERROR: Poster_User field must be specified for Review Creation")
-        if 'postee_user' not in json_data:
-            return HttpResponse("ERROR: Postee_user field must be specified for Review creation")
-        #Any field not specified in the body of the request will use the default value of the review
-        if 'body' in json_data:
-            reviewObj.body = json_data['body']
-        if 'title' in json_data:
-            reviewObj.title = json_data['title']
-        if 'score' in json_data:
-            reviewObj.score = float(json_data['score'])
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
+        for key, value in json_data.items():
+            #ugly
+            if key not in required:
+                setattr(reviewObj, key, value)        
+        # Any field not specified in the body of the request will 
+        #use the default value of the review
         if 'task' in json_data:
             try:
                 reviewObj.task = Task.objects.get(pk=json_data['task'])
@@ -105,10 +102,6 @@ def review_create(request):
                 reviewObj.postee_user = Users.objects.get(pk=json_data['postee_user'])
             except Users.DoesNotExist:
                 return HttpResponse("ERROR: Postee User does not exist")
-            # logger.error(key)
-            # logger.error(Users.objects.get(pk=key))
-            #reviewObj.postee_user = json_data['postee_user']
-        #try:
         try:
             reviewObj.save()
             return JsonResponse(model_to_dict(reviewObj))
@@ -116,18 +109,6 @@ def review_create(request):
             return HttpResponse("ERROR: Wrong data type inputs")  
     else:
         return HttpResponse("ERROR: Review Creation endpoint must be POSTed") 
-
-# def review_delete(request, review_id):
-#     if request.method == 'DELETE':
-#         try:
-#             reviewObj = Review.objects.get(pk=review_id)
-#         except Review.DoesNotExist:
-#             return HttpResponse("ERROR: Review with that id does not exist")
-#         reviewObj.delete()
-#         return HttpResponse("Deleted Review with ID: " + str(review_id))
-#     else :
-#         return HttpResponse("ERROR: Review deletion endpoint only accepts DELETE requests")
-
 
 def task_query(request):
     """ Allows GET requests to access model instances by filtering"""
@@ -158,22 +139,21 @@ def task_create(request):
         "status":"OPEN",
         "remote":false,
         "pricing_type":true,
+        "pricing_info":true,
         "time":5
     }
     """
     if request.method == "POST":
-        required = set(field.name for field in set(Task._meta.fields).difference({'id'}))
+        required = set(field.name for field in set(Task._meta.fields))
         required.remove('id')
 
         try:
-            # request_body = request.body.decode('utf-8')
             request_data = request.POST
         except ValueError:
             HttpResponse("Bad json input, it's super pickey for some reason. I promise it works.")
-        for requirement in required:
-            if requirement not in request_data:
-                return HttpResponse(str(requirement) + " is a required field.")
-        primary_keys = []
+        missing_fields = required.difference(request_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         task_obj = Task()
         for key, value in request_data.items():
             setattr(task_obj, key, value)        
@@ -251,22 +231,15 @@ def user(request, user_id):
 
 def user_create(request):
     if request.method == 'POST':
-        userObj = Users()
-        #count = User.objects.get().count()
-        #UserObj.User_id = count+1
+        required = set(field.name for field in set(Users._meta.fields))
+        required.remove('id')
         json_data = request.POST
-        if 'fname' in json_data:
-            userObj.fname = json_data['fname']
-        if 'lname' in json_data:
-            userObj.lname = json_data['lname']
-        if 'email' in json_data:
-            userObj.email = json_data['email']
-        if 'bio' in json_data:
-            userObj.bio = json_data['bio']
-        if 'pw' in json_data:
-            userObj.pw = json_data['pw']
-        if 'location' in json_data:
-            userObj.location = json_data['location']
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return JsonResponse({"ERROR":"Missing required fields: " + ', '.join(missing_fields)})
+        userObj = Users()
+        for key, value in json_data.items():
+            setattr(userObj, key, value)
         try:
             userObj.save()
             return JsonResponse(model_to_dict(userObj))

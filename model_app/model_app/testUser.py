@@ -67,7 +67,15 @@ class TestUser(TestCase):
             })
 
     def test_delete_user(self):
-        response = self.client.post(reverse('user_create'), {})
+        create_json = {
+                "fname":'Dan',
+                "lname":'Theman',
+                "email":'xyz@example.com',
+                "bio":"",
+                "pw":'pas',
+                "location":'behind you',
+            }
+        response = self.client.post(reverse('user_create'), create_json)
         resp_json = json.loads((response.content).decode("utf-8"))
 
         response2 = self.client.delete(reverse('user', args=[resp_json['id']]))
@@ -87,22 +95,13 @@ class TestUser(TestCase):
     def test_post_create_user_no_fields(self):
         response = self.client.post(reverse('user_create'), {})
         resp_json = json.loads((response.content).decode("utf-8"))
-        self.assertEquals(resp_json["fname"], "")
-        self.assertEquals(resp_json["lname"], "")
-        self.assertEquals(resp_json["email"], "")
-        self.assertEquals(resp_json["bio"], "")
-        self.assertEquals(resp_json["pw"], "")
-        self.assertEquals(resp_json["location"], "")
+        self.assertTrue(resp_json["ERROR"].startswith("Missing required fields:"))
 
     def test_post_create_user_some_fields(self):
         response = self.client.post(reverse('user_create'), {"fname": "1", "lname": "2"})
         resp_json = json.loads((response.content).decode("utf-8"))
-        self.assertEquals(resp_json["fname"], "1")
-        self.assertEquals(resp_json["lname"], "2")
-        self.assertEquals(resp_json["email"], "")
-        self.assertEquals(resp_json["bio"], "")
-        self.assertEquals(resp_json["pw"], "")
-        self.assertEquals(resp_json["location"], "")
+        self.assertTrue(resp_json["ERROR"].startswith("Missing required fields:"))
+
 
     def test_post_create_user_all_fields(self):
         response = self.client.post(reverse('user_create'), {"fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
