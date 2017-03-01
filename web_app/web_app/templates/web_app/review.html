@@ -1,26 +1,112 @@
-<h2> Review <h2>
-<h3> Reviewer</h3>
-{% if poster %}
-    <a href="/user/{{ poster.id }}/">{{ poster.fname }} {{poster.lname }}</a>
-{% else %}
-    <p>No Poster is available.</p>
-{% endif %}
-<h3> Review subject</h3>
-{% if postee %}
-    <a href="/user/{{ postee.id }}/">{{ postee.fname }} {{postee.lname}}</a>
-{% else %}
-    <p>No Postee is available.</p>
-{% endif %}
-<h3> Task</h3>
-{% if task %}
-    <a href="/task/{{ task.task_id }}/">{{ task.title }}</a>
-{% else %}
-    <p>No Task is available.</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% if task %}
-    <h4>{{ review.title }}</h4>
-    <p>{{review.body}}</p>
-{% else %}
-    <p>No Task is available.</p>
-{% endif %}
+	<head>
+		<link href="/static/css/bootstrap.css" rel="stylesheet">
+		<link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+		<link href="/static/css/project.css" rel="stylesheet">
+
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="/">TaskTic</a>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      
+		      
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="/task/1/">Tasks</a></li>
+		        <li><a href="/user/1/">Users</a></li>
+		        <li class="active"><a href="#">Reviews</a></li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+
+		<div class="page-header">
+  			<h1>Review - {{review.title}} </h1>
+		</div>
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+			  <div class="panel-body">
+			    {{review.body}} <br> <br>
+			    <b>Score:  </b> {{ review.score}}
+			  </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+			<div class="col-sm-12">
+				<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">Reviewer</h3>
+				  </div>
+				  <div class="panel-body">
+				    {% if poster %}
+				    	<b>Name: </b> {{ poster.fname }} {{poster.lname }} <br/>
+				    	<b>Email: </b> {{ poster.email}} <br/>
+				    	<b>Location: </b> {{poster.location}} <br/>
+					    <a class = "btn btn-primary" href="/user/{{ poster.id }}/" role="button">Visit Page</a>
+					{% else %}
+					    <p>No Poster is available.</p>
+					{% endif %}
+				  </div>
+				</div>
+			</div>
+			</div>
+			<div class="col-sm-6">
+			<div class="col-sm-12">
+				<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">Reviewee</h3>
+				  </div>
+				  <div class="panel-body">
+				    {% if postee %}
+					    <b>Name: </b> {{ postee.fname }} {{postee.lname }} <br/>
+				    	<b>Email: </b> {{ postee.email}} <br/>
+				    	<b>Location: </b> {{postee.location}} <br/>
+					    <a class = "btn btn-primary" href="/user/{{ postee.id }}/" role="button">Visit Page</a>
+					{% else %}
+					    <p>No Postee is available.</p>
+					{% endif %}
+				  </div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Task</h3>
+			  </div>
+			  <div class="panel-body">
+			    {% if task %}
+				    <b>Title: </b> {{ task.title }} <br/>
+			    	<b>Description: </b> {{ task.description}} <br/>
+			    	<b>Location: </b> {{task.location}} <br/>
+			    	<b>Status: </b> {{task.status}} <br/>
+				    <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Visit Page</a>
+				{% else %}
+				    <p>No Postee is available.</p>
+				{% endif %}
+			  </div>
+			</div>
+		</div>
+		
+	<script src="/static/js/bootstrap.js"></script>
+	</body>
+</html>

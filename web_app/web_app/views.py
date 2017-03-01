@@ -31,7 +31,7 @@ def home(request):
 		'recent_listings_list': resp[1]
 	}
 	# return HttpResponse(topUsers)
-	return render(request, 'web_app/index.html', context)
+	return render(request, 'web_app/index2.html', context)
 
 def review(request, review_id):
 	logger.error("In review method")

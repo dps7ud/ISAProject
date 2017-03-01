@@ -1,10 +1,13 @@
 from django.conf.urls import url
 from django.http import Http404
 import django.views.defaults
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
 #handler404 = 'views.four_oh_four'
+statics = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns = [
     #Since debug==True, need to manualy route to our 404 page
@@ -14,4 +17,4 @@ urlpatterns = [
     url(r'^review/(?P<review_id>[0-9]+)/?$', views.review, name='review'),
     url(r'^home/?', views.home, name='home'),
     url(r'^/?$', views.home, name='home'),
-]
+] + statics
