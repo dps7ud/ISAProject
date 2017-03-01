@@ -116,3 +116,67 @@ Models Layer Endpoints
           "pricing_type":True,
       }
       ```
+- getUserRating/(user_id)
+  - GET: Returns the average score for a user with id of user_id
+    - Example Response:
+    ```python
+    { "score": 5.0}
+    ```
+- topUsers/
+  - GET: Returns a list of 5 User model instances which correspond to the users with the highest average rating.
+
+- recentListings/
+  - GET: Returns a list of 5 Task model instances which corrsepond to the tasks which have been posted most recently
+
+- Other Model Layer Helper functions (Only accept GET requests)
+  - api/v1/taskSkills/(task_id) : Returns a list filled with TaskSkills objects for all of the skills needed for task with task_id
+  - api/v1/taskOwners/(task_id) : Return a list of User models which correspond to the owners of the task with task_id
+  - api/v1/taskWorkers/(task_id) : Return a list of User models which correspond to the workers on the task with task_id
+  - api/v1/taskReviews/(task_id) : Return a list of Review models which correspond to reviews for the task with task_id
+  - api/v1/userLanguages/(user_id) : Return a list of UserLanguages models which correspond to the languages known by the user with user_id
+  - api/v1/userSkills/(user_id) : Return a list of UserSkills models which correspond to the skills of the user with user_id
+  - api/v1/userOwnerTasks/(user_id) : Return a list of Task models which correspond to the task which the user with user_id owns
+  - api/v1/userWorkerTasks/(user_id) : Return a list of Task models which correspond to the task which the user with user_id has worked on
+  - api/v1/userReviews/(user_id) : Return a list of Review models which correspond to the reviews which the user with user_id has created
+  - api/v1/userReviewed/(user_id) : Return a list of Review models which correspond to the reviews where the user with user_id is the subject
+  
+Experience Layer Endpoints
+-------------
+All endpoints on the experience layer only accepts GET requests at this point
+- home/
+  - Calls to Model Layer
+    - topUsers/
+    - recentListings/
+  - Returns:  List containing [response from topUsers, response from recentListings, combination of any error string from the calls above]
+
+- review/(review_id)
+  - Calls to Model Layer
+    1. api/v1/review/(review_id)/
+    2. api/v1/user/(Review.postee_user)
+    3. api/v1/user/(Review.poster_user)
+    4. api/v1/task/info/(Review.task)
+  - Returns: List containing [response from call a, response from call b, response from call c, response from call d, error strings]
+
+- user/(user_id)
+  - Calls to Model Layer
+    1. api/v1/user/(user_id)
+    2. api/v1/userLanguages/(user_id)
+    3. api/v1/userSkills/(user_id)
+    4. api/v1/userOwnerTasks/(user_id)
+    5. api/v1/userWorkerTasks/(user_id)
+    6. api/v1/userReviews/(user_id)
+    7. api/v1/userReviewed/(user_id)
+  - Returns: List containing [response from call a, response from call b, response from call c, response from call d, response from call e, response from call f, response from call g, error strings]
+
+- task/(task_id)
+  - Calls to Model Layer
+    1. api/v1/task/info/(task_id)
+    2. api/v1/taskOwners/(task_id)
+    3. api/v1/taskWorkers/(task_id)
+    4. api/v1/taskSkills/(task_id)
+    5. api/v1/taskReviews/(task_id)
+  - Returns: List containing [response from call a, response from call b, response from call c, response from call d, response from call e, error strings]
+
+Web Layer Endpoints
+-------------
+All web layer endpoints correspond to the experience layer endpoints and calls that part of the API when invoked
