@@ -11,6 +11,16 @@ Members of the Team
   - Matthew Tillman (mst2jd)
   - Brandon Whitfield (bjw4ph)
 
+Project 3 Notes
+-------------
+- Testing: Please ensure the user 'www' is given access to database 'test_cs4501' in the same way as was done in project 1 before running the tests in the models layer
+- User Stories: User stories can be found in "UserStories.pdf" in the top directory of the repository
+  - Testing for User Story 1 can be primarily found in testUtility.py
+  - Testing for User Story 2 can be found in testTask.py
+  - Testing for User Story 3 can be found in testUser.py
+  - Testing for User Story 4 can be found in testReview.py
+  - Testing for User Story 5 completed by checking functionality on the web layer
+
 Models Layer Endpoints
 -------------
 
