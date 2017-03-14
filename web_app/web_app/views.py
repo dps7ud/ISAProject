@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+
+from .forms import SignUpForm
 
 import urllib.request
 import urllib.parse
@@ -91,3 +94,14 @@ def user(request, user_id):
 		'errors': errorString
 	}
 	return render(request, 'web_app/user.html', context)
+
+def signup(request):
+	if request.method == 'POST':
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			return HttpResponseRedirect('/home/')
+	else:
+		form = SignUpForm()
+
+	return render(request, 'web_app/signup.html', {'form': form})
+
