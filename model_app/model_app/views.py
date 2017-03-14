@@ -10,7 +10,6 @@ from django.forms.models import model_to_dict
 from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
 
 import json
-
 import logging
 
 # Get an instance of a logger
@@ -22,8 +21,11 @@ def index(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
-
-def review(request, review_id):
+def review_info(request, review_id):
+    """Used to retrieve, update, and delete a user which is already created
+        GET: Returns user with *user_id* if it exists, error otherwise
+        POST: Updates fields for user with *user_id*, returns error if no such user
+    """
     if request.method == 'POST':
         try:
             reviewObj = Review.objects.get(pk=review_id)
@@ -70,7 +72,6 @@ def review(request, review_id):
             return JsonResponse(model_to_dict(reviewObj))
         except Review.DoesNotExist:
             return HttpResponse("ERROR: Review with that id does not exist")
-
 
 def review_create(request):
     if request.method == 'POST':
@@ -125,23 +126,9 @@ def task_query(request):
     else:
         return HttpResponse("ERROR: Posted to task_query")
 
-
 def task_create(request):
     """Accepts post request containing a single json object
-    to create new task model instances. Acceptable json looks like this:
-    {
-        "pricing_info":"0.0",
-        "title":"mynew_task",
-        "description":"",
-        "location":"here",
-        "time_to_live":"2017-02-15",
-        "post_date":"2017-02-15",
-        "status":"OPEN",
-        "remote":false,
-        "pricing_type":true,
-        "pricing_info":true,
-        "time":5
-    }
+    to create new task model instances.
     """
     if request.method == "POST":
         required = set(field.name for field in set(Task._meta.fields))
@@ -162,10 +149,13 @@ def task_create(request):
     else:
         return HttpResponse("ERROR: task_create must be POSTed")
 
-
 def task_info(request, task_id):
-    """Get requests return an individual object, post requests update
-    an individual object and reports success of update"""
+    """Used to get, update and delete task objects.
+       Returns error if no such task exists.
+        -GET return json task object
+        -POST update a task and reports success of update
+        -DELETE deletes object with specified *task_id*
+    """
     try:
         task_obj = Task.objects.get(pk=task_id)
     except Task.DoesNotExist:
@@ -173,7 +163,6 @@ def task_info(request, task_id):
     if request.method == "GET":
         return JsonResponse(model_to_dict(task_obj))
     elif request.method == "POST":
-        # request_body = request.body.decode('utf-8')
         try:
             update_data = request.POST
         except ValueError:
@@ -187,7 +176,6 @@ def task_info(request, task_id):
         return HttpResponse("Deleted Task with ID: " + str(task_id))
     else:
         return HttpResponse("pass\n")
-
 
 def user(request, user_id):
     if request.method == 'POST':
@@ -227,7 +215,6 @@ def user(request, user_id):
             return JsonResponse(model_to_dict(userObj))
         except Users.DoesNotExist:
             return HttpResponse("ERROR: User with that id does not exist")
-
 
 def user_create(request):
     if request.method == 'POST':
@@ -402,8 +389,4 @@ def user_reviewed(request, user_id):
         return JsonResponse(reviewsList, safe=False)
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
-
-
-
-
 

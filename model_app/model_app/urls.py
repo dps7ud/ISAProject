@@ -21,7 +21,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^api/v1/review/(?P<review_id>[0-9]+)/$', views.review, name='review'),
+    url(r'^api/v1/review/info/(?P<review_id>[0-9]+)/$', views.review_info, name='review_info'),
     url(r'^api/v1/review/create/$', views.review_create, name='review_create'),
     url(r'^api/v1/task/info/(?P<task_id>[0-9]+)/$', views.task_info, name='task_info'),
     url(r'^api/v1/task/create/$', views.task_create, name='task_create'),
