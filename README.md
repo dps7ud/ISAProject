@@ -24,7 +24,7 @@ Project 3 Notes
 Models Layer Endpoints
 -------------
 
-  - /api/v1/review/(review_id)/
+  - /api/v1/review/info/(review_id)/
     - Used to retrieve or update a review which is already created
     - GET: Returns information for the review with a primary key of review_id if it exists, and return an error otherwise
     - POST: Updates fields specified using form encoded key-value pairs in the POST body
@@ -56,7 +56,7 @@ Models Layer Endpoints
        }
        ```
       
-- /api/v1/user/(user_id)/
+- /api/v1/user/info/(user_id)/
     - Used to retrieve, update, and delete a user which is already created
     - GET: Returns information for the user with a primary key of user_id if it exists, and return an error otherwise
     - POST: Updates fields specified in the body of the request for the user with a primary key of user_id, and returns an error otherwise
