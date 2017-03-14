@@ -10,6 +10,11 @@ import json
 import urllib.error
 from urllib.error import URLError
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 def home(request):
 	if request.method == 'GET':
@@ -257,3 +262,20 @@ def user(request, user_id):
 		return JsonResponse([resp, resp2, resp3, resp4, resp5, resp6, resp7, errorStrings], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts GET requests")
+
+def signup(request):
+	if request.method == "POST":
+		errorStrings = ""
+		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		logger.error('testing')
+		logger.error(str(post_encoded))
+		req = urllib.request.Request('http://models-api:8000/api/v1/user/create/', data=post_encoded, method='POST')
+		resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		try:
+			resp = json.loads(resp_json)
+		except ValueError:
+			resp = False
+			errorStrings = resp_json
+		return JsonResponse([resp, errorStrings], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")

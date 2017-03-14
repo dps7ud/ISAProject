@@ -99,9 +99,19 @@ def signup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
 		if form.is_valid():
-			return HttpResponseRedirect('/home/')
+			post_encoded = urllib.parse.urlencode(form.cleaned_data).encode('utf-8')
+			req = urllib.request.Request('http://exp-api:8000/signup/', data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			logger.error('finishing')
+			logger.error(resp)
+			logger.error(resp[0])
+			if not resp[1] == "":
+				return HttpResponse(resp[1])
+			else:
+				return HttpResponseRedirect('/user/' + str(resp[0]['id']) + '/')		
 	else:
 		form = SignUpForm()
-
+	
 	return render(request, 'web_app/signup.html', {'form': form})
 

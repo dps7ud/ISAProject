@@ -197,6 +197,8 @@ def user(request, user_id):
             return HttpResponse("ERROR: User with that id does not exist")
         # body_unicode = request.body.decode('utf-8')
         json_data = request.POST
+        logger.error("In the models layer")
+        logger.error(json_data)
         if 'fname' in json_data:
             userObj.fname = json_data['fname']
         if 'lname' in json_data:
@@ -233,7 +235,10 @@ def user_create(request):
     if request.method == 'POST':
         required = set(field.name for field in set(Users._meta.fields))
         required.remove('id')
+        logger.error("in user create")
         json_data = request.POST
+        #logger.error(request.POST['fname'])
+        logger.error(str(json_data))
         missing_fields = required.difference(json_data.keys())
         if missing_fields:
             return JsonResponse({"ERROR":"Missing required fields: " + ', '.join(missing_fields)})
