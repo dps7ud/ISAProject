@@ -46,7 +46,7 @@ def review(request, review_id):
 	if request.method == 'GET':
 		errorStrings = ""
 		try:
-			req = urllib.request.Request('http://models-api:8000/api/v1/review/' + review_id + '/')
+			req = urllib.request.Request('http://models-api:8000/api/v1/review/info/' + review_id + '/')
 			resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
 			try:
 				resp = json.loads(resp_json)
