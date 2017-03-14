@@ -22,9 +22,9 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def review_info(request, review_id):
-    """Used to retrieve, update, and delete a user which is already created
-        GET: Returns user with *user_id* if it exists, error otherwise
-        POST: Updates fields for user with *user_id*, returns error if no such user
+    """Used to retrieve, update, and delete a review which is already created
+        GET: Returns review with *review_id* if it exists, error otherwise
+        POST: Updates fields for review with *review_id*, returns error if no such review
     """
     if request.method == 'POST':
         try:
@@ -177,7 +177,11 @@ def task_info(request, task_id):
     else:
         return HttpResponse("pass\n")
 
-def user(request, user_id):
+def user_info(request, user_id):
+    """Used to retrieve, update and delete a user
+        GET: Returns user with *user_id* if it exists, error otherwise
+        POST: Updates fields for user with *user_id*, returns error if no such user
+    """
     if request.method == 'POST':
         try:
             userObj = Users.objects.get(pk=user_id)
