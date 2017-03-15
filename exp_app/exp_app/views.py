@@ -15,6 +15,10 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+import os
+import hmac
+from django.conf import settings
+
 # Create your views here.
 def home(request):
 	if request.method == 'GET':
@@ -279,3 +283,32 @@ def signup(request):
 		return JsonResponse([resp, errorStrings], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def login(request):
+	if request.method == "POST":
+		errorStrings = ""
+		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		req = urllib.request.Request('http://models-api:8000/api/v1/user/find/', data=post_encoded, method='POST')
+		resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		if resp == "Correct":
+			authenticator = hmac.new(
+			        key = settings.SECRET_KEY.encode('utf-8'),
+			        msg = os.urandom(32),
+			        digestmod = 'sha256',
+			    ).hexdigest()
+			logger.error(authenticator)
+			auth_encoded = urllib.parse.urlencode({"username": request.POST["username"], "authenticator": authenticator}).encode('utf-8')
+			req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', data=auth_encoded, method='POST')
+			resp2_json = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+			try:
+				resp2 = json.loads(resp2_json)
+			except ValueError:
+				resp2 = False
+				errorStrings = resp2_json
+			return JsonResponse([resp2, errorStrings], safe=False)
+		else:
+			return JsonResponse([False, resp], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+

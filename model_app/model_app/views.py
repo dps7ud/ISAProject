@@ -7,8 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib.auth import hashers
+import datetime
 
-from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
+from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills, Authenticator
 
 import json
 
@@ -23,6 +24,17 @@ def index(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
+
+def authenticator_create(request):
+    if request.method == 'POST':
+        auth_obj = Authenticator()
+        for key, value in request.POST.items():
+            setattr(auth_obj, key, value)
+        auth_obj.date_created = datetime.datetime.now()        
+        auth_obj.save()
+        return JsonResponse(model_to_dict(auth_obj))
+    else:
+        return HttpResponse("ERROR: Endpoint must be POSTed")
 
 def review(request, review_id):
     if request.method == 'POST':
@@ -258,6 +270,24 @@ def user_create(request):
             #return HttpResponse("ERROR: Wrong data type inputs")
     else:
         return HttpResponse("ERROR: User creation endpoint must be posted")
+
+def user_find(request):
+    if request.method == 'POST':
+        # if Users.objects.filter(username=request.POST['username']).filter(pw=hashers.make_password(request.POST['pw'])).count() == 0:
+        # logger.error("Misty")
+        # hashed_pass = hashers.make_password(str(request.POST['pw']))
+        # logger.error(hashed_pass)
+        try:
+            userObj = Users.objects.get(username=request.POST['username'])
+        except Users.DoesNotExist:
+            return HttpResponse("Username not registered")
+
+        if hashers.check_password(request.POST['pw'], userObj.pw):
+            return HttpResponse("Correct")
+        else:
+            return HttpResponse("Password Incorrect")
+
+
 
 # ----------------------- For Project 3 ------------------------------------
 def user_rating(user):

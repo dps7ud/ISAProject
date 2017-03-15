@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
-from .forms import SignUpForm
+
+from .forms import SignUpForm, LoginForm
 
 import urllib.request
 import urllib.parse
@@ -111,4 +113,26 @@ def signup(request):
 		form = SignUpForm()
 	
 	return render(request, 'web_app/signup.html', {'form': form})
+
+def login(request):
+	errors = False
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			post_encoded = urllib.parse.urlencode(form.cleaned_data).encode('utf-8')
+			req = urllib.request.Request('http://exp-api:8000/login/', data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			if not resp[0]:
+				errors = resp[1]
+			else:
+				response = HttpResponseRedirect(reverse('home'))
+				response.set_cookie("auth", resp[0]["authenticator"])
+				return response
+	else:
+		form = LoginForm()
+
+	return render(request, 'web_app/login.html', {'form': form, 'errors': errors})
+
+
 

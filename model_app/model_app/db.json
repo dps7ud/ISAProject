@@ -1,5 +1,14 @@
 [
   {
+    "model": "model_app.authenticator",
+    "pk" : 1,
+    "fields": {
+      "username": "test",
+      "authenticator": "test",
+      "date_created": "2013-02-09"
+    }
+  },
+  {
     "model": "model_app.task",
     "pk" : 1,
     "fields": {

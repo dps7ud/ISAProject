@@ -7,6 +7,11 @@ TASK_STATUS_CHOICES = (
 )
 
 # Create your models here.
+class Authenticator(models.Model):
+    username = models.CharField(max_length=100)
+    authenticator = models.CharField(max_length=300)
+    date_created = models.DateTimeField()
+
 class Task(models.Model):
     """Task models individual jobs (past, present or future) that
     exist within our system.

@@ -16,6 +16,7 @@ urlpatterns = [
 	url(r'^task/(?P<task_id>[0-9]+)/?$', views.task, name='task'),
     url(r'^review/(?P<review_id>[0-9]+)/?$', views.review, name='review'),
     url(r'^signup/?', views.signup, name='signup'),
+    url(r'^login/?', views.login, name='login'),
     url(r'^home/?', views.home, name='home'),
     url(r'^/?$', views.home, name='home'),
 ] + statics

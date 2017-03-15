@@ -8,3 +8,7 @@ class SignUpForm(forms.Form):
 	email = forms.CharField(label='Email', max_length=100)
 	bio = forms.CharField(label='Bio', max_length=100)
 	pw = forms.CharField(label='Password', max_length=100)
+
+class LoginForm(forms.Form):
+	username = forms.CharField(label='Username', max_length=100)
+	pw = forms.CharField(label='Password', max_length=100)
