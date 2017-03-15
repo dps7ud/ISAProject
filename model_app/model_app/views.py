@@ -6,6 +6,7 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.contrib.auth import hashers
 
 from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
 
@@ -199,6 +200,8 @@ def user(request, user_id):
         json_data = request.POST
         logger.error("In the models layer")
         logger.error(json_data)
+        if 'username' in json_data:
+            userObj.username = json_data['username']
         if 'fname' in json_data:
             userObj.fname = json_data['fname']
         if 'lname' in json_data:
@@ -244,12 +247,15 @@ def user_create(request):
             return JsonResponse({"ERROR":"Missing required fields: " + ', '.join(missing_fields)})
         userObj = Users()
         for key, value in json_data.items():
-            setattr(userObj, key, value)
-        try:
-            userObj.save()
-            return JsonResponse(model_to_dict(userObj))
-        except:
-            return HttpResponse("ERROR: Wrong data type inputs")
+            if key == 'pw':
+                setattr(userObj, key, hashers.make_password(json_data['pw']))
+            else:
+                setattr(userObj, key, value)
+        #try:
+        userObj.save()
+        return JsonResponse(model_to_dict(userObj))
+        #except:
+            #return HttpResponse("ERROR: Wrong data type inputs")
     else:
         return HttpResponse("ERROR: User creation endpoint must be posted")
 

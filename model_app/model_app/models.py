@@ -24,11 +24,12 @@ class Task(models.Model):
     pricing_info = models.FloatField()
 
 class Users(models.Model):
+    username = models.CharField(max_length=100)
     fname = models.CharField(max_length=25)
     lname = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     bio = models.CharField(max_length=500)
-    pw = models.CharField(max_length=50)
+    pw = models.CharField(max_length=500)
     location = models.CharField(max_length=50)
 
 class Review(models.Model):

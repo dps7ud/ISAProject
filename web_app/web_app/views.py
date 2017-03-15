@@ -103,9 +103,6 @@ def signup(request):
 			req = urllib.request.Request('http://exp-api:8000/signup/', data=post_encoded, method='POST')
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 			resp = json.loads(resp_json)
-			logger.error('finishing')
-			logger.error(resp)
-			logger.error(resp[0])
 			if not resp[1] == "":
 				return HttpResponse(resp[1])
 			else:

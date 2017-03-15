@@ -35,6 +35,7 @@ class TestUtility(TestCase):
 
         #Add in a new user
         create_json = {
+                "username": "tester",
                 "fname":'Dan',
                 "lname":'Theman',
                 "email":'xyz@example.com',
@@ -42,7 +43,9 @@ class TestUtility(TestCase):
                 "pw":'pas',
                 "location":'behind you',
             }
-        response = self.client.post(reverse('user_create'), create_json)
+        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        print((response.content).decode("utf-8"))
+
         resp_json = json.loads((response.content).decode("utf-8"))
 
         #Add in a perfect rating for this new user
@@ -97,6 +100,7 @@ class TestUtility(TestCase):
 
     def test_get_user_rating_no_reviews(self):
         create_json = {
+                "username": "test",
                 "fname":'Dan',
                 "lname":'Theman',
                 "email":'xyz@example.com',
@@ -104,7 +108,9 @@ class TestUtility(TestCase):
                 "pw":'pas',
                 "location":'behind you',
             }
-        response = self.client.post(reverse('user_create'), create_json)
+        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        print((response.content).decode("utf-8"))
+
         resp_json = json.loads((response.content).decode("utf-8"))
         responseRating = self.client.get(reverse('get_user_rating', args=[resp_json['id']]))
         rating_json = json.loads((responseRating.content).decode("utf-8"))

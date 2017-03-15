@@ -83,6 +83,7 @@
     "model": "model_app.users",
     "pk": 1,
     "fields": {
+      "username": "user1",
       "fname": "TDawg",
       "lname": "Pinckney",
       "email": "fake@gmail.com",
@@ -95,6 +96,7 @@
     "model": "model_app.users",
     "pk": 2,
     "fields": {
+      "username": "user2",
       "fname": "Ian",
       "lname": "Zheng",
       "email": "ian@gmail.com",
@@ -107,6 +109,7 @@
     "model": "model_app.users",
     "pk": 3,
     "fields": {
+      "username": "user3",
       "fname": "Brandon",
       "lname": "Whitfield",
       "email": "brandon@gmail.com",
@@ -119,6 +122,7 @@
     "model": "model_app.users",
     "pk": 4,
     "fields": {
+      "username": "user4",
       "fname": "David",
       "lname": "Stolz",
       "email": "david@gmail.com",
@@ -131,6 +135,7 @@
     "model": "model_app.users",
     "pk": 5,
     "fields": {
+      "username": "user5",
       "fname": "Matt",
       "lname": "Tillman",
       "email": "matt@gmail.com",
