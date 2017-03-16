@@ -36,6 +36,32 @@ def authenticator_create(request):
     else:
         return HttpResponse("ERROR: Endpoint must be POSTed")
 
+def authenticator_find(request, username):
+    if request.method == 'GET':
+        logger.error("Auth Finder")
+        logger.error(username)
+        auths = Authenticator.objects.filter(username=username)
+        authsList = []
+        for i in auths:
+            authsList.append(model_to_dict(i))
+        return JsonResponse(authsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+
+def authenticator(request, auth_id):
+    if request.method == 'DELETE':
+        try:
+            authObj = Authenticator.objects.get(pk=auth_id)
+        except Authenticator.DoesNotExist:
+            return HttpResponse("ERROR: Authenticator with that id does not exist")
+        authObj.delete()
+        return HttpResponse("Deleted Authenticator with ID: " + str(auth_id))
+    else:
+        return HttpResponse("ERROR: Not correct type of Request")
+
+
+    
+
 def review(request, review_id):
     if request.method == 'POST':
         try:

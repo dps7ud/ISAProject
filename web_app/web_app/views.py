@@ -98,6 +98,7 @@ def user(request, user_id):
 	return render(request, 'web_app/user.html', context)
 
 def signup(request):
+	errors = False
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
 		if form.is_valid():
@@ -105,14 +106,16 @@ def signup(request):
 			req = urllib.request.Request('http://exp-api:8000/signup/', data=post_encoded, method='POST')
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 			resp = json.loads(resp_json)
-			if not resp[1] == "":
-				return HttpResponse(resp[1])
+			if not resp[0]:
+				errors = resp[1]
 			else:
-				return HttpResponseRedirect('/user/' + str(resp[0]['id']) + '/')		
+				response = HttpResponseRedirect(reverse('home'))
+				response.set_cookie("auth", resp[0]["authenticator"])
+				return response			
 	else:
 		form = SignUpForm()
 	
-	return render(request, 'web_app/signup.html', {'form': form})
+	return render(request, 'web_app/signup.html', {'form': form, 'errors': errors})
 
 def login(request):
 	errors = False
@@ -133,6 +136,11 @@ def login(request):
 		form = LoginForm()
 
 	return render(request, 'web_app/login.html', {'form': form, 'errors': errors})
+
+def logout(request):
+	#Make request to the experience layer '/logout'
+	#Delete all of the auth cookies
+	return HttpResponse("Logout")
 
 
 

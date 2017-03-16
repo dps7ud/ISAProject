@@ -278,9 +278,22 @@ def signup(request):
 		try:
 			resp = json.loads(resp_json)
 		except ValueError:
-			resp = False
-			errorStrings = resp_json
-		return JsonResponse([resp, errorStrings], safe=False)
+			return JsonResponse([False, resp_json], safe=False)
+		authenticator = hmac.new(
+		        key = settings.SECRET_KEY.encode('utf-8'),
+		        msg = os.urandom(32),
+		        digestmod = 'sha256',
+		    ).hexdigest()
+		logger.error(authenticator)
+		auth_encoded = urllib.parse.urlencode({"username": resp["username"], "authenticator": authenticator}).encode('utf-8')
+		req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', data=auth_encoded, method='POST')
+		resp2_json = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+		try:
+			resp2 = json.loads(resp2_json)
+		except ValueError:
+			resp2 = False
+			errorStrings = resp2_json
+		return JsonResponse([resp2, errorStrings], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
 
@@ -310,5 +323,24 @@ def login(request):
 			return JsonResponse([False, resp], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def logout(request):
+	if request.method == "POST":
+		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/find/' + request.POST["username"] + '/')
+		resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		try: 
+			resp = json.loads(resp_json)
+		except ValueError:
+			return JsonResponse([False, resp], safe=False)
+		for i in resp:
+			delreq = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(i["id"]) + '/', method="DELETE")
+			resp_json = urllib.request.urlopen(delreq, timeout=5).read().decode('utf-8')
+		return JsonResponse(["Success", ""], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+
+
 
 
