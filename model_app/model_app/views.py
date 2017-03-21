@@ -6,8 +6,10 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.contrib.auth import hashers
+import datetime
 
-from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
+from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills, Authenticator
 
 import json
 import logging
@@ -21,11 +23,52 @@ def index(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
+def authenticator_create(request):
+    if request.method == 'POST':
+        auth_obj = Authenticator()
+        for key, value in request.POST.items():
+            setattr(auth_obj, key, value)
+        auth_obj.date_created = datetime.datetime.now()        
+        auth_obj.save()
+        return JsonResponse(model_to_dict(auth_obj))
+    else:
+        return HttpResponse("ERROR: Endpoint must be POSTed")
+
+def authenticator_find(request, username):
+    if request.method == 'GET':
+        logger.error("Auth Finder")
+        logger.error(username)
+        auths = Authenticator.objects.filter(username=username)
+        authsList = []
+        for i in auths:
+            authsList.append(model_to_dict(i))
+        return JsonResponse(authsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Can only accept GET requests")
+
+def authenticator(request, authenticator):
+    if request.method == 'GET':
+        try:
+            authObj = Authenticator.objects.get(authenticator=authenticator)
+        except Authenticator.DoesNotExist:
+            return HttpResponse("ERROR: Authenticator with that id does not exist")
+        return HttpResponse("Auth Correct")
+    if request.method == 'DELETE':
+        try:
+            authObj = Authenticator.objects.get(authenticator=authenticator)
+        except Authenticator.DoesNotExist:
+            return HttpResponse("ERROR: Authenticator with that id does not exist")
+        authObj.delete()
+        return HttpResponse("Deleted Authenticator with ID: " + str(auth_id))
+    else:
+        return HttpResponse("ERROR: Not correct type of Request")
+
 def review_info(request, review_id):
     """Used to retrieve, update, and delete a review which is already created
         GET: Returns review with *review_id* if it exists, error otherwise
         POST: Updates fields for review with *review_id*, returns error if no such review
     """
+
     if request.method == 'POST':
         try:
             reviewObj = Review.objects.get(pk=review_id)
@@ -189,6 +232,10 @@ def user_info(request, user_id):
             return HttpResponse("ERROR: User with that id does not exist")
         # body_unicode = request.body.decode('utf-8')
         json_data = request.POST
+        logger.error("In the models layer")
+        logger.error(json_data)
+        if 'username' in json_data:
+            userObj.username = json_data['username']
         if 'fname' in json_data:
             userObj.fname = json_data['fname']
         if 'lname' in json_data:
@@ -224,20 +271,44 @@ def user_create(request):
     if request.method == 'POST':
         required = set(field.name for field in set(Users._meta.fields))
         required.remove('id')
+        logger.error("in user create")
         json_data = request.POST
+        #logger.error(request.POST['fname'])
+        logger.error(str(json_data))
         missing_fields = required.difference(json_data.keys())
         if missing_fields:
             return JsonResponse({"ERROR":"Missing required fields: " + ', '.join(missing_fields)})
         userObj = Users()
         for key, value in json_data.items():
-            setattr(userObj, key, value)
-        try:
-            userObj.save()
-            return JsonResponse(model_to_dict(userObj))
-        except:
-            return HttpResponse("ERROR: Wrong data type inputs")
+            if key == 'pw':
+                setattr(userObj, key, hashers.make_password(json_data['pw']))
+            else:
+                setattr(userObj, key, value)
+        #try:
+        userObj.save()
+        return JsonResponse(model_to_dict(userObj))
+        #except:
+            #return HttpResponse("ERROR: Wrong data type inputs")
     else:
         return HttpResponse("ERROR: User creation endpoint must be posted")
+
+def user_find(request):
+    if request.method == 'POST':
+        # if Users.objects.filter(username=request.POST['username']).filter(pw=hashers.make_password(request.POST['pw'])).count() == 0:
+        # logger.error("Misty")
+        # hashed_pass = hashers.make_password(str(request.POST['pw']))
+        # logger.error(hashed_pass)
+        try:
+            userObj = Users.objects.get(username=request.POST['username'])
+        except Users.DoesNotExist:
+            return HttpResponse("Username not registered")
+
+        if hashers.check_password(request.POST['pw'], userObj.pw):
+            return HttpResponse("Correct")
+        else:
+            return HttpResponse("Password Incorrect")
+
+
 
 # ----------------------- For Project 3 ------------------------------------
 def user_rating(user):

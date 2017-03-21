@@ -7,6 +7,11 @@ TASK_STATUS_CHOICES = (
 )
 
 # Create your models here.
+class Authenticator(models.Model):
+    username = models.CharField(max_length=100)
+    authenticator = models.CharField(max_length=300)
+    date_created = models.DateTimeField()
+
 class Task(models.Model):
     """Task models individual jobs (past, present or future) that
     exist within our system.
@@ -24,11 +29,12 @@ class Task(models.Model):
     pricing_info = models.FloatField()
 
 class Users(models.Model):
+    username = models.CharField(max_length=100)
     fname = models.CharField(max_length=25)
     lname = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     bio = models.CharField(max_length=500)
-    pw = models.CharField(max_length=50)
+    pw = models.CharField(max_length=500)
     location = models.CharField(max_length=50)
 
 class Review(models.Model):

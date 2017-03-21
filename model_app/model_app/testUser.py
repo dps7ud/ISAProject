@@ -33,6 +33,7 @@ class TestUser(TestCase):
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
+                "username": "user1",
                 "fname": "TDawg",
                 "lname": "Pinckney",
                 "email": "fake@gmail.com",
@@ -46,6 +47,7 @@ class TestUser(TestCase):
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
+                "username": "user1",
                 "fname": "New",
                 "lname": "Name",
                 "email": "fake@gmail.com",
@@ -54,10 +56,12 @@ class TestUser(TestCase):
                 "location": "Charlottesville"
             })
     def test_post_user_update_all_fields(self):
-        response = self.client.post(reverse('user_info', args=[1]), {"fname": "New", "lname": "Name", "email": "new@gmail.com", "bio":"I make changes", "pw":"secret", "location":"Virginia"})
+
+        response = self.client.post(reverse('user_info', args=[1]), {"username": "user10", "fname": "New", "lname": "Name", "email": "new@gmail.com", "bio":"I make changes", "pw":"secret", "location":"Virginia"})
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
+                "username": "user10",
                 "fname": "New",
                 "lname": "Name",
                 "email": "new@gmail.com",
@@ -68,6 +72,7 @@ class TestUser(TestCase):
 
     def test_delete_user(self):
         create_json = {
+                "username": "wow",
                 "fname":'Dan',
                 "lname":'Theman',
                 "email":'xyz@example.com',
@@ -75,7 +80,8 @@ class TestUser(TestCase):
                 "pw":'pas',
                 "location":'behind you',
             }
-        response = self.client.post(reverse('user_create'), create_json)
+        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        print((response.content).decode("utf-8"))
         resp_json = json.loads((response.content).decode("utf-8"))
 
         response2 = self.client.delete(reverse('user_info', args=[resp_json['id']]))
@@ -104,13 +110,13 @@ class TestUser(TestCase):
 
 
     def test_post_create_user_all_fields(self):
-        response = self.client.post(reverse('user_create'), {"fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
         resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json["username"], "user99")
         self.assertEquals(resp_json["fname"], "1")
         self.assertEquals(resp_json["lname"], "2")
         self.assertEquals(resp_json["email"], "3")
         self.assertEquals(resp_json["bio"], "4")
-        self.assertEquals(resp_json["pw"], "5")
         self.assertEquals(resp_json["location"], "6")
 
     def test_get_create_user(self):

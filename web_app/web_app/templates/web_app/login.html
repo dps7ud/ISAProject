@@ -1,0 +1,20 @@
+{% if errors %}
+    <h1> {{errors}}</h1>
+{% endif %}
+{% if next %}
+    <form action="/login/?next={{next}}" method="post">
+    	<label for="username">Username: </label>
+        <input id="username" type="text" name="username" value="{{ username }}">
+        <label for="pw">Password: </label>
+        <input id="pw" type="password" name="pw" value="{{ pw }}">
+        <input type="submit" value="OK">
+    </form>
+{% else %}
+    <form action="/login/" method="post">
+        <label for="username">Username: </label>
+        <input id="username" type="text" name="username" value="{{ username }}">
+        <label for="pw">Password: </label>
+        <input id="pw" type="password" name="pw" value="{{ pw }}">
+        <input type="submit" value="OK">
+    </form>
+{% endif %}

@@ -10,6 +10,15 @@ import json
 import urllib.error
 from urllib.error import URLError
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
+import os
+import hmac
+from django.conf import settings
+
 # Create your views here.
 def home(request):
 	if request.method == 'GET':
@@ -257,3 +266,121 @@ def user(request, user_id):
 		return JsonResponse([resp, resp2, resp3, resp4, resp5, resp6, resp7, errorStrings], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts GET requests")
+
+def signup(request):
+	if request.method == "POST":
+		errorStrings = False
+		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		logger.error('testing')
+		logger.error(str(post_encoded))
+		req = urllib.request.Request('http://models-api:8000/api/v1/user/create/', data=post_encoded, method='POST')
+		resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		try:
+			resp = json.loads(resp_json)
+		except ValueError:
+			return JsonResponse([False, False, resp_json], safe=False)
+		authenticator = hmac.new(
+		        key = settings.SECRET_KEY.encode('utf-8'),
+		        msg = os.urandom(32),
+		        digestmod = 'sha256',
+		    ).hexdigest()
+		logger.error(authenticator)
+		auth_encoded = urllib.parse.urlencode({"username": resp["username"], "authenticator": authenticator}).encode('utf-8')
+		req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', data=auth_encoded, method='POST')
+		resp2_json = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+		try:
+			resp2 = json.loads(resp2_json)
+		except ValueError:
+			resp2 = False
+			errorStrings = resp2_json
+		return JsonResponse([resp2, resp, errorStrings], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def login(request):
+	if request.method == "POST":
+		errorStrings = ""
+		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		req = urllib.request.Request('http://models-api:8000/api/v1/user/find/', data=post_encoded, method='POST')
+		resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		if resp == "Correct":
+			authenticator = hmac.new(
+			        key = settings.SECRET_KEY.encode('utf-8'),
+			        msg = os.urandom(32),
+			        digestmod = 'sha256',
+			    ).hexdigest()
+			logger.error(authenticator)
+			auth_encoded = urllib.parse.urlencode({"username": request.POST["username"], "authenticator": authenticator}).encode('utf-8')
+			req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', data=auth_encoded, method='POST')
+			resp2_json = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+			try:
+				resp2 = json.loads(resp2_json)
+			except ValueError:
+				resp2 = False
+				errorStrings = resp2_json
+			return JsonResponse([resp2, errorStrings], safe=False)
+		else:
+			return JsonResponse([False, resp], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def logout(request):
+	if request.method == "POST":
+		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/find/' + request.POST["username"] + '/')
+		resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		try: 
+			resp = json.loads(resp_json)
+		except ValueError:
+			return JsonResponse([False, resp], safe=False)
+		for i in resp:
+			delreq = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(i["authenticator"]) + '/', method="DELETE")
+			resp_json = urllib.request.urlopen(delreq, timeout=5).read().decode('utf-8')
+		return JsonResponse(["Success", ""], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def createListing(request):
+	if request.method == "POST":
+		logger.error("In exp createisting")
+		auth = request.POST["auth"]
+		logger.error(auth)
+		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(auth) + '/', method="GET")
+		resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		logger.error("auth resp")
+		logger.error(resp)
+		if resp != "Auth Correct":
+			return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
+		listing = request.POST["listing"]
+		logger.error("listing")
+		logger.error(listing)
+		# listing_dict = listing.dict()
+		# logger.error("listing_dict")
+		# logger.error(listing_dict)
+		listing_json = json.loads(listing)
+		logger.error(listing_json)
+		post_encoded = urllib.parse.urlencode(listing_json.dict()).encode('utf-8')
+		req2 = urllib.request.Request('http://models-api:8000/api/v1/task/create/', data=post_encoded, method='POST')
+		resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+		try:
+			resp2 = json.loads(resp_json2)
+		except ValueError:
+			logger.error("resp_json2")
+			logger.error(resp_json2)
+			return JsonResponse([False, resp_json2])
+		logger.error("resp2")
+		logger.error(resp2)
+		return JsonResponse([resp2, False], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+
+
+
+
+
+
+
+
+
+

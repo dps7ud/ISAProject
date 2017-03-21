@@ -1,6 +1,11 @@
 from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
+
+from .forms import SignUpForm, LoginForm, CreateListingForm
 
 import urllib.request
 import urllib.parse
@@ -91,3 +96,89 @@ def user(request, user_id):
 		'errors': errorString
 	}
 	return render(request, 'web_app/user.html', context)
+
+def signup(request):
+	errors = False
+	if request.method == 'POST':
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			post_encoded = urllib.parse.urlencode(form.cleaned_data).encode('utf-8')
+			req = urllib.request.Request('http://exp-api:8000/signup/', data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			if resp[2]:
+				errors = resp[2]
+			else:
+				response = HttpResponseRedirect(reverse('user', args=[resp[1]["id"]]))
+				response.set_cookie("auth", resp[0]["authenticator"])
+				return response			
+	else:
+		form = SignUpForm()
+	
+	return render(request, 'web_app/signup.html', {'form': form, 'errors': errors})
+
+def login(request):
+	errors = False
+	if request.GET["next"]:
+		nextStop = request.GET["next"]
+	else:
+		nextStop = False
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			post_encoded = urllib.parse.urlencode(form.cleaned_data).encode('utf-8')
+			req = urllib.request.Request('http://exp-api:8000/login/', data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			if not resp[0]:
+				errors = resp[1]
+			else:
+				if nextStop:
+					response = HttpResponseRedirect(nextStop)
+				else:
+					response = HttpResponseRedirect(reverse('home'))
+				response.set_cookie("auth", resp[0]["authenticator"])
+				return response
+	else:
+		form = LoginForm()
+
+	return render(request, 'web_app/login.html', {'form': form, 'errors': errors, 'next': nextStop})
+
+def logout(request):
+	#Make request to the experience layer '/logout'
+	#Delete all of the auth cookies
+	return HttpResponse("Logout")
+
+def create_listing(request):
+	auth = request.COOKIES.get('auth')
+	
+	if not auth:
+		return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+
+	errors = False
+	if request.method == 'POST':
+		logger.error("in post of web app create listing")
+		form = CreateListingForm(request.POST)
+		if form.is_valid():
+			logger.error("Form is valid")
+			post_encoded = urllib.parse.urlencode({"listing": json.dumps(form.cleaned_data), "auth": auth}).encode('utf-8')
+			req = urllib.request.Request('http://exp-api:8000/createListing/', data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			if not resp[0]:
+				logger.error(resp[1])
+				errors = resp[1]
+				if resp[1] == "ERROR: Invalid Auth":
+					return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+			else:
+				response = HttpResponseRedirect(reverse('task', args=[resp[0]['id']]))
+				return response
+		else:
+			errors = form.errors
+	else:
+		form = CreateListingForm()
+
+	return render(request, 'web_app/createlisting.html', {'form': form, 'errors': errors})
+
+
+
