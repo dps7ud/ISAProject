@@ -55,7 +55,7 @@ def review(request, review_id):
 	if request.method == 'GET':
 		errorStrings = ""
 		try:
-			req = urllib.request.Request('http://models-api:8000/api/v1/review/' + review_id + '/')
+			req = urllib.request.Request('http://models-api:8000/api/v1/review/info/' + review_id + '/')
 			resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
 			try:
 				resp = json.loads(resp_json)
@@ -67,7 +67,7 @@ def review(request, review_id):
 			errorStrings = "Timeout Error "
 		if resp:
 			try:
-				req2 = urllib.request.Request('http://models-api:8000/api/v1/user/' + str(resp["postee_user"]) + '/')
+				req2 = urllib.request.Request('http://models-api:8000/api/v1/user/info/' + str(resp["postee_user"]) + '/')
 				resp_json2 = urllib.request.urlopen(req2,timeout=5).read().decode('utf-8')
 				try:
 					resp2 = json.loads(resp_json2)
@@ -79,7 +79,7 @@ def review(request, review_id):
 				errorStrings = errorStrings + "Timeout Error "
 
 			try:
-				req3 = urllib.request.Request('http://models-api:8000/api/v1/user/' + str(resp["poster_user"]) + '/')
+				req3 = urllib.request.Request('http://models-api:8000/api/v1/user/info/' + str(resp["poster_user"]) + '/')
 				resp_json3 = urllib.request.urlopen(req3, timeout=5).read().decode('utf-8')
 				try:
 					resp3 = json.loads(resp_json3)
@@ -180,7 +180,7 @@ def user(request, user_id):
 	if request.method == 'GET':
 		errorStrings = ""
 		try:
-			req = urllib.request.Request('http://models-api:8000/api/v1/user/' + user_id + '/')
+			req = urllib.request.Request('http://models-api:8000/api/v1/user/info/' + user_id + '/')
 			resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
 			try:
 				resp = json.loads(resp_json)

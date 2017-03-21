@@ -12,9 +12,9 @@ class TestReview(TestCase):
         pass #nothing to set up
 
 
-    #----------------------Testing "review" ---------------------------
+    #----------------------Testing "review_info" ---------------------------
     def test_get_review(self):
-        response = self.client.get(reverse('review', args=[1]))
+        response = self.client.get(reverse('review_info', args=[1]))
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(response.status_code, 200)
         self.assertEquals(resp_json, {
@@ -30,12 +30,12 @@ class TestReview(TestCase):
 
 
     def test_get_review_not_present(self):
-        response = self.client.get(reverse('review', args=[68]))
+        response = self.client.get(reverse('review_info', args=[68]))
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Review with that id does not exist")
 
     def test_post_review_no_update(self):
-        response = self.client.post(reverse('review', args=[1]), {})
+        response = self.client.post(reverse('review_info', args=[1]), {})
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
@@ -48,7 +48,7 @@ class TestReview(TestCase):
             })
 
     def test_post_review_update_some_fields(self):
-        response = self.client.post(reverse('review', args=[1]), {"title": "New", "body":"Body"})
+        response = self.client.post(reverse('review_info', args=[1]), {"title": "New", "body":"Body"})
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
@@ -60,7 +60,7 @@ class TestReview(TestCase):
                 "postee_user": 2
             })
     def test_post_review_update_all_fields(self):
-        response = self.client.post(reverse('review', args=[1]), {
+        response = self.client.post(reverse('review_info', args=[1]), {
                 "title": "1",
                 "body": "2",
                 "score": 3,
@@ -79,17 +79,17 @@ class TestReview(TestCase):
                 "postee_user": 3
             })
     def test_post_review_update_wrong_task_id(self):
-        response = self.client.post(reverse('review', args=[1]), {"task": 50})
+        response = self.client.post(reverse('review_info', args=[1]), {"task": 50})
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Task object does not exist")
 
     def test_post_review_update_wrong_postee_user_id(self):
-        response = self.client.post(reverse('review', args=[1]), {"postee_user": 50})
+        response = self.client.post(reverse('review_info', args=[1]), {"postee_user": 50})
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Postee User does not exist")
 
     def test_post_review_update_wrong_poster_user_id(self):
-        response = self.client.post(reverse('review', args=[1]), {"poster_user": 50})
+        response = self.client.post(reverse('review_info', args=[1]), {"poster_user": 50})
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Poster User does not exist")
 
@@ -104,16 +104,16 @@ class TestReview(TestCase):
             })
         resp_json = json.loads((response.content).decode("utf-8"))
 
-        response2 = self.client.delete(reverse('review', args=[resp_json['id']]))
+        response2 = self.client.delete(reverse('review_info', args=[resp_json['id']]))
         resp2 = (response2.content).decode("utf-8")
         self.assertEquals(resp2, "Deleted Review with ID: " + str(resp_json['id']))
 
-        response3 = self.client.get(reverse('review', args=[resp_json['id']]))
+        response3 = self.client.get(reverse('review_info', args=[resp_json['id']]))
         resp3 = (response3.content).decode("utf-8")
         self.assertEquals(resp3, "ERROR: Review with that id does not exist")
 
     def test_delete_review_no_review(self):
-        response = self.client.delete(reverse('review', args=[60]))
+        response = self.client.delete(reverse('review_info', args=[60]))
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Review with that id does not exist")
 
