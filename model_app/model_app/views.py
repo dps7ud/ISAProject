@@ -48,10 +48,16 @@ def authenticator_find(request, username):
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
 
-def authenticator(request, auth_id):
+def authenticator(request, authenticator):
+    if request.method == 'GET':
+        try:
+            authObj = Authenticator.objects.get(authenticator=authenticator)
+        except Authenticator.DoesNotExist:
+            return HttpResponse("ERROR: Authenticator with that id does not exist")
+        return HttpResponse("Auth Correct")
     if request.method == 'DELETE':
         try:
-            authObj = Authenticator.objects.get(pk=auth_id)
+            authObj = Authenticator.objects.get(authenticator=authenticator)
         except Authenticator.DoesNotExist:
             return HttpResponse("ERROR: Authenticator with that id does not exist")
         authObj.delete()

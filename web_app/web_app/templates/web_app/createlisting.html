@@ -1,0 +1,29 @@
+{% if errors %}
+    <h1> {{errors}}</h1>
+{% endif %}
+
+<form action="/createListing/" method="post">
+	<label for="title">Title: </label>
+    <input id="title" type="text" name="title" value="{{ title }}"><br>
+    <label for="description">Description: </label>
+    <input id="description" type="text" name="description" value="{{ description }}"><br>
+    <label for="location">Location: </label>
+    <input id="location" type="text" name="location" value="{{ location }}"><br>
+    <label for="Status">Status: </label>
+    <select id="status" type="text" name="status">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select><br>
+    <label for="remote">Remote: </label>
+    <input type="radio" name="remote" id="remote" value="True">Yes
+    <input id="remote" type="radio" name="remote" value="">No<br>
+    <label for="time">Time: </label>
+    <input id="time" type="text" name="time" value="{{ time }}"><br>
+    <label for="pricing_type">Pricing Type: </label>
+    <input id="pricing_type" type="text" name="pricing_type" value="{{ pricing_type }}"><br>
+    <label for="pricing_info">Pricing Info: </label>
+    <input id="pricing_info" type="text" name="pricing_info" value="{{ pricing_info }}"><br>
+    <input type="submit" value="OK">
+</form>

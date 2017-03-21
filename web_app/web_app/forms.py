@@ -12,3 +12,13 @@ class SignUpForm(forms.Form):
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Username', max_length=100)
 	pw = forms.CharField(label='Password', max_length=100)
+
+class CreateListingForm(forms.Form):
+	title = forms.CharField(label='Title', max_length=200)
+	description = forms.CharField(label='description', max_length=200)
+	location = forms.CharField(label='location', max_length=200)
+	status = forms.CharField(label='Status', max_length=25)
+	remote = forms.BooleanField(label='remote')
+	time = forms.CharField(label='time', max_length=200)
+	pricing_type = forms.BooleanField(label='pricing_type')
+	pricing_info = forms.FloatField(label='pricing_info')

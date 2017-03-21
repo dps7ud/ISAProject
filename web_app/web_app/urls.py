@@ -18,5 +18,7 @@ urlpatterns = [
     url(r'^signup/?', views.signup, name='signup'),
     url(r'^login/?', views.login, name='login'),
     url(r'^home/?', views.home, name='home'),
+    url(r'^createListing/?', views.create_listing, name='create_listing'),
+
     url(r'^/?$', views.home, name='home'),
 ] + statics

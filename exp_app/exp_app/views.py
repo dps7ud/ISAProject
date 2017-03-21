@@ -269,7 +269,7 @@ def user(request, user_id):
 
 def signup(request):
 	if request.method == "POST":
-		errorStrings = ""
+		errorStrings = False
 		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
 		logger.error('testing')
 		logger.error(str(post_encoded))
@@ -278,7 +278,7 @@ def signup(request):
 		try:
 			resp = json.loads(resp_json)
 		except ValueError:
-			return JsonResponse([False, resp_json], safe=False)
+			return JsonResponse([False, False, resp_json], safe=False)
 		authenticator = hmac.new(
 		        key = settings.SECRET_KEY.encode('utf-8'),
 		        msg = os.urandom(32),
@@ -293,7 +293,7 @@ def signup(request):
 		except ValueError:
 			resp2 = False
 			errorStrings = resp2_json
-		return JsonResponse([resp2, errorStrings], safe=False)
+		return JsonResponse([resp2, resp, errorStrings], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
 
@@ -334,11 +334,51 @@ def logout(request):
 		except ValueError:
 			return JsonResponse([False, resp], safe=False)
 		for i in resp:
-			delreq = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(i["id"]) + '/', method="DELETE")
+			delreq = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(i["authenticator"]) + '/', method="DELETE")
 			resp_json = urllib.request.urlopen(delreq, timeout=5).read().decode('utf-8')
 		return JsonResponse(["Success", ""], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def createListing(request):
+	if request.method == "POST":
+		logger.error("In exp createisting")
+		auth = request.POST["auth"]
+		logger.error(auth)
+		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(auth) + '/', method="GET")
+		resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+		logger.error("auth resp")
+		logger.error(resp)
+		if resp != "Auth Correct":
+			return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
+		listing = request.POST["listing"]
+		logger.error("listing")
+		logger.error(listing)
+		# listing_dict = listing.dict()
+		# logger.error("listing_dict")
+		# logger.error(listing_dict)
+		listing_json = json.loads(listing)
+		logger.error(listing_json)
+		post_encoded = urllib.parse.urlencode(listing_json.dict()).encode('utf-8')
+		req2 = urllib.request.Request('http://models-api:8000/api/v1/task/create/', data=post_encoded, method='POST')
+		resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+		try:
+			resp2 = json.loads(resp_json2)
+		except ValueError:
+			logger.error("resp_json2")
+			logger.error(resp_json2)
+			return JsonResponse([False, resp_json2])
+		logger.error("resp2")
+		logger.error(resp2)
+		return JsonResponse([resp2, False], safe=False)
+	else:
+		return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+
+
+
+
+
 
 
 
