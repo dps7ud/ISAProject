@@ -80,6 +80,7 @@ def user(request, user_id):
 	req = urllib.request.Request('http://exp-api:8000/user/' + user_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
+	logger.error(resp)
 	if resp[7] == "":
 		errorString = False
 	else:

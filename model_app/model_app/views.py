@@ -465,3 +465,102 @@ def user_reviewed(request, user_id):
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
 
+def user_main(request, user_id):
+    responseArray = []
+    errorString = ""
+    try:
+        userObj = Users.objects.get(pk=user_id)
+        responseArray.append(model_to_dict(userObj))
+    except Users.DoesNotExist:
+        errorString += "ERROR: User with that id does not exist"
+        responseArray.append(False)
+
+    languages = UserLanguages.objects.filter(user=user_id)
+    languagesList = []
+    for i in languages:
+        languagesList.append(model_to_dict(i))
+    responseArray.append(languagesList)
+
+    skills = UserSkills.objects.filter(user=user_id)
+    skillsList = []
+    for i in skills:
+        skillsList.append(model_to_dict(i))
+    responseArray.append(skillsList)
+
+    tasks = Task.objects.filter(owner__user=user_id)
+    tasksList = []
+    for i in tasks:
+        tasksList.append(model_to_dict(i))
+    responseArray.append(tasksList)
+
+    tasks = Task.objects.filter(worker__user=user_id)
+    tasksList = []
+    for i in tasks:
+        tasksList.append(model_to_dict(i))
+    responseArray.append(tasksList)
+
+    reviews = Review.objects.filter(poster_user=user_id)
+    reviewsList = []
+    for i in reviews:
+        reviewsList.append(model_to_dict(i))
+    responseArray.append(reviewsList)
+
+    reviews = Review.objects.filter(postee_user=user_id)
+    reviewsList = []
+    for i in reviews:
+        reviewsList.append(model_to_dict(i))
+    responseArray.append(reviewsList)
+
+    responseArray.append(errorString)
+
+    return JsonResponse(responseArray, safe=False)
+
+def task_main(request, task_id):
+    responseArray = []
+    errorString = ""
+
+    try:
+        taskObj = Task.objects.get(pk=task_id)
+        responseArray.append(model_to_dict(taskObj))
+    except Task.DoesNotExist:
+        errorString += "ERROR: Task with that id does not exist"
+        responseArray.append(False)
+
+    skills = TaskSkills.objects.filter(task=task_id)
+    skillsList = []
+    for i in skills:
+        skillsList.append(model_to_dict(i))
+    responseArray.append(skillsList)
+
+    owners = Users.objects.filter(owner__task=task_id)
+    ownersList = []
+    for i in owners:
+        ownersList.append(model_to_dict(i))
+    responseArray.append(ownersList)
+
+    workers = Users.objects.filter(worker__task=task_id)
+    workersList = []
+    for i in workers:
+        workersList.append(model_to_dict(i))
+    responseArray.append(workersList)
+
+    reviews = Review.objects.filter(task=task_id)
+    reviewsList = []
+    for i in reviews:
+        reviewsList.append(model_to_dict(i))
+    responseArray.append(reviewsList)
+
+    responseArray.append(errorString)
+    logger.error("responseArray")
+    logger.error(responseArray)
+    return JsonResponse(responseArray, safe=False)
+
+
+
+
+
+
+
+
+
+
