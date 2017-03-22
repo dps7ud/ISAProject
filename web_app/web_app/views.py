@@ -119,9 +119,9 @@ def signup(request):
 
 def login(request):
 	errors = False
-	if request.GET["next"]:
+	try:
 		nextStop = request.GET["next"]
-	else:
+	except:
 		nextStop = False
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
@@ -161,7 +161,9 @@ def create_listing(request):
 		form = CreateListingForm(request.POST)
 		if form.is_valid():
 			logger.error("Form is valid")
-			post_encoded = urllib.parse.urlencode({"listing": json.dumps(form.cleaned_data), "auth": auth}).encode('utf-8')
+			listingInfo = form.cleaned_data
+			listingInfo["auth"] = auth;
+			post_encoded = urllib.parse.urlencode(listingInfo).encode('utf-8')
 			req = urllib.request.Request('http://exp-api:8000/createListing/', data=post_encoded, method='POST')
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 			resp = json.loads(resp_json)

@@ -7,6 +7,8 @@ from django.http import JsonResponse
 import urllib.request
 import urllib.parse
 import json
+import ast
+import datetime
 import urllib.error
 from urllib.error import URLError
 
@@ -342,24 +344,26 @@ def logout(request):
 
 def createListing(request):
 	if request.method == "POST":
-		logger.error("In exp createisting")
-		auth = request.POST["auth"]
-		logger.error(auth)
+		
+		respDict = (request.POST).dict()
+		
+		auth = respDict["auth"]
+		
 		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(auth) + '/', method="GET")
 		resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
-		logger.error("auth resp")
-		logger.error(resp)
+		
 		if resp != "Auth Correct":
 			return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-		listing = request.POST["listing"]
-		logger.error("listing")
-		logger.error(listing)
+		
 		# listing_dict = listing.dict()
 		# logger.error("listing_dict")
 		# logger.error(listing_dict)
-		listing_json = json.loads(listing)
-		logger.error(listing_json)
-		post_encoded = urllib.parse.urlencode(listing_json.dict()).encode('utf-8')
+		del respDict["auth"]
+		respDict["status"] = "ACC"
+		respDict["time_to_live"] = "2017-02-15"
+		respDict["post_date"] = "2017-02-15"
+		logger.error(respDict)
+		post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
 		req2 = urllib.request.Request('http://models-api:8000/api/v1/task/create/', data=post_encoded, method='POST')
 		resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
 		try:
