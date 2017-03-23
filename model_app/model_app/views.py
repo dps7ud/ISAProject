@@ -51,9 +51,10 @@ def authenticator(request, authenticator):
         try:
             authObj = Authenticator.objects.get(authenticator=authenticator)
         except Authenticator.DoesNotExist:
-            return HttpResponse("ERROR: Authenticator with that id does not exist")
-        return HttpResponse("Auth Correct")
-    if request.method == 'DELETE':
+            return HttpResponse("Auth Incorrect")
+        userObj = Users.objects.get(username=authObj.username)
+        return HttpResponse(str(userObj.pk))
+    elif request.method == 'DELETE':
         try:
             authObj = Authenticator.objects.get(authenticator=authenticator)
         except Authenticator.DoesNotExist:
@@ -372,6 +373,23 @@ def task_skills(request, task_id):
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
 
+def task_skills_create(request):
+    if request.method == 'POST':
+        skillsObj = TaskSkills()
+        json_data = request.POST
+        try:
+            skillsObj.task = Task.objects.get(pk=json_data['task'])
+        except Task.DoesNotExist:
+            return HttpResponse("ERROR: Task object does not exist")
+        skillsObj.skill = json_data['skill']
+        try:
+            skillsObj.save()
+            return JsonResponse(model_to_dict(skillsObj))
+        except:
+            return HttpResponse("ERROR: Wrong data type inputs")
+    else:
+        return HttpResponse("ERROR: Can only accept POST requests")
+
 def task_owners(request, task_id):
     if request.method == 'GET':
         owners = Users.objects.filter(owner__task=task_id)
@@ -381,6 +399,26 @@ def task_owners(request, task_id):
         return JsonResponse(ownersList, safe=False)
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
+
+def task_owners_create(request):
+    if request.method == 'POST':
+        ownerObj = Owner()
+        json_data = request.POST
+        try:
+            ownerObj.task = Task.objects.get(pk=json_data['task'])
+        except Task.DoesNotExist:
+            return HttpResponse("ERROR: Task object does not exist")
+        try:
+            ownerObj.user = Users.objects.get(pk=json_data['user'])
+        except Task.DoesNotExist:
+            return HttpResponse("ERROR: User object does not exist")
+        try:
+            ownerObj.save()
+            return JsonResponse(model_to_dict(ownerObj))
+        except:
+            return HttpResponse("ERROR: Wrong data type inputs")
+    else:
+        return HttpResponse("ERROR: Can only accept POST requests")
     
 
 def task_workers(request, task_id):

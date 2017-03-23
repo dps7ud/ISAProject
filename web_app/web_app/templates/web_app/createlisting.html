@@ -1,29 +1,79 @@
-{% if errors %}
-    <h1> {{errors}}</h1>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
 
-<form action="/createListing/" method="post">
-	<label for="title">Title: </label>
-    <input id="title" type="text" name="title" value="{{ title }}"><br>
-    <label for="description">Description: </label>
-    <input id="description" type="text" name="description" value="{{ description }}"><br>
-    <label for="location">Location: </label>
-    <input id="location" type="text" name="location" value="{{ location }}"><br>
-    <label for="Status">Status: </label>
-    <select id="status" type="text" name="status">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-    </select><br>
-    <label for="remote">Remote: </label>
-    <input type="radio" name="remote" id="remote" value="True">Yes
-    <input id="remote" type="radio" name="remote" value="">No<br>
-    <label for="time">Time: </label>
-    <input id="time" type="text" name="time" value="{{ time }}"><br>
-    <label for="pricing_type">Pricing Type: </label>
-    <input id="pricing_type" type="text" name="pricing_type" value="{{ pricing_type }}"><br>
-    <label for="pricing_info">Pricing Info: </label>
-    <input id="pricing_info" type="text" name="pricing_info" value="{{ pricing_info }}"><br>
-    <input type="submit" value="OK">
-</form>
+    <head>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+        <link href="/static/css/project.css" rel="stylesheet">
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        
+        <script src="/static/js/bootstrap.js"></script>
+        <script src="/static/js/setup.js"></script>
+        <script src="/static/js/bootstrap-tagsinput.js"></script>
+
+
+    </head>
+    <body>
+        <div id="navbar"></div>
+        {% if errors %}
+            <div class="alert alert-danger" role="alert" style="padding-top:70px">{{errors}}</div>
+        {% endif %}
+        <div class="page-header">
+            <h1>Create Listing</h1>
+        </div>
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <form action="/createListing/" method="post">
+                    <div class="form-group">
+                        <label for="title">Title: </label>
+                        <input id="title" type="text" name="title" value="{{ title }}"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description: </label>
+                        <input id="description" type="text" name="description" value="{{ description }}"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location: </label>
+                        <input id="location" type="text" name="location" value="{{ location }}"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="Status">Status: </label>
+                        <select id="status" type="text" name="status">
+                            <option value="ACC.">Accepted</option>
+                            <option value="DONE">Done</option>
+                            <option value="OPEN">Open</option>
+                        </select><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="remote">Remote: </label><br>
+                        <input type="radio" name="remote" id="remote" value="remote"> Yes<br>
+                        <input id="remote" type="radio" name="remote" value="no"> No<br>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time: </label>
+                        <input id="time" type="text" name="time" value="{{ time }}"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricing_type">Pricing Type: </label><br>
+                        <input type="radio" name="pricing_type" id="pricing_type" value="Lump"> Lump Sum<br>
+                        <input id="pricing_type" type="radio" name="pricing_type" value="Hourly"> Hourly<br>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricing_info">Pricing Info: </label>
+                        <input id="pricing_info" type="text" name="pricing_info" value="{{ pricing_info }}"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="required_skills">Required Skills: </label>
+                        <input id="required_skills" type="text" name="required_skills" class="form-control" data-role="tagsinput"><br>
+                    </div>
+                    <input type="submit" value="OK">
+                </form>
+              </div>
+            </div>
+        </div>
+        
+    <script src="/static/js/bootstrap.js"></script>
+    </body>
+</html>

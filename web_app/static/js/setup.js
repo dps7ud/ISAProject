@@ -19,6 +19,9 @@ $("#navbar").load("/static/html/navbar.html", function(){
         $("#nav3").parent().addClass("active");
     }
     if (pathname.indexOf("/login") >= 0){
+        $("#nav5").parent().addClass("active");
+    }
+    if (pathname.indexOf("/signup") >= 0){
         $("#nav4").parent().addClass("active");
     }
 });

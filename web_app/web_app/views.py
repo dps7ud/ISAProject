@@ -67,9 +67,9 @@ def task(request, task_id):
 		errorString = resp[5]
 	context = {
 		'task': resp[0],
-		'owners': resp[1],
-		'workers': resp[2],
-		'skills': resp[3],
+		'owners': resp[2],
+		'workers': resp[3],
+		'skills': resp[1],
 		'reviews': resp[4],
 		'errors': errorString
 	}
@@ -164,6 +164,7 @@ def create_listing(request):
 			logger.error("Form is valid")
 			listingInfo = form.cleaned_data
 			listingInfo["auth"] = auth;
+			listingInfo["skills"] = request.POST["required_skills"]
 			post_encoded = urllib.parse.urlencode(listingInfo).encode('utf-8')
 			req = urllib.request.Request('http://exp-api:8000/createListing/', data=post_encoded, method='POST')
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')

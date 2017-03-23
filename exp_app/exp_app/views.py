@@ -225,16 +225,25 @@ def createListing(request):
 		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(auth) + '/', method="GET")
 		resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
 		
-		if resp != "Auth Correct":
+		if resp == "Auth Incorrect":
 			return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-		
+		logger.error(resp)
 		# listing_dict = listing.dict()
 		# logger.error("listing_dict")
 		# logger.error(listing_dict)
 		del respDict["auth"]
-		respDict["status"] = "ACC"
 		respDict["time_to_live"] = "2017-02-15"
 		respDict["post_date"] = "2017-02-15"
+		if respDict["pricing_type"] == "Lump":
+			respDict["pricing_type"] = True
+		else:
+			respDict["pricing_type"] = False
+		if respDict["remote"] == "remote":
+			respDict["remote"] = True
+		else:
+			respDict["remote"] = False
+		skillsString = respDict["skills"]
+		del respDict["skills"]
 		logger.error(respDict)
 		post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
 		req2 = urllib.request.Request('http://models-api:8000/api/v1/task/create/', data=post_encoded, method='POST')
@@ -247,6 +256,15 @@ def createListing(request):
 			return JsonResponse([False, resp_json2])
 		logger.error("resp2")
 		logger.error(resp2)
+		if skillsString != "":
+			skillsArray = skillsString.split(",")
+			for i in skillsArray:
+				post_encoded = urllib.parse.urlencode({'task': resp2['id'], 'skill': i}).encode('utf-8')
+				req3 = urllib.request.Request('http://models-api:8000/api/v1/taskSkills/create/', data=post_encoded, method='POST')
+				resp3 = urllib.request.urlopen(req3, timeout=5).read().decode('utf-8')
+		post_encoded = urllib.parse.urlencode({'task': resp2['id'], 'user': resp}).encode('utf-8')
+		req3 = urllib.request.Request('http://models-api:8000/api/v1/taskOwners/create/', data=post_encoded, method='POST')
+		resp3 = urllib.request.urlopen(req3, timeout=5).read().decode('utf-8')
 		return JsonResponse([resp2, False], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
