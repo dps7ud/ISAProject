@@ -26,13 +26,7 @@ def home(request):
 		auth = "yes"
 	else:
 		auth = "no"
-	try:
-		if request.GET["success"] == "logout":
-			successString = "Successfully Logged Out"
-		else:
-			successString = "Operation Successful"
-	except:
-		successString = False
+	successString = success_messaging(request)
 	
 	req = urllib.request.Request('http://exp-api:8000/home/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -57,7 +51,7 @@ def review(request, review_id):
 		auth = "yes"
 	else:
 		auth = "no"
-	logger.error("In review method")
+	successString = success_messaging(request)
 	req = urllib.request.Request('http://exp-api:8000/review/' + review_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
@@ -71,13 +65,15 @@ def review(request, review_id):
 		'poster': resp[2],
 		'task': resp[3],
 		'errors': errorString,
-		'auth': auth
+		'auth': auth,
+		'success': successString
 	}
 	return render(request, 'web_app/review.html', context)
 	# return HttpResponse(resp[2][0])
 
 def task(request, task_id):
 	auth = request.COOKIES.get('auth')
+	successString = success_messaging(request)
 	if auth:
 		auth = "yes"
 	else:
@@ -97,12 +93,14 @@ def task(request, task_id):
 		'skills': resp[1],
 		'reviews': resp[4],
 		'errors': errorString,
-		'auth': auth
+		'auth': auth,
+		'success': successString
 	}
 	return render(request, 'web_app/task.html', context)
 
 def user(request, user_id):
 	auth = request.COOKIES.get('auth')
+	successString = success_messaging(request)
 	if auth:
 		auth = "yes"
 	else:
@@ -126,7 +124,8 @@ def user(request, user_id):
 		'reviewer': resp[5],
 		'reviewee': resp[6],
 		'errors': errorString,
-		'auth': auth
+		'auth': auth,
+		'success': successString
 	}
 	return render(request, 'web_app/user.html', context)
 
@@ -136,6 +135,7 @@ def signup(request):
 		auth = "yes"
 	else:
 		auth = "no"
+	successString = success_messaging(request)
 	errors = False
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
@@ -150,13 +150,13 @@ def signup(request):
 			if resp[2]:
 				errors = resp[2]
 			else:
-				response = HttpResponseRedirect(reverse('user', args=[resp[1]["id"]]))
+				response = HttpResponseRedirect(reverse('user', args=[resp[1]["id"]])+ "?success=signup")
 				response.set_cookie("auth", resp[0]["authenticator"])
 				return response			
 	else:
 		form = SignUpForm()
 	
-	return render(request, 'web_app/signup.html', {'form': form, 'errors': errors, 'auth': auth})
+	return render(request, 'web_app/signup.html', {'form': form, 'errors': errors, 'auth': auth, 'success': successString})
 
 def login(request):
 	errors = False
@@ -164,6 +164,7 @@ def login(request):
 		nextStop = request.GET["next"]
 	except:
 		nextStop = False
+	successString = success_messaging(request)
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
 		if form.is_valid():
@@ -175,15 +176,15 @@ def login(request):
 				errors = resp[1]
 			else:
 				if nextStop:
-					response = HttpResponseRedirect(nextStop)
+					response = HttpResponseRedirect(nextStop + "?success=login")
 				else:
-					response = HttpResponseRedirect(reverse('home'))
+					response = HttpResponseRedirect(reverse('home') + "?success=login")
 				response.set_cookie("auth", resp[0]["authenticator"])
 				return response
 	else:
 		form = LoginForm()
 
-	return render(request, 'web_app/login.html', {'form': form, 'errors': errors, 'next': nextStop})
+	return render(request, 'web_app/login.html', {'form': form, 'errors': errors, 'next': nextStop, 'success': successString})
 
 def logout(request):
 	auth = request.COOKIES.get('auth')
@@ -197,6 +198,7 @@ def logout(request):
 	return response
 
 def create_listing(request):
+	successString = success_messaging(request)
 	auth = request.COOKIES.get('auth')
 	
 	if not auth:
@@ -221,14 +223,29 @@ def create_listing(request):
 				if resp[1] == "ERROR: Invalid Auth":
 					return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
 			else:
-				response = HttpResponseRedirect(reverse('task', args=[resp[0]['id']]))
+				response = HttpResponseRedirect(reverse('task', args=[resp[0]['id']]) + "?success=createListing")
 				return response
 		else:
 			errors = form.errors
 	else:
 		form = CreateListingForm()
 
-	return render(request, 'web_app/createlisting.html', {'form': form, 'errors': errors})
+	return render(request, 'web_app/createlisting.html', {'form': form, 'errors': errors, 'success': successString})
+
+def success_messaging(request):
+	try:
+		if request.GET["success"] == "logout":
+			return "Successfully Logged Out"
+		elif request.GET["success"] == "login":
+			return "Successfully Logged In"
+		elif request.GET["success"] == "signup":
+			return "Successfully Signed Up"
+		elif request.GET["success"] == "createListing":
+			return "Successfully Created Task"
+		else:
+			return "Operation Successful"
+	except:
+		return False
 
 
 
