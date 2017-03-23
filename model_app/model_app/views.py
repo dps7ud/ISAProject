@@ -452,6 +452,23 @@ def user_languages(request, user_id):
         return HttpResponse("ERROR: Can only accept GET requests")
     
 
+def user_languages_create(request):
+    if request.method == 'POST':
+        langObj = UserLanguages()
+        json_data = request.POST
+        try:
+            langObj.user = Users.objects.get(pk=json_data['user'])
+        except Task.DoesNotExist:
+            return HttpResponse("ERROR: Task object does not exist")
+        langObj.spoken_language = json_data['spoken_language']
+        try:
+            langObj.save()
+            return JsonResponse(model_to_dict(langObj))
+        except:
+            return HttpResponse("ERROR: Wrong data type inputs")
+    else:
+        return HttpResponse("ERROR: Can only accept POST requests")
+
 def user_skills(request, user_id):
     if request.method == 'GET':
         skills = UserSkills.objects.filter(user=user_id)
@@ -461,6 +478,23 @@ def user_skills(request, user_id):
         return JsonResponse(skillsList, safe=False)
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
+
+def user_skills_create(request):
+    if request.method == 'POST':
+        skillsObj = UserSkills()
+        json_data = request.POST
+        try:
+            skillsObj.user = Users.objects.get(pk=json_data['user'])
+        except Task.DoesNotExist:
+            return HttpResponse("ERROR: Task object does not exist")
+        skillsObj.skill = json_data['skill']
+        try:
+            skillsObj.save()
+            return JsonResponse(model_to_dict(skillsObj))
+        except:
+            return HttpResponse("ERROR: Wrong data type inputs")
+    else:
+        return HttpResponse("ERROR: Can only accept POST requests")
 
 def user_owner_tasks(request, user_id):
     if request.method == 'GET':

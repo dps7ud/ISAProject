@@ -103,7 +103,10 @@ def signup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
 		if form.is_valid():
-			post_encoded = urllib.parse.urlencode(form.cleaned_data).encode('utf-8')
+			userInfo = form.cleaned_data
+			userInfo["user_skills"] = request.POST["user_skills"]
+			userInfo["spoken_languages"] = request.POST["spoken_languages"]
+			post_encoded = urllib.parse.urlencode(userInfo).encode('utf-8')
 			req = urllib.request.Request('http://exp-api:8000/signup/', data=post_encoded, method='POST')
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 			resp = json.loads(resp_json)

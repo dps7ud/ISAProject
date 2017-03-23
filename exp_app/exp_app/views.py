@@ -145,7 +145,16 @@ def review(request, review_id):
 def signup(request):
 	if request.method == "POST":
 		errorStrings = False
-		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		respDict = (request.POST).dict()
+		logger.error("respDict")
+		logger.error(respDict)
+		languagesString = respDict['spoken_languages']
+		skillsString = respDict['user_skills']
+		del respDict['spoken_languages']
+		del respDict['user_skills']
+		logger.error("respDict2")
+		logger.error(respDict)
+		post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
 		logger.error('testing')
 		logger.error(str(post_encoded))
 		req = urllib.request.Request('http://models-api:8000/api/v1/user/create/', data=post_encoded, method='POST')
@@ -154,6 +163,8 @@ def signup(request):
 			resp = json.loads(resp_json)
 		except ValueError:
 			return JsonResponse([False, False, resp_json], safe=False)
+		logger.error("resp")
+		logger.error(resp)
 		authenticator = hmac.new(
 		        key = settings.SECRET_KEY.encode('utf-8'),
 		        msg = os.urandom(32),
@@ -168,6 +179,19 @@ def signup(request):
 		except ValueError:
 			resp2 = False
 			errorStrings = resp2_json
+		if skillsString != "":
+			skillsArray = skillsString.split(",")
+			for i in skillsArray:
+				post_encoded = urllib.parse.urlencode({'user': resp['id'], 'skill': i}).encode('utf-8')
+				req3 = urllib.request.Request('http://models-api:8000/api/v1/userSkills/create/', data=post_encoded, method='POST')
+				resp3 = urllib.request.urlopen(req3, timeout=5).read().decode('utf-8')
+		if languagesString != "":
+			languagesArray = languagesString.split(",")
+			for i in languagesArray:
+				post_encoded = urllib.parse.urlencode({'user': resp['id'], 'spoken_language': i}).encode('utf-8')
+				req3 = urllib.request.Request('http://models-api:8000/api/v1/userLanguages/create/', data=post_encoded, method='POST')
+				resp3 = urllib.request.urlopen(req3, timeout=5).read().decode('utf-8')
+
 		return JsonResponse([resp2, resp, errorStrings], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")

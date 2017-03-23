@@ -10,6 +10,7 @@
         
         <script src="/static/js/bootstrap.js"></script>
         <script src="/static/js/setup.js"></script>
+        <script src="/static/js/bootstrap-tagsinput.js"></script>
 
 
     </head>
@@ -27,31 +28,39 @@
                 <form action="/signup/" method="post">
                     <div class="form-group">
                         <label for="username">Username: </label>
-                        <input id="username" type="text" name="username" value="{{ username }}">
+                        <input id="username" type="text" name="username" value="{{ username }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="fname">First name: </label>
-                        <input id="fname" type="text" name="fname" value="{{ fname }}">
+                        <input id="fname" type="text" name="fname" value="{{ fname }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="lname">Last name: </label>
-                        <input id="lname" type="text" name="lname" value="{{ lname }}">
+                        <input id="lname" type="text" name="lname" value="{{ lname }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="location">Location: </label>
-                        <input id="location" type="text" name="location" value="{{ location }}">
+                        <input id="location" type="text" name="location" value="{{ location }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="bio">Biography: </label>
-                        <input id="bio" type="text" name="bio" value="{{ bio }}">
+                        <input id="bio" type="text" name="bio" value="{{ bio }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="email">Email: </label>
-                        <input id="email" type="text" name="email" value="{{ email }}">
+                        <input id="email" type="text" name="email" value="{{ email }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="pw">Password: </label>
-                        <input id="pw" type="password" name="pw" value="{{ pw }}">
+                        <input id="pw" type="password" name="pw" value="{{ pw }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_skills">User Skills: </label>
+                        <input id="user_skills" type="text" name="user_skills" class="form-control" data-role="tagsinput"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="spoken_languages">Spoken Languages: </label>
+                        <input id="spoken_languages" type="text" name="spoken_languages" class="form-control" data-role="tagsinput"><br>
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
