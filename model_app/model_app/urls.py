@@ -24,7 +24,7 @@ urlpatterns = [
 
     url(r'^api/v1/authenticator/create/$', views.authenticator_create, name='authenticator_create'),
     #Username only looks for alphanumeric characters, may need to restrict front end username in the future
-    url(r'^api/v1/authenticator/find/(?P<username>\w+)/$', views.authenticator_find, name='authenticator_find'),
+    url(r'^api/v1/authenticator/find/(?P<authenticator>\w+)/$', views.authenticator_find, name='authenticator_find'),
     url(r'^api/v1/authenticator/(?P<authenticator>\w+)/$', views.authenticator, name='authenticator'),
     url(r'^api/v1/review/info/(?P<review_id>[0-9]+)/$', views.review_info, name='review_info'),
     url(r'^api/v1/review/create/$', views.review_create, name='review_create'),

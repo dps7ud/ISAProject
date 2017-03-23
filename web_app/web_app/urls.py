@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^review/(?P<review_id>[0-9]+)/?$', views.review, name='review'),
     url(r'^signup/?', views.signup, name='signup'),
     url(r'^login/?', views.login, name='login'),
+     url(r'^logout/?', views.logout, name='logout'),
     url(r'^home/?', views.home, name='home'),
     url(r'^createListing/?', views.create_listing, name='create_listing'),
 

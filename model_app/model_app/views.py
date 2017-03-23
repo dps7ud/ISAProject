@@ -34,14 +34,19 @@ def authenticator_create(request):
     else:
         return HttpResponse("ERROR: Endpoint must be POSTed")
 
-def authenticator_find(request, username):
+def authenticator_find(request, authenticator):
     if request.method == 'GET':
         logger.error("Auth Finder")
-        logger.error(username)
-        auths = Authenticator.objects.filter(username=username)
+        try:
+            authOrig = Authenticator.objects.get(authenticator=authenticator)
+        except Authenticator.DoesNotExist:
+            return HttpResponse("ERROR: Authenticator does not exist")
+        logger.error(authOrig)
+        auths = Authenticator.objects.filter(username=str(authOrig.username)) 
         authsList = []
         for i in auths:
             authsList.append(model_to_dict(i))
+        logger.error(authsList)
         return JsonResponse(authsList, safe=False)
     else:
         return HttpResponse("ERROR: Can only accept GET requests")
@@ -55,12 +60,17 @@ def authenticator(request, authenticator):
         userObj = Users.objects.get(username=authObj.username)
         return HttpResponse(str(userObj.pk))
     elif request.method == 'DELETE':
+        logger.error("delete")
+        logger.error(authenticator)
         try:
             authObj = Authenticator.objects.get(authenticator=authenticator)
         except Authenticator.DoesNotExist:
             return HttpResponse("ERROR: Authenticator with that id does not exist")
-        authObj.delete()
-        return HttpResponse("Deleted Authenticator with ID: " + str(auth_id))
+        try:
+            authObj.delete()
+            return HttpResponse("Deleted Authenticator: " + str(authenticator))
+        except:
+            return HttpResponse("Authenticator Deletion failed")
     else:
         return HttpResponse("ERROR: Not correct type of Request")
 

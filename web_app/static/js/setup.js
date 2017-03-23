@@ -9,6 +9,12 @@ $(document).ready(function(){
 // });
 $("#navbar").load("/static/html/navbar.html", function(){
     var pathname = window.location.pathname;
+    console.log($("#authPresent").data("auth"))
+    if($("#authPresent").data("auth") == "yes"){
+        console.log("if statement")
+        $("#nav5").html("Logout")
+        $("#nav5").attr("href", "/logout")
+    } 
     if (pathname.indexOf("/task") >= 0){
         $("#nav1").parent().addClass("active");
     }

@@ -21,7 +21,19 @@ def four_oh_four(request):
     return HttpResponse("<h2>four-oh-four</h2>")
 
 def home(request):
-	logger.error("In home method")
+	auth = request.COOKIES.get('auth')
+	if auth:
+		auth = "yes"
+	else:
+		auth = "no"
+	try:
+		if request.GET["success"] == "logout":
+			successString = "Successfully Logged Out"
+		else:
+			successString = "Operation Successful"
+	except:
+		successString = False
+	
 	req = urllib.request.Request('http://exp-api:8000/home/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
@@ -32,12 +44,19 @@ def home(request):
 	context = {
 		'top_users_list': resp[0],
 		'recent_listings_list': resp[1],
-		'errors': errorString
+		'errors': errorString,
+		'success': successString,
+		'auth': auth
 	}
 	# return HttpResponse(topUsers)
 	return render(request, 'web_app/home.html', context)
 
 def review(request, review_id):
+	auth = request.COOKIES.get('auth')
+	if auth:
+		auth = "yes"
+	else:
+		auth = "no"
 	logger.error("In review method")
 	req = urllib.request.Request('http://exp-api:8000/review/' + review_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -51,12 +70,18 @@ def review(request, review_id):
 		'postee': resp[1],
 		'poster': resp[2],
 		'task': resp[3],
-		'errors': errorString
+		'errors': errorString,
+		'auth': auth
 	}
 	return render(request, 'web_app/review.html', context)
 	# return HttpResponse(resp[2][0])
 
 def task(request, task_id):
+	auth = request.COOKIES.get('auth')
+	if auth:
+		auth = "yes"
+	else:
+		auth = "no"
 	logger.error("In task method")
 	req = urllib.request.Request('http://exp-api:8000/task/' + task_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -71,11 +96,17 @@ def task(request, task_id):
 		'workers': resp[3],
 		'skills': resp[1],
 		'reviews': resp[4],
-		'errors': errorString
+		'errors': errorString,
+		'auth': auth
 	}
 	return render(request, 'web_app/task.html', context)
 
 def user(request, user_id):
+	auth = request.COOKIES.get('auth')
+	if auth:
+		auth = "yes"
+	else:
+		auth = "no"
 	logger.error("In user method")
 	req = urllib.request.Request('http://exp-api:8000/user/' + user_id + '/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -94,11 +125,17 @@ def user(request, user_id):
 		'worker': resp[4],
 		'reviewer': resp[5],
 		'reviewee': resp[6],
-		'errors': errorString
+		'errors': errorString,
+		'auth': auth
 	}
 	return render(request, 'web_app/user.html', context)
 
 def signup(request):
+	auth = request.COOKIES.get('auth')
+	if auth:
+		auth = "yes"
+	else:
+		auth = "no"
 	errors = False
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
@@ -119,7 +156,7 @@ def signup(request):
 	else:
 		form = SignUpForm()
 	
-	return render(request, 'web_app/signup.html', {'form': form, 'errors': errors})
+	return render(request, 'web_app/signup.html', {'form': form, 'errors': errors, 'auth': auth})
 
 def login(request):
 	errors = False
@@ -149,9 +186,15 @@ def login(request):
 	return render(request, 'web_app/login.html', {'form': form, 'errors': errors, 'next': nextStop})
 
 def logout(request):
+	auth = request.COOKIES.get('auth')
 	#Make request to the experience layer '/logout'
 	#Delete all of the auth cookies
-	return HttpResponse("Logout")
+	post_encoded = urllib.parse.urlencode({"authenticator": auth}).encode('utf-8')
+	req = urllib.request.Request('http://exp-api:8000/logout/', data=post_encoded, method='POST')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	response = HttpResponseRedirect(reverse('home') + "?success=logout")
+	response.delete_cookie("auth")
+	return response
 
 def create_listing(request):
 	auth = request.COOKIES.get('auth')

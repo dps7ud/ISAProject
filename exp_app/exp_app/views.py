@@ -225,17 +225,17 @@ def login(request):
 
 def logout(request):
 	if request.method == "POST":
-		post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
-		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/find/' + request.POST["username"] + '/')
+		# post_encoded = urllib.parse.urlencode((request.POST).dict()).encode('utf-8')
+		req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/find/' + request.POST["authenticator"] + '/')
 		resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
 		try: 
 			resp = json.loads(resp_json)
 		except ValueError:
-			return JsonResponse([False, resp], safe=False)
+			return JsonResponse([False, resp_json], safe=False)
 		for i in resp:
 			delreq = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(i["authenticator"]) + '/', method="DELETE")
 			resp_json = urllib.request.urlopen(delreq, timeout=5).read().decode('utf-8')
-		return JsonResponse(["Success", ""], safe=False)
+		return JsonResponse(["Success", False], safe=False)
 	else:
 		return HttpResponse("ERROR: Endpoint only accepts POST requests")
 
