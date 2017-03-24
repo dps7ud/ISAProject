@@ -1,17 +1,14 @@
-from django.shortcuts import render
 from django.core import serializers
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
+from .forms import *
 
-from .forms import SignUpForm, LoginForm, CreateListingForm
-
-import urllib.request
-import urllib.parse
 import json
-
 import logging
+import urllib.parse
+import urllib.request
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -189,12 +186,18 @@ def login(request):
     else:
         form = LoginForm()
 
-    return render(request, 'web_app/login.html', {'form': form, 'errors': errors, 'next': nextStop, 'success': successString})
+    return render(request, 'web_app/login.html', 
+            {
+                'form': form, 
+                'errors': errors, 
+                'next': nextStop, 
+                'success': successString
+            })
 
 def logout(request):
     auth = request.COOKIES.get('auth')
-    #Make request to the experience layer '/logout'
-    #Delete all of the auth cookies
+    #   Make request to the experience layer '/logout'
+    # Delete all of the auth cookies
     post_encoded = urllib.parse.urlencode({"authenticator": auth}).encode('utf-8')
     req = urllib.request.Request('http://exp-api:8000/logout/', data=post_encoded, method='POST')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -219,23 +222,31 @@ def create_listing(request):
             listingInfo["auth"] = auth;
             listingInfo["skills"] = request.POST["required_skills"]
             post_encoded = urllib.parse.urlencode(listingInfo).encode('utf-8')
-            req = urllib.request.Request('http://exp-api:8000/createListing/', data=post_encoded, method='POST')
+            req = urllib.request.Request('http://exp-api:8000/createListing/', 
+                    data=post_encoded, method='POST')
             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
             resp = json.loads(resp_json)
             if not resp[0]:
                 logger.error(resp[1])
                 errors = resp[1]
                 if resp[1] == "ERROR: Invalid Auth":
-                    return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+                    return HttpResponseRedirect(reverse("login") + "?next=" 
+                            + reverse("create_listing"))
             else:
-                response = HttpResponseRedirect(reverse('task', args=[resp[0]['id']]) + "?success=createListing")
+                response = HttpResponseRedirect(reverse('task', args=[resp[0]['id']]) 
+                        + "?success=createListing")
                 return response
         else:
             errors = form.errors
     else:
         form = CreateListingForm()
 
-    return render(request, 'web_app/createlisting.html', {'form': form, 'errors': errors, 'success': successString})
+    return render(request, 'web_app/createlisting.html', 
+            {
+                'form': form, 
+                'errors': errors, 
+                'success': successString
+            })
 
 def success_messaging(request):
     try:
@@ -251,6 +262,3 @@ def success_messaging(request):
             return "Operation Successful"
     except:
         return False
-
-
-
