@@ -83,7 +83,6 @@ def review_info(request, review_id):
             reviewObj = Review.objects.get(pk=review_id)
         except Review.DoesNotExist:
             return HttpResponse("ERROR: Review with that id does not exist")
-        # body_unicode = request.body.decode('utf-8')
         json_data = request.POST
         if 'body' in json_data:
             reviewObj.body = json_data['body']
@@ -239,7 +238,6 @@ def user_info(request, user_id):
             userObj = Users.objects.get(pk=user_id)
         except Users.DoesNotExist:
             return HttpResponse("ERROR: User with that id does not exist")
-        # body_unicode = request.body.decode('utf-8')
         json_data = request.POST
         logger.error("In the models layer")
         logger.error(json_data)
@@ -282,7 +280,6 @@ def user_create(request):
         required.remove('id')
         logger.error("in user create")
         json_data = request.POST
-        #logger.error(request.POST['fname'])
         logger.error(str(json_data))
         missing_fields = required.difference(json_data.keys())
         if missing_fields:
@@ -293,20 +290,13 @@ def user_create(request):
                 setattr(userObj, key, hashers.make_password(json_data['pw']))
             else:
                 setattr(userObj, key, value)
-        #try:
         userObj.save()
         return JsonResponse(model_to_dict(userObj))
-        #except:
-            #return HttpResponse("ERROR: Wrong data type inputs")
     else:
         return HttpResponse("ERROR: User creation endpoint must be posted")
 
 def user_find(request):
     if request.method == 'POST':
-        # if Users.objects.filter(username=request.POST['username']).filter(pw=hashers.make_password(request.POST['pw'])).count() == 0:
-        # logger.error("Misty")
-        # hashed_pass = hashers.make_password(str(request.POST['pw']))
-        # logger.error(hashed_pass)
         try:
             userObj = Users.objects.get(username=request.POST['username'])
         except Users.DoesNotExist:
@@ -634,13 +624,3 @@ def task_main(request, task_id):
     logger.error("responseArray")
     logger.error(responseArray)
     return JsonResponse(responseArray, safe=False)
-
-
-
-
-
-
-
-
-
-

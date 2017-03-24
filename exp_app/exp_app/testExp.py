@@ -6,9 +6,9 @@ from exp_app.models import Task, Review, Users, TaskSkills
 import json
 
 class TestExp(SimpleTestCase):
+
     #setUp method is called before each test in this class
     def setUp(self):
-        # call_command("loaddata", "db.json")
         pass #nothing to set up
 
     # ------------------ Testing "home" ------------------------------------

@@ -28,7 +28,8 @@ class TestUtility(TestCase):
         responseRating = self.client.get(reverse('get_user_rating', args=[resp_json[0]['id']]))
         rating_json = json.loads((responseRating.content).decode("utf-8"))
         for i in range(1,5):
-            responseRating2 = self.client.get(reverse('get_user_rating', args=[resp_json[i]['id']]))
+            responseRating2 = self.client.get(reverse('get_user_rating', 
+                args=[resp_json[i]['id']]))
             rating2_json = json.loads((responseRating2.content).decode("utf-8"))
             self.assertEquals(rating2_json['rating'] <= rating_json['rating'], True)
             rating_json = rating2_json
@@ -43,7 +44,16 @@ class TestUtility(TestCase):
                 "pw":'pas',
                 "location":'behind you',
             }
-        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        response = self.client.post(reverse('user_create'), 
+                {
+                    "username": "user99", 
+                    "fname": "1", 
+                    "lname": "2", 
+                    "email": "3", 
+                    "bio": "4", 
+                    "pw": "5", 
+                    "location": "6" 
+                })
         print((response.content).decode("utf-8"))
 
         resp_json = json.loads((response.content).decode("utf-8"))
@@ -67,7 +77,8 @@ class TestUtility(TestCase):
         responseRating = self.client.get(reverse('get_user_rating', args=[resp_json[0]['id']]))
         rating_json = json.loads((responseRating.content).decode("utf-8"))
         for i in range(1,5):
-            responseRating2 = self.client.get(reverse('get_user_rating', args=[resp_json[i]['id']]))
+            responseRating2 = self.client.get(reverse('get_user_rating', 
+                args=[resp_json[i]['id']]))
             rating2_json = json.loads((responseRating2.content).decode("utf-8"))
             self.assertEquals(rating2_json['rating'] <= rating_json['rating'], True)
             rating_json = rating2_json
@@ -108,7 +119,16 @@ class TestUtility(TestCase):
                 "pw":'pas',
                 "location":'behind you',
             }
-        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        response = self.client.post(reverse('user_create'), 
+                {
+                    "username": "user99", 
+                    "fname": "1", 
+                    "lname": "2", 
+                    "email": "3", 
+                    "bio": "4", 
+                    "pw": "5", 
+                    "location": "6" 
+                })
         print((response.content).decode("utf-8"))
 
         resp_json = json.loads((response.content).decode("utf-8"))
@@ -120,10 +140,6 @@ class TestUtility(TestCase):
         responseRating = self.client.get(reverse('get_user_rating', args=[87]))
         rating_json = json.loads((responseRating.content).decode("utf-8"))
         self.assertEquals(rating_json['rating'], 0)
-
-
-
-    
 
     #tearDown method is called after each test
     def tearDown(self):

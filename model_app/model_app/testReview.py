@@ -1,6 +1,6 @@
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
 from django.core.management import call_command
+from django.core.urlresolvers import reverse
+from django.test import TestCase, Client
 from model_app.models import Task, Review, Users
 
 import json
@@ -48,7 +48,11 @@ class TestReview(TestCase):
             })
 
     def test_post_review_update_some_fields(self):
-        response = self.client.post(reverse('review_info', args=[1]), {"title": "New", "body":"Body"})
+        response = self.client.post(reverse('review_info', args=[1]), 
+                {
+                    "title": "New", 
+                    "body":"Body"
+                })
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
@@ -208,12 +212,6 @@ class TestReview(TestCase):
         response = self.client.get(reverse('review_create'))
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Review Creation endpoint must be POSTed")
-
-    
-
-
-
-    
 
     #tearDown method is called after each test
     def tearDown(self):

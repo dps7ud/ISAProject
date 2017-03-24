@@ -1,7 +1,8 @@
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from model_app.models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills
+from django.core.urlresolvers import reverse
+from django.test import TestCase, Client
+
+from model_app.models import *
 
 import json
 
@@ -14,7 +15,7 @@ class TestTask(TestCase):
     def test_asserts(self):
         self.assertEquals(1, 1)
 
-    #--------------------------- Testing "task_info" -------------------------------------------------
+    #--------------------------- Testing "task_info" ------------------------------
     def test_get_task_info(self):
         response = self.client.get(reverse('task_info', args=[1]))
         resp_json = json.loads((response.content).decode("utf-8"))
@@ -74,18 +75,6 @@ class TestTask(TestCase):
                 "remote":False, 
                 "pricing_type":True,
             })
-        # response = self.client.post(reverse('task_create'), {
-        #         "pricing_info":"0.0", 
-        #         "location":"here", 
-        #         "time_to_live":"2017-02-15", 
-        #         "title":"A hard task", 
-        #         "description":"It is super hard", 
-        #         "post_date":"2017-02-15", 
-        #         "status":"OPEN", 
-        #         "time":"5",
-        #         "remote":False, 
-        #         "pricing_type":True
-        #     })
         resp_json = json.loads((response.content).decode("utf-8"))
 
         response2 = self.client.delete(reverse('task_info', args=[resp_json['id']]))
@@ -224,8 +213,6 @@ class TestTask(TestCase):
         for i in resp_json:
             for j in reviewFields:
                 self.assertEquals(j in i, True)
-
-    
 
     #tearDown method is called after each test
     def tearDown(self):
