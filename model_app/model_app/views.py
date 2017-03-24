@@ -1,16 +1,14 @@
+from django.contrib.auth import hashers
 from django.core import serializers
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template import loader
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.forms.models import model_to_dict
-from django.contrib.auth import hashers
+
+from .models import *
+
 import datetime
-
-from .models import Review, Task, Users, TaskSkills, Owner, Worker, UserLanguages, UserSkills, Authenticator
-
 import json
 import logging
 
