@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^api/v1/task/main/(?P<task_id>[0-9]+)/$', views.task_main, name='task_main'),
     url(r'^api/v1/task/create/$', views.task_create, name='task_create'),
     url(r'^api/v1/task/query', views.task_query, name='task_query'),
+    url(r'^api/v1/task/all/$', views.task_all, name='task_all'),
     url(r'^api/v1/user/info/(?P<user_id>[0-9]+)/$', views.user_info, name='user_info'),
     url(r'^api/v1/user/main/(?P<user_id>[0-9]+)/$', views.user_main, name='user_main'),
     url(r'^api/v1/user/create/$', views.user_create, name='user_create'),

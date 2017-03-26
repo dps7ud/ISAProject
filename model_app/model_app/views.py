@@ -180,6 +180,13 @@ def task_query(request):
     else:
         return HttpResponse("ERROR: Posted to task_query")
 
+def task_all(request):
+    tasks = Task.objects.all()
+    tasksList = []
+    for i in tasks:
+        tasksList.append(model_to_dict(i))
+    return JsonResponse(tasksList, safe=False)
+
 def task_create(request):
     """Accepts post request containing a single json object
     to create new task model instances.

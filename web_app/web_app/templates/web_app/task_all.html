@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+        <link href="/static/css/project.css" rel="stylesheet">
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        
+        <script src="/static/js/bootstrap.js"></script>
+        <script src="/static/js/setup.js"></script>
+
+
+    </head>
+    <body>
+        <div id="navbar"></div>
+        <div id="authPresent" data-auth={{auth}}></div>
+
+        {% if success %}
+                <div class="alert alert-success" role="alert" style="padding-top:70px">{{success}}</div>
+        {% endif %}
+        
+        <div class="page-header">
+            <h1>All Tasks 
+            {% if auth == 'yes' %}
+                <a class = "btn btn-primary" href="/createListing/" role="button">Create New Listing</a>
+            {% endif %}
+            </h1>
+        </div>
+
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">User Tasks</h3>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Visit Page </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td> {{task.title}}</td>
+                        <td> {{task.location}}</td>
+                        <td> {{task.status}}</td>
+                        <td> Worker </td>
+                        <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    <script src="/static/js/bootstrap.js"></script>
+    </body>
+</html>
