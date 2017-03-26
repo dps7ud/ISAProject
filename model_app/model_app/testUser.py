@@ -43,7 +43,11 @@ class TestUser(TestCase):
             })
 
     def test_post_user_update_some_fields(self):
-        response = self.client.post(reverse('user_info', args=[1]), {"fname": "New", "lname":"Name"})
+        response = self.client.post(reverse('user_info', args=[1]), 
+                {
+                    "fname": "New", 
+                    "lname":"Name"
+                })
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
@@ -57,7 +61,9 @@ class TestUser(TestCase):
             })
     def test_post_user_update_all_fields(self):
 
-        response = self.client.post(reverse('user_info', args=[1]), {"username": "user10", "fname": "New", "lname": "Name", "email": "new@gmail.com", "bio":"I make changes", "pw":"secret", "location":"Virginia"})
+        response = self.client.post(reverse('user_info', args=[1]), {"username": "user10", 
+            "fname": "New", "lname": "Name", "email": "new@gmail.com", 
+            "bio":"I make changes", "pw":"secret", "location":"Virginia"})
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
@@ -80,7 +86,16 @@ class TestUser(TestCase):
                 "pw":'pas',
                 "location":'behind you',
             }
-        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        response = self.client.post(reverse('user_create'), 
+                {
+                    "username": "user99", 
+                    "fname": "1", 
+                    "lname": "2", 
+                    "email": "3", 
+                    "bio": "4", 
+                    "pw": "5", 
+                    "location": "6" 
+                })
         print((response.content).decode("utf-8"))
         resp_json = json.loads((response.content).decode("utf-8"))
 
@@ -110,7 +125,16 @@ class TestUser(TestCase):
 
 
     def test_post_create_user_all_fields(self):
-        response = self.client.post(reverse('user_create'), {"username": "user99", "fname": "1", "lname": "2", "email": "3", "bio": "4", "pw": "5", "location": "6" })
+        response = self.client.post(reverse('user_create'), 
+                {
+                    "username": "user99", 
+                    "fname": "1", 
+                    "lname": "2", 
+                    "email": "3", 
+                    "bio": "4", 
+                    "pw": "5", 
+                    "location": "6" 
+                })
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json["username"], "user99")
         self.assertEquals(resp_json["fname"], "1")
@@ -235,9 +259,6 @@ class TestUser(TestCase):
         for i in resp_json:
             for j in reviewFields:
                 self.assertEquals(j in i, True)
-
-
-    
 
     #tearDown method is called after each test
     def tearDown(self):
