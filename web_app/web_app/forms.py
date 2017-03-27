@@ -22,3 +22,9 @@ class CreateListingForm(forms.Form):
     time = forms.CharField(label='time', max_length=200)
     pricing_type = forms.CharField(label='pricing_type', max_length=25)
     pricing_info = forms.FloatField(label='pricing_info')
+
+class CreateReviewForm(forms.Form):
+    title = forms.CharField(label='Title', max_length=200)
+    body = forms.CharField(label='body', max_length=200)
+    score = forms.FloatField(label='score')
+

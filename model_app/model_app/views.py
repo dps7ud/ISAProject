@@ -24,6 +24,11 @@ def index(request):
 def authenticator_create(request):
     if request.method == 'POST':
         auth_obj = Authenticator()
+        required = {'authenticator','username'}
+        json_data = request.POST
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         for key, value in request.POST.items():
             setattr(auth_obj, key, value)
         auth_obj.date_created = datetime.datetime.now()        
@@ -285,9 +290,7 @@ def user_create(request):
     if request.method == 'POST':
         required = set(field.name for field in set(Users._meta.fields))
         required.remove('id')
-        logger.error("in user create")
         json_data = request.POST
-        logger.error(str(json_data))
         missing_fields = required.difference(json_data.keys())
         if missing_fields:
             return JsonResponse({"ERROR":"Missing required fields: " + ', '.join(missing_fields)})
@@ -460,11 +463,15 @@ def user_languages(request, user_id):
 def user_languages_create(request):
     if request.method == 'POST':
         langObj = UserLanguages()
+        required = {'spoken_language','user'}
         json_data = request.POST
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         try:
             langObj.user = Users.objects.get(pk=json_data['user'])
-        except Task.DoesNotExist:
-            return HttpResponse("ERROR: Task object does not exist")
+        except Users.DoesNotExist:
+            return HttpResponse("ERROR: User object does not exist")
         langObj.spoken_language = json_data['spoken_language']
         try:
             langObj.save()
@@ -486,12 +493,16 @@ def user_skills(request, user_id):
 
 def user_skills_create(request):
     if request.method == 'POST':
-        skillsObj = UserSkills()
+        required = {'skill','user'}
         json_data = request.POST
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
+        skillsObj = UserSkills()
         try:
             skillsObj.user = Users.objects.get(pk=json_data['user'])
-        except Task.DoesNotExist:
-            return HttpResponse("ERROR: Task object does not exist")
+        except Users.DoesNotExist:
+            return HttpResponse("ERROR: User object does not exist")
         skillsObj.skill = json_data['skill']
         try:
             skillsObj.save()
@@ -631,3 +642,38 @@ def task_main(request, task_id):
     logger.error("responseArray")
     logger.error(responseArray)
     return JsonResponse(responseArray, safe=False)
+
+def get_user_needed_reviews(request, user_id):
+    needed_pairs = []
+    tasks = Task.objects.filter(worker__user=user_id)
+    logger.error(tasks)
+    for i in tasks:
+        workers = Users.objects.filter(worker__task=i.pk)
+        for j in workers:
+            if j.pk != user_id:
+                try:
+                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                except Review.DoesNotExist:
+                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+        owners = Users.objects.filter(owner__task = i.pk)
+        for j in owners:
+            try:
+                reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+            except Review.DoesNotExist:
+                needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+    tasks = Task.objects.filter(owner__user=user_id)
+    for i in tasks:
+        workers = Users.objects.filter(worker__task=i.pk)
+        for j in workers:
+            try:
+                reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+            except Review.DoesNotExist:
+                needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+        owners = Users.objects.filter(owner__task = i.pk)
+        for j in owners:
+            if j.pk != user_id:
+                try:
+                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                except Review.DoesNotExist:
+                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+    return JsonResponse(needed_pairs, safe=False)

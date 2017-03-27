@@ -3,7 +3,7 @@
     "model": "model_app.authenticator",
     "pk" : 1,
     "fields": {
-      "username": "test",
+      "username": "user1",
       "authenticator": "test",
       "date_created": "2013-02-09"
     }

@@ -260,6 +260,66 @@ class TestUser(TestCase):
             for j in reviewFields:
                 self.assertEquals(j in i, True)
 
+    # -----------------------Testing "user_skills_create" ------------------------------
+    def test_user_skills_create_get(self):
+        response = self.client.get(reverse('user_skills_create'))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept POST requests")
+
+    def test_user_skills_create_post_missing_field(self):
+        response = self.client.post(reverse('user_skills_create'), {
+                "skill":"testing"
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertTrue(resp_json.startswith("Missing required fields"))
+
+    def test_user_skills_create_post_correct(self):
+        response = self.client.post(reverse('user_skills_create'), {
+                "skill":"testing",
+                "user": 1
+            })
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json["skill"], "testing")
+        self.assertEquals(resp_json["user"], 1)
+
+    def test_user_skills_create_post_no_user_id(self):
+        response = self.client.post(reverse('user_skills_create'), {
+                "skill":"testing",
+                "user": 75
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: User object does not exist")
+
+    # -----------------------Testing "user_languages_create" ------------------------------
+    def test_user_languages_create_get(self):
+        response = self.client.get(reverse('user_languages_create'))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept POST requests")
+
+    def test_user_languages_create_post_missing_field(self):
+        response = self.client.post(reverse('user_languages_create'), {
+                "spoken_language":"testing"
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertTrue(resp_json.startswith("Missing required fields"))
+
+    def test_user_languages_create_post_correct(self):
+        response = self.client.post(reverse('user_languages_create'), {
+                "spoken_language":"testing",
+                "user": 1
+            })
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json["spoken_language"], "testing")
+        self.assertEquals(resp_json["user"], 1)
+
+    def test_user_languages_create_post_no_user_id(self):
+        response = self.client.post(reverse('user_languages_create'), {
+                "spoken_language":"testing",
+                "user": 75
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: User object does not exist")
+
     #tearDown method is called after each test
     def tearDown(self):
         pass #nothing to tear down
