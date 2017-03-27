@@ -1,0 +1,3 @@
+As a user, login should be persistant across navigation.
+As a user, I should be the only user able to create content unique to my user account.
+As a user, content created and actions taken should persist across sessions.
