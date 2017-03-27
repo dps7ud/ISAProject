@@ -26,8 +26,6 @@ class TestReview(TestCase):
             "poster_user": 1,
             "postee_user": 2
         })
-        self.assertEquals
-
 
     def test_get_review_not_present(self):
         response = self.client.get(reverse('review_info', args=[68]))
