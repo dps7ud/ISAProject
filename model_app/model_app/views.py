@@ -316,6 +316,8 @@ def user_find(request):
             return HttpResponse("Correct")
         else:
             return HttpResponse("Password Incorrect")
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts POST requests")
 
 
 
@@ -384,7 +386,11 @@ def task_skills(request, task_id):
 def task_skills_create(request):
     if request.method == 'POST':
         skillsObj = TaskSkills()
+        required = {'task','skill'}
         json_data = request.POST
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         try:
             skillsObj.task = Task.objects.get(pk=json_data['task'])
         except Task.DoesNotExist:
@@ -411,14 +417,18 @@ def task_owners(request, task_id):
 def task_owners_create(request):
     if request.method == 'POST':
         ownerObj = Owner()
+        required = {'task','user'}
         json_data = request.POST
+        missing_fields = required.difference(json_data.keys())
+        if missing_fields:
+            return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         try:
             ownerObj.task = Task.objects.get(pk=json_data['task'])
         except Task.DoesNotExist:
             return HttpResponse("ERROR: Task object does not exist")
         try:
             ownerObj.user = Users.objects.get(pk=json_data['user'])
-        except Task.DoesNotExist:
+        except Users.DoesNotExist:
             return HttpResponse("ERROR: User object does not exist")
         try:
             ownerObj.save()

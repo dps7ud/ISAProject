@@ -18,13 +18,13 @@
         <div id="authPresent" data-auth={{auth}}></div>
 
         {% if success %}
-                <div class="alert alert-success" role="alert" style="padding-top:70px">{{success}}</div>
+                <div class="alert alert-success" role="alert" style="margin-top:70px">{{success}}</div>
         {% endif %}
         
         <div class="page-header">
             <h1>All Tasks 
             {% if auth == 'yes' %}
-                <a class = "btn btn-primary" href="/createListing/" role="button">Create New Listing</a>
+                <a class = "btn btn-primary pull-right" href="/createListing/" role="button">Create New Listing</a>
             {% endif %}
             </h1>
         </div>

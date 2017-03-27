@@ -214,6 +214,36 @@ class TestTask(TestCase):
             for j in reviewFields:
                 self.assertEquals(j in i, True)
 
+    # -----------------------Testing "task_skills_create" ------------------------------
+    def test_task_skills_create_get(self):
+        response = self.client.get(reverse('task_skills_create'))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept POST requests")
+
+    def test_task_skills_create_post_missing_field(self):
+        response = self.client.post(reverse('task_skills_create'), {
+                "skill":"testing"
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertTrue(resp_json.startswith("Missing required fields"))
+
+    def test_task_skills_create_post_correct(self):
+        response = self.client.post(reverse('task_skills_create'), {
+                "skill":"testing",
+                "task": 1
+            })
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json["skill"], "testing")
+        self.assertEquals(resp_json["task"], 1)
+
+    def test_task_skills_create_post_no_task_id(self):
+        response = self.client.post(reverse('task_skills_create'), {
+                "skill":"testing",
+                "task": 75
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Task object does not exist")
+
     #tearDown method is called after each test
     def tearDown(self):
         pass #nothing to tear down

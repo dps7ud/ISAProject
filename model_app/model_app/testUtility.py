@@ -216,6 +216,46 @@ class TestUtility(TestCase):
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Authenticator with that id does not exist")
 
+    #------------------------Testing "task_owners_create" -------------------------------
+    def test_task_owners_create_get(self):
+        response = self.client.get(reverse('task_owners_create'))
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Can only accept POST requests")
+
+    def test_task_owners_create_post_missing_field(self):
+        response = self.client.post(reverse('task_owners_create'), {
+                "user":1
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertTrue(resp_json.startswith("Missing required fields"))
+
+    def test_task_owners_create_post_correct(self):
+        response = self.client.post(reverse('task_owners_create'), {
+                "user":1,
+                "task":1
+            })
+        resp_json = json.loads((response.content).decode("utf-8"))
+        self.assertEquals(resp_json["task"], 1)
+        self.assertEquals(resp_json["user"], 1)
+    
+    def test_task_owners_create_post_no_user_id(self):
+        response = self.client.post(reverse('task_owners_create'), {
+                "user":75,
+                "task":1
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: User object does not exist")
+
+    def test_task_owners_create_post_no_task_id(self):
+        response = self.client.post(reverse('task_owners_create'), {
+                "user":1,
+                "task":75
+            })
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Task object does not exist")
+
+
+
 
 
 
