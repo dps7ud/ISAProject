@@ -150,18 +150,9 @@ class TestUtility(TestCase):
     def test_authenticator_create_correct(self):
         response = self.client.post(reverse('authenticator_create'), {
                 "username": "test",
-                "authenticator": "test"
             })
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json["username"], "test")
-        self.assertEquals(resp_json["authenticator"], "test")
-
-    def test_authenticator_create_missing_field(self):
-        response = self.client.post(reverse('authenticator_create'), {
-                "username": "test"
-            })
-        resp_json = (response.content).decode("utf-8")
-        self.assertTrue(resp_json.startswith("Missing required fields:"))
 
     #----------------------Testing "authenticator_find" ---------------------------
     def test_authenticator_find_post(self):
@@ -175,14 +166,14 @@ class TestUtility(TestCase):
         self.assertEquals(resp_json,  "ERROR: Authenticator does not exist")
 
     def test_authenticator_find_get_correct(self):
-        response = self.client.get(reverse('authenticator_find', args=["test"]))
+        response = self.client.get(reverse('authenticator_find', args=["e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6"]))
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json[0]["username"], "user1")
-        self.assertEquals(resp_json[0]["authenticator"], "test")
+        self.assertEquals(resp_json[0]["authenticator"], "e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6")
 
     #----------------------Testing "authenticator" ---------------------------
     def test_authenticator_get(self):
-        response = self.client.get(reverse('authenticator', args=["test"]))
+        response = self.client.get(reverse('authenticator', args=["e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6"]))
         resp_json = (response.content).decode("utf-8")
         self.assertNotEquals(resp_json, "Auth Incorrect")
 
@@ -197,17 +188,16 @@ class TestUtility(TestCase):
         self.assertEquals(resp_json, "ERROR: Not correct type of Request")
 
     def test_authenticator_delete_correct(self):
-        response = self.client.post(reverse('authenticator_create'), {
-                "username": "testing",
-                "authenticator": "testing"
-            })
-        resp_json = json.loads((response.content).decode("utf-8"))
+        # response = self.client.post(reverse('authenticator_create'), {
+        #         "username": "testing",
+        #     })
+        # resp_json = json.loads((response.content).decode("utf-8"))
 
-        response2 = self.client.delete(reverse('authenticator', args=["testing"]))
+        response2 = self.client.delete(reverse('authenticator', args=["e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6"]))
         resp2 = (response2.content).decode("utf-8")
         self.assertTrue(resp2.startswith("Deleted Authenticator:"))
 
-        response3 = self.client.get(reverse('authenticator', args=["testing"]))
+        response3 = self.client.get(reverse('authenticator', args=["e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6"]))
         resp_json3 = (response3.content).decode("utf-8")
         self.assertEquals(resp_json3, "Auth Incorrect")
 

@@ -100,10 +100,8 @@ class TestTask(TestCase):
         response = self.client.post(reverse("task_create"), {
                 "pricing_info":0.0, 
                 "location":"here", 
-                "time_to_live":"2017-02-15", 
                 "title":"A hard task", 
-                "description":"It is super hard", 
-                "post_date":"2017-02-15", 
+                "description":"It is super hard",  
                 "status":"OPEN", 
                 "time": "5",
                 "remote":False, 
@@ -113,10 +111,8 @@ class TestTask(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(resp_json["pricing_info"], "0.0")
         self.assertEquals(resp_json["location"], "here")
-        self.assertEquals(resp_json["time_to_live"], "2017-02-15" )
         self.assertEquals(resp_json["title"], "A hard task")
         self.assertEquals(resp_json["description"], "It is super hard")
-        self.assertEquals(resp_json["post_date"], "2017-02-15")
         self.assertEquals(resp_json["status"], "OPEN")
         self.assertEquals(resp_json["remote"], 'False')
         self.assertEquals(resp_json["pricing_type"], 'True')

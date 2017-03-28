@@ -1,3 +1,18 @@
-As a user, login should be persistant across navigation.
-As a user, I should be the only user able to create content unique to my user account.
-As a user, content created and actions taken should persist across sessions.
+As a user, I should be able to go a login page from the navigation bar
+	An error should be returned if a username is not registered
+	An error should be returned if a password doesn't match record for that user
+	As a user login should create a token to signify logging in for the future
+As a user, for any operation that requires logging in, redirect to the login page.
+	Redirect back to the original page with successful login
+User should see a navigation bar which should say login or logout based on whether they are logged in or not
+As a user, I should be able to view a list of all tasks
+	As a user, I want to be able to view a Create New Listing page if I am logged in from this list of tasks page
+A users authorization cookie should only be allowed to use for 7 days before requiring new login
+A user should be able to user the Create New Listings page to create a new listing
+	Form Validation should occur to ensure all required fields are filled out correctly
+	This page should redirect to the newly created listing upon successful completion
+A user should be able to use the SignUp page to sign themselves up
+	Form validation should occur to ensure all required fields are filled out correctly
+	Page should redirect to the newly created user's page upon successful completion
+
+

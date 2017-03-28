@@ -38,7 +38,7 @@ class TestUser(TestCase):
                 "lname": "Pinckney",
                 "email": "fake@gmail.com",
                 "bio": "I like to program",
-                "pw": "password",
+                "pw": "pbkdf2_sha256$30000$jDkJdhOAYRip$9MXH/vI07vjggfk8TpelQh4EE5ILT5tuZrOpsKHfFqY=",
                 "location": "Charlottesville"
             })
 
@@ -56,14 +56,14 @@ class TestUser(TestCase):
                 "lname": "Name",
                 "email": "fake@gmail.com",
                 "bio": "I like to program",
-                "pw": "password",
+                "pw": "pbkdf2_sha256$30000$jDkJdhOAYRip$9MXH/vI07vjggfk8TpelQh4EE5ILT5tuZrOpsKHfFqY=",
                 "location": "Charlottesville"
             })
     def test_post_user_update_all_fields(self):
 
         response = self.client.post(reverse('user_info', args=[1]), {"username": "user10", 
             "fname": "New", "lname": "Name", "email": "new@gmail.com", 
-            "bio":"I make changes", "pw":"secret", "location":"Virginia"})
+            "bio":"I make changes", "location":"Virginia"})
         resp_json = json.loads((response.content).decode("utf-8"))
         self.assertEquals(resp_json, {
                 "id": 1,
@@ -72,7 +72,7 @@ class TestUser(TestCase):
                 "lname": "Name",
                 "email": "new@gmail.com",
                 "bio": "I make changes",
-                "pw": "secret",
+                "pw": "pbkdf2_sha256$30000$jDkJdhOAYRip$9MXH/vI07vjggfk8TpelQh4EE5ILT5tuZrOpsKHfFqY=",
                 "location": "Virginia"
             })
 

@@ -8,12 +8,15 @@ Members of the Team
 --------------
 
   - David Stolz (dps7ud)
-  - Matthew Tillman (mst2jd)
   - Brandon Whitfield (bjw4ph)
 
 Project 4 Notes
 -------------
 - User Stories: User stories can be found in "UserStories_4.txt" in the top directory of the repository.
+- Create New Listing: Button to reach this page can only be seen after you have logged in on main Task List page, reached by pressing 'Tasks' on the navbar
+  -Example Login Credentials: Username: 'user1', Password: 'm'
+- Logout Logic: Logout logic on the web app can be reached only when a user has been logged in, once this happens 'Login' on the navbar is replaced by 'Logout' which can be pressed to log the user our
+- Testing: testAuth.py created to hold all of the testing for the new Authenticator table, and additional tests were added to testUtility.py, testTask.py, and testUser.py to test some additional helper endpoints added to the model layer
 
 Project 3 Notes
 -------------
