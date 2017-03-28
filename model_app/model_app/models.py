@@ -20,8 +20,8 @@ class Task(models.Model):
     description = models.CharField(max_length=200)
     #Not nullable, use ""
     location = models.CharField(max_length=200)
-    time_to_live = models.DateField()
-    post_date = models.DateField()
+    time_to_live = models.DateTimeField()
+    post_date = models.DateTimeField()
     status = models.CharField(max_length=4, choices=TASK_STATUS_CHOICES)
     remote = models.BooleanField()
     time = models.CharField(max_length=200)

@@ -230,6 +230,8 @@ def create_listing(request):
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
 
     errors = False
+    authString = "yes"
+
     if request.method == 'POST':
         logger.error("in post of web app create listing")
         form = CreateListingForm(request.POST)
@@ -260,7 +262,8 @@ def create_listing(request):
 
     return render(request, 'web_app/createlisting.html', 
             {
-                'form': form, 
+                'form': form,
+                'auth':  authString,
                 'errors': errors, 
                 'success': successString
             })

@@ -5,6 +5,8 @@
         <link href="/static/css/bootstrap.css" rel="stylesheet">
         <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
         <link href="/static/css/project.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-tagsinput.css" rel="stylesheet">
+
 
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         
@@ -16,6 +18,7 @@
     </head>
     <body>
         <div id="navbar"></div>
+        <div id="authPresent" data-auth={{auth}}></div>
         {% if errors %}
             <div class="alert alert-danger" role="alert" style="margin-top:70px">{{errors}}</div>
         {% endif %}
@@ -31,44 +34,35 @@
             <div class="panel panel-default">
               <div class="panel-body">
                 <form action="/createListing/" method="post">
-                    <div class="form-group">
-                        <label for="title">Title: </label>
-                        <input id="title" type="text" name="title" value="{{ title }}"><br>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description: </label>
-                        <input id="description" type="text" name="description" value="{{ description }}"><br>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Location: </label>
-                        <input id="location" type="text" name="location" value="{{ location }}"><br>
-                    </div>
-                    <div class="form-group">
-                        <label for="Status">Status: </label>
-                        <select id="status" type="text" name="status">
-                            <option value="ACC.">Accepted</option>
-                            <option value="DONE">Done</option>
-                            <option value="OPEN">Open</option>
-                        </select><br>
-                    </div>
-                    <div class="form-group">
-                        <label for="remote">Remote: </label><br>
-                        <input type="radio" name="remote" id="remote" value="remote"> Yes<br>
-                        <input id="remote" type="radio" name="remote" value="no"> No<br>
-                    </div>
-                    <div class="form-group">
-                        <label for="time">Time: </label>
-                        <input id="time" type="text" name="time" value="{{ time }}"><br>
-                    </div>
-                    <div class="form-group">
-                        <label for="pricing_type">Pricing Type: </label><br>
-                        <input type="radio" name="pricing_type" id="pricing_type" value="Lump"> Lump Sum<br>
-                        <input id="pricing_type" type="radio" name="pricing_type" value="Hourly"> Hourly<br>
-                    </div>
-                    <div class="form-group">
-                        <label for="pricing_info">Pricing Info: </label>
-                        <input id="pricing_info" type="text" name="pricing_info" value="{{ pricing_info }}"><br>
-                    </div>
+                    {% for field in form %}
+                        {% if field.label == "Status"  %}
+                            <div class="form-group">
+                                <label for="Status">Status: </label>
+                                <select id="status" type="text" name="status" class="form-control">
+                                    <option value="ACC.">Accepted</option>
+                                    <option value="DONE">Done</option>
+                                    <option value="OPEN">Open</option>
+                                </select><br>
+                            </div>
+                        {% elif field.label == "remote" %}
+                            <div class="form-group">
+                                <label for="remote">Remote: </label><br>
+                                <input type="radio" name="remote" id="remote" value="remote"> Yes<br>
+                                <input id="remote" type="radio" name="remote" value="no"> No<br>
+                            </div>
+                        {% elif field.label == "pricing_type" %}
+                            <div class="form-group">
+                                <label for="pricing_type">Pricing Type: </label><br>
+                                <input type="radio" name="pricing_type" id="pricing_type" value="Lump"> Lump Sum<br>
+                                <input id="pricing_type" type="radio" name="pricing_type" value="Hourly"> Hourly<br>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <label for="{{field.name}}">{{field.label}}: </label>
+                                <input id="{{field.name}}" type="text" name="{{field.name}}" class="form-control">
+                            </div>
+                        {% endif %}
+                    {% endfor%}
                     <div class="form-group">
                         <label for="required_skills">Required Skills: </label>
                         <input id="required_skills" type="text" name="required_skills" class="form-control" data-role="tagsinput"><br>

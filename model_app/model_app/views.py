@@ -5,12 +5,16 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template import loader
+from django.conf import settings
+from django.utils import timezone
 
 from .models import *
 
+import hmac
 import datetime
 import json
 import logging
+import os
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -24,14 +28,27 @@ def index(request):
 def authenticator_create(request):
     if request.method == 'POST':
         auth_obj = Authenticator()
-        required = {'authenticator','username'}
+        required = {'username'}
         json_data = request.POST
         missing_fields = required.difference(json_data.keys())
         if missing_fields:
             return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         for key, value in request.POST.items():
             setattr(auth_obj, key, value)
-        auth_obj.date_created = datetime.datetime.now()        
+        authValid = True
+        newAuth = "placeholder"
+        while authValid:
+            newAuth = hmac.new(
+                key = settings.SECRET_KEY.encode('utf-8'),
+                msg = os.urandom(32),
+                digestmod = 'sha256',
+            ).hexdigest()
+            try:
+                Authenticator.objects.get(authenticator=newAuth)
+            except Authenticator.DoesNotExist:
+                authValid = False
+        auth_obj.authenticator = newAuth
+        auth_obj.date_created = timezone.now()    
         auth_obj.save()
         return JsonResponse(model_to_dict(auth_obj))
     else:
@@ -59,6 +76,10 @@ def authenticator(request, authenticator):
         try:
             authObj = Authenticator.objects.get(authenticator=authenticator)
         except Authenticator.DoesNotExist:
+            return HttpResponse("Auth Incorrect")
+        if authObj.date_created <= timezone.now() - datetime.timedelta(days=7):
+            logger.error("Auth is too old")
+            #authObj.delete()
             return HttpResponse("Auth Incorrect")
         userObj = Users.objects.get(username=authObj.username)
         return HttpResponse(str(userObj.pk))
@@ -196,6 +217,8 @@ def task_create(request):
     if request.method == "POST":
         required = set(field.name for field in set(Task._meta.fields))
         required.remove('id')
+        required.remove('time_to_live')
+        required.remove('post_date')
 
         try:
             request_data = request.POST
@@ -206,7 +229,9 @@ def task_create(request):
             return HttpResponse("Missing required fields: " + ', '.join(missing_fields))
         task_obj = Task()
         for key, value in request_data.items():
-            setattr(task_obj, key, value)        
+            setattr(task_obj, key, value)
+        task_obj.time_to_live = timezone.now() + datetime.timedelta(days=30)
+        task_obj.post_date = datetime.datetime.now()      
         task_obj.save()
         return JsonResponse(model_to_dict(task_obj))
     else:
@@ -300,8 +325,12 @@ def user_create(request):
                 setattr(userObj, key, hashers.make_password(json_data['pw']))
             else:
                 setattr(userObj, key, value)
-        userObj.save()
-        return JsonResponse(model_to_dict(userObj))
+        try:
+            Users.objects.get(username=userObj.username)
+        except Users.DoesNotExist:
+            userObj.save()
+            return JsonResponse(model_to_dict(userObj))
+        return HttpResponse("ERROR: Username already registered")
     else:
         return HttpResponse("ERROR: User creation endpoint must be posted")
 

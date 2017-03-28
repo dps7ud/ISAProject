@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
+
 
 from urllib.error import URLError
 import urllib.parse
@@ -11,6 +13,7 @@ import hmac
 import json
 import logging
 import os
+import datetime
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -161,17 +164,11 @@ def signup(request):
     if request.method == "POST":
         errorStrings = False
         respDict = (request.POST).dict()
-        logger.error("respDict")
-        logger.error(respDict)
         languagesString = respDict['spoken_languages']
         skillsString = respDict['user_skills']
         del respDict['spoken_languages']
         del respDict['user_skills']
-        logger.error("respDict2")
-        logger.error(respDict)
         post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
-        logger.error('testing')
-        logger.error(str(post_encoded))
         req = urllib.request.Request('http://models-api:8000/api/v1/user/create/', 
                 data=post_encoded, method='POST')
         resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
@@ -179,16 +176,7 @@ def signup(request):
             resp = json.loads(resp_json)
         except ValueError:
             return JsonResponse([False, False, resp_json], safe=False)
-        logger.error("resp")
-        logger.error(resp)
-        authenticator = hmac.new(
-                key = settings.SECRET_KEY.encode('utf-8'),
-                msg = os.urandom(32),
-                digestmod = 'sha256',
-            ).hexdigest()
-        logger.error(authenticator)
-        auth_encoded = urllib.parse.urlencode({"username": resp["username"], 
-            "authenticator": authenticator}).encode('utf-8')
+        auth_encoded = urllib.parse.urlencode({"username": resp["username"]}).encode('utf-8')
         req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', 
                 data=auth_encoded, method='POST')
         resp2_json = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
@@ -227,14 +215,7 @@ def login(request):
                 data=post_encoded, method='POST')
         resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
         if resp == "Correct":
-            authenticator = hmac.new(
-                    key = settings.SECRET_KEY.encode('utf-8'),
-                    msg = os.urandom(32),
-                    digestmod = 'sha256',
-                ).hexdigest()
-            logger.error(authenticator)
-            auth_encoded = urllib.parse.urlencode({"username": request.POST["username"], 
-                "authenticator": authenticator}).encode('utf-8')
+            auth_encoded = urllib.parse.urlencode({"username": request.POST["username"]}).encode('utf-8')
             req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', 
                     data=auth_encoded, method='POST')
             resp2_json = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
@@ -280,12 +261,7 @@ def createListing(request):
         if resp == "Auth Incorrect":
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
         logger.error(resp)
-        # listing_dict = listing.dict()
-        # logger.error("listing_dict")
-        # logger.error(listing_dict)
         del respDict["auth"]
-        respDict["time_to_live"] = "2017-02-15"
-        respDict["post_date"] = "2017-02-15"
         if respDict["pricing_type"] == "Lump":
             respDict["pricing_type"] = True
         else:
