@@ -22,6 +22,9 @@ urlpatterns = [
     url(r'^signup/?', views.signup, name='signup'),
     url(r'^task/(?P<task_id>[0-9]+)/?$', views.task, name='task'),
     url(r'^user/(?P<user_id>[0-9]+)/?$', views.user, name='user'),
+    url(r'^profile/?', views.profile, name='profile'),
+
+
 
     url(r'^/?$', views.home, name='home'),
 ] + statics

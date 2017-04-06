@@ -13,6 +13,8 @@ if($("#authPresent").data("auth") == "yes"){
     console.log("if statement")
     $("#nav5").html("Logout")
     $("#nav5").attr("href", "/logout")
+    $("#navBodyBar").html("<li><a href='/profile/' id='nav6'>Profile</a></li>" + $("#navBodyBar").html())
+    //$("#profileNav").html("<li><a href='/profile/' id='nav6'>Profile</a></li>")
 } 
 if (pathname.indexOf("/task") >= 0){
     $("#nav1").parent().addClass("active");
@@ -29,8 +31,30 @@ if (pathname.indexOf("/login") >= 0){
 if (pathname.indexOf("/signup") >= 0){
     $("#nav4").parent().addClass("active");
 }
+if (pathname.indexOf("/profile") >= 0){
+    $("#nav6").parent().addClass("active");
+}
+
+$('#reviewModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // var postee = button.data('postee')
+  // var poster = button.data('poster')
+  // var task = button.data('task')
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+
+
 
 
 // console.log(pathname)
 
 })
+
+function createReview(){
+    alert("call this on click");
+}

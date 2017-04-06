@@ -267,6 +267,33 @@ def create_listing(request):
                 'errors': errors, 
                 'success': successString
             })
+
+def profile(request):
+    successString = success_messaging(request)
+    auth = request.COOKIES.get('auth')
+    
+    if not auth:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("profile"))
+
+    authString = "yes"
+
+    req = urllib.request.Request('http://exp-api:8000/profile/' + auth + '/')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    logger.error(resp)
+    if not resp[1]:
+        errorString = resp[1]
+    else:
+        errorString = False
+
+    context = {
+        'neededReviews': resp[0],
+        'auth':  authString,
+        'errors': errorString, 
+        'success': successString
+    }
+    return render(request, 'web_app/profile.html', context)
+
 def create_review(request):
     successString = success_messaging(request)
     auth = request.COOKIES.get('auth')

@@ -300,3 +300,22 @@ def createListing(request):
         return JsonResponse([resp2, False], safe=False)
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
+def profile(request, auth):
+    req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' + str(auth) + '/', method="GET")
+    resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+        
+    if resp == "Auth Incorrect":
+        return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
+
+    req2 = urllib.request.Request('http://models-api:8000/api/v1/user/neededReviews/' + resp + '/', method="GET")
+    resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+    try:
+        resp2 = json.loads(resp_json2)
+    except ValueError:
+        logger.error("resp_json2")
+        logger.error(resp_json2)
+        return JsonResponse([False, resp_json2])
+
+    return JsonResponse([resp2, False], safe=False)
+
