@@ -267,6 +267,28 @@ def create_listing(request):
                 'errors': errors, 
                 'success': successString
             })
+def create_review(request):
+    successString = success_messaging(request)
+    auth = request.COOKIES.get('auth')
+
+    if not auth:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
+
+    errors = False
+    if request.method == 'POST':
+        form = CreateReviewForm(request.POST)
+        if form.is_valid():
+            reviewInfo = form.cleaned_data
+            reviewInfo["auth"] = auth
+            post_encoded = urllib.parse.urlencode(reviewInfo).encode('utf-8')
+            req = urllib.request.Request('http://exp-api:8000/createReview/', 
+                    data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            if not resp[0]:
+                errors = resp[1]
+                if resp[1] == "ERROR: Invalid Auth":
+                    return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
 
 def success_messaging(request):
     try:
