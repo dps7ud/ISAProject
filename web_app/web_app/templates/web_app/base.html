@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+        <link href="/static/css/project.css" rel="stylesheet">
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="/static/js/bootstrap.js"></script>
+        <script src="/static/js/setup.js"></script>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">TaskTic</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              
+              
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="/task/" id="nav1">Tasks</a></li>
+                <li><a href="/user/1/" id="nav2">Users</a></li>
+                <li><a href="/review/1/" id="nav3">Reviews</a></li>
+                <li><a href="/signup/" id="nav4">Sign Up</a></li>
+                <li><a href="/login/" id="nav5">Login</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+        <div id="authPresent" data-auth={{auth}}></div>
+
+        {% if errors %}
+                <div class="alert alert-danger" role="alert" style="margin-top:70px">{{errors}}</div>
+        {% endif %}
+
+        {% if success %}
+                <div class="alert alert-success" role="alert" style="margin-top:70px">{{success}}</div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+
+
+
+
+
+    <script src="/static/js/bootstrap.js"></script>
+
+    </body>
+</html>
