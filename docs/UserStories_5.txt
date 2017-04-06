@@ -1,0 +1,8 @@
+As a user, I should be able to search for task listings relevant to myself.
+As a user, I should be able to limit these searches by the following:
+    Job poster, description and title keywords, location, time requirements,
+    due date and post date, completed-ness, payment information and requirements.
+As a user, I should be able to search for user listings relevant to myself.
+As a user, I should be able to limit these searches by the following:
+    Review score, tasks completed, username, skills and  bio keywords and location
+As a user, I should be able to post new listings and have them appear in search results
