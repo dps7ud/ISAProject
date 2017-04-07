@@ -37,15 +37,40 @@ if (pathname.indexOf("/profile") >= 0){
 
 $('#reviewModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  // var postee = button.data('postee')
-  // var poster = button.data('poster')
-  // var task = button.data('task')
+  //var recipient = button.data('poster') // Extract info from data-* attributes
+  var postee = button.data('postee')
+  var poster = button.data('poster')
+  var task = button.data('task')
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('.modal-title').text('New message to ' + recipient)
-  modal.find('.modal-body input').val(recipient)
+  // var modal = $(this)
+  // modal.find('.modal-title').text('New message to ' + recipient)
+  // modal.find('.modal-body input').val(recipient)
+  $('#posterField').val(poster)
+  $('#posteeField').val(postee)
+  $('#taskField').val(task)
+
+})
+
+$("#create-review-form").on('submit', function(e){
+    if($('#message-title').val() == "" || !$('#message-title').val()){
+        alert("Must fill the message title");
+        return false;
+    }
+    if($('#message-text').val() == "" || !$('#message-text').val()){
+        alert("Must fill the message body");
+        return false;
+    }
+
+    $.ajax({
+        url: "/createReview/",
+        type: "POST",
+        data: $("#create-review-form").serialize(),
+        success: function(data){
+            alert("Successfully submitted.")
+        }
+    });
+
 })
 
 

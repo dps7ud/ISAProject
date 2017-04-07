@@ -28,7 +28,7 @@
                         <!-- <td>1</td>
                         <td>2</td> -->
 
-                        <td> <a class = "btn btn-primary" href="#" role="button">Go</a> </td>
+                        <td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" data-poster="{{userID}}" data-postee="{{pair.1.id}}" data-task="{{pair.0.id}}">Create</button> </td>
                     </tr>
                 {% endfor %}
                 
@@ -37,34 +37,45 @@
             </table>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" data-whatever="@mdo">Open modal for @mdo</button>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
-    ...more buttons...
+    
 
     <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+            <h4 class="modal-title" id="exampleModalLabel">New Review</h4>
           </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="recipient-name" class="control-label">Recipient:</label>
-                <input type="text" class="form-control" id="recipient-name">
+          <form id="create-review-form">
+              <div class="modal-body">
+                    <input type="hidden" name="poster_user" id="posterField">
+                    <input type="hidden" name="postee_user" id="posteeField">
+                    <input type="hidden" name="task" id="taskField">
+                  <div class="form-group">
+                    <label for="score" class="control-label">Score:</label>
+                    <select type="text" class="form-control" id="score" name="score">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="message-title" class="control-label">Title:</label>
+                    <input type="text" class="form-control" id="message-title" name="title">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="control-label">Message:</label>
+                    <textarea class="form-control" id="message-text" name="body"></textarea>
+                  </div>
+                
               </div>
-              <div class="form-group">
-                <label for="message-text" class="control-label">Message:</label>
-                <textarea class="form-control" id="message-text"></textarea>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary" value="Create Review">
               </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="createReview()">Send message</button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

@@ -281,12 +281,13 @@ def profile(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     logger.error(resp)
-    if not resp[1]:
-        errorString = resp[1]
+    if not resp[2]:
+        errorString = resp[2]
     else:
         errorString = False
 
     context = {
+        'userID': resp[1],
         'neededReviews': resp[0],
         'auth':  authString,
         'errors': errorString, 
@@ -295,27 +296,39 @@ def profile(request):
     return render(request, 'web_app/profile.html', context)
 
 def create_review(request):
-    successString = success_messaging(request)
-    auth = request.COOKIES.get('auth')
+    if request.method == "POST":
+        logger.error("In createReview")
+        respDict = (request.POST).dict()
+        logger.error(respDict)
+        post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/createReview/', 
+                data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        logger.error(resp_json)
+        return HttpResponse("Finished")
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts POST requests")
+    # successString = success_messaging(request)
+    # auth = request.COOKIES.get('auth')
 
-    if not auth:
-        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
+    # if not auth:
+    #     return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
 
-    errors = False
-    if request.method == 'POST':
-        form = CreateReviewForm(request.POST)
-        if form.is_valid():
-            reviewInfo = form.cleaned_data
-            reviewInfo["auth"] = auth
-            post_encoded = urllib.parse.urlencode(reviewInfo).encode('utf-8')
-            req = urllib.request.Request('http://exp-api:8000/createReview/', 
-                    data=post_encoded, method='POST')
-            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-            resp = json.loads(resp_json)
-            if not resp[0]:
-                errors = resp[1]
-                if resp[1] == "ERROR: Invalid Auth":
-                    return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
+    # errors = False
+    # if request.method == 'POST':
+    #     form = CreateReviewForm(request.POST)
+    #     if form.is_valid():
+    #         reviewInfo = form.cleaned_data
+    #         reviewInfo["auth"] = auth
+    #         post_encoded = urllib.parse.urlencode(reviewInfo).encode('utf-8')
+    #         req = urllib.request.Request('http://exp-api:8000/createReview/', 
+    #                 data=post_encoded, method='POST')
+    #         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    #         resp = json.loads(resp_json)
+    #         if not resp[0]:
+    #             errors = resp[1]
+    #             if resp[1] == "ERROR: Invalid Auth":
+    #                 return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
 
 def success_messaging(request):
     try:

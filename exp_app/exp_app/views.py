@@ -306,7 +306,7 @@ def profile(request, auth):
     resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
         
     if resp == "Auth Incorrect":
-        return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
+        return JsonResponse([False, False, "ERROR: Invalid Auth"], safe=False)
 
     req2 = urllib.request.Request('http://models-api:8000/api/v1/user/neededReviews/' + resp + '/', method="GET")
     resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
@@ -315,7 +315,22 @@ def profile(request, auth):
     except ValueError:
         logger.error("resp_json2")
         logger.error(resp_json2)
-        return JsonResponse([False, resp_json2])
+        return JsonResponse([False, resp, resp_json2])
 
-    return JsonResponse([resp2, False], safe=False)
+    return JsonResponse([resp2, resp, False], safe=False)
+
+def createReview(request):
+    if request.method == "POST":
+        logger.error("In createReview exp")
+        respDict = (request.POST).dict()
+        logger.error(respDict)
+        post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
+        req2 = urllib.request.Request('http://models-api:8000/api/v1/review/create/', 
+                data=post_encoded, method='POST')
+        resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
+        logger.error(resp_json2)
+        return HttpResponse("Finished")
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
 
