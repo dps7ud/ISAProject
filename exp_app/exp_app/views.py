@@ -6,14 +6,14 @@ from django.utils import timezone
 
 
 from urllib.error import URLError
-import urllib.parse
-import urllib.request
-
+import datetime
 import hmac
 import json
+from kafka import KafkaProducer
 import logging
 import os
-import datetime
+import urllib.parse
+import urllib.request
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
