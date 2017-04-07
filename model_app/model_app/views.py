@@ -50,6 +50,8 @@ def authenticator_create(request):
         auth_obj.authenticator = newAuth
         auth_obj.date_created = timezone.now()    
         auth_obj.save()
+        print("New Auth")
+        print (auth_obj.authenticator)
         return JsonResponse(model_to_dict(auth_obj))
     else:
         return HttpResponse("ERROR: Endpoint must be POSTed")
@@ -683,34 +685,46 @@ def task_main(request, task_id):
     return JsonResponse(responseArray, safe=False)
 
 def get_user_needed_reviews(request, user_id):
+    logger.error("user_id")
+    logger.error(user_id)
     needed_pairs = []
     tasks = Task.objects.filter(worker__user=user_id)
     logger.error(tasks)
     for i in tasks:
         workers = Users.objects.filter(worker__task=i.pk)
         for j in workers:
-            if j.pk != user_id:
+            if int(j.pk) != int(user_id):
+                logger.error("j.pk")
+                logger.error(j.pk)
                 try:
                     reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
                 except Review.DoesNotExist:
                     needed_pairs.append([model_to_dict(i), model_to_dict(j)])
         owners = Users.objects.filter(owner__task = i.pk)
         for j in owners:
-            try:
-                reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
-            except Review.DoesNotExist:
-                needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+            if int(j.pk) != int(user_id):
+                logger.error("j.pk")
+                logger.error(j.pk)
+                try:
+                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                except Review.DoesNotExist:
+                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
     tasks = Task.objects.filter(owner__user=user_id)
     for i in tasks:
         workers = Users.objects.filter(worker__task=i.pk)
         for j in workers:
-            try:
-                reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
-            except Review.DoesNotExist:
-                needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+            if int(j.pk) != int(user_id):
+                logger.error("j.pk")
+                logger.error(j.pk)
+                try:
+                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                except Review.DoesNotExist:
+                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
         owners = Users.objects.filter(owner__task = i.pk)
         for j in owners:
-            if j.pk != user_id:
+            if int(j.pk) != int(user_id):
+                logger.error("j.pk")
+                logger.error(j.pk)
                 try:
                     reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
                 except Review.DoesNotExist:

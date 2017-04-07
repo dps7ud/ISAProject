@@ -1,135 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'web_app/base.html' %}
 
-    <head>
-        <link href="/static/css/bootstrap.css" rel="stylesheet">
-        <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
-        <link href="/static/css/project.css" rel="stylesheet">
-
-        <script src="http://code.jquery.com/jquery-latest.js"></script>
-        <script src="/static/js/bootstrap.js"></script>
-        <script src="/static/js/setup.js"></script>
-
-    </head>
-    <body>
-        <div id="navbar"></div>
-        <div id="authPresent" data-auth={{auth}}></div>
-
-        {% if errors %}
-                <div class="alert alert-danger" role="alert" style="margin-top:70px">{{errors}}</div>
-        {% endif %}
-
-        {% if success %}
-                <div class="alert alert-success" role="alert" style="margin-top:70px">{{success}}</div>
-        {% endif %}
-
+{% block content %}
+    <div class="col-sm-12">
+    <div class="jumbotron">
+      <h1>TaskTic</h1>
+      <p>A Micro-Consulting Service</p>
+    </div>
+    </div>
+    <div class="col-sm-12">
+    <div class="page-header">
+      <h2>Top Rated Users</h2>
+    </div>
+    </div>
+      <div class="row">
+        {% for user in top_users_list %}
+        <div class="col-sm-4">
         <div class="col-sm-12">
-        <div class="jumbotron">
-          <h1>TaskTic</h1>
-          <p>A Micro-Consulting Service</p>
-        </div>
-        </div>
-        <div class="col-sm-12">
-        <div class="page-header">
-          <h2>Top Rated Users</h2>
-        </div>
-        </div>
-          <div class="row">
-            {% for user in top_users_list %}
-            <div class="col-sm-4">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <b>Name: </b> {{ user.fname }} {{user.lname }} <br/>
-                        <b>Email: </b> {{ user.email}} <br/>
-                        <b>Location: </b> {{user.location}} <br/>
-                        <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Visit Page</a>
-                    </div>
-                
-                     
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <b>Name: </b> {{ user.fname }} {{user.lname }} <br/>
+                    <b>Email: </b> {{ user.email}} <br/>
+                    <b>Location: </b> {{user.location}} <br/>
+                    <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Visit Page</a>
                 </div>
-            </div>
-            </div>
-            {% endfor %}
             
-          </div>
-        
-
-        
-        <div class="col-sm-12">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">
-                <h3 class="panel-title">Most Recent Tasks</h3>
+                 
             </div>
-
-            <!-- Table -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                        <th>Role</th>
-                        <th>Visit Page </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for task in recent_listings_list %}
-                    <tr>
-                        <td> {{task.title}}</td>
-                        <td> {{task.location}}</td>
-                        <td> {{task.status}}</td>
-                        <td> Owner </td>
-                        <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
         </div>
         </div>
-
-
-
-
-
-    <script src="/static/js/bootstrap.js"></script>
-
-    </body>
-</html>
-
-
-
-
-<!-- <h2>Tasktic</h2>
-{% if top_users_list %}
-<h3>Top users</h3>
-    <ul>
-    {% for user in top_users_list %}
-        <li><a href="/user/{{ user.id }}/">{{ user.fname }} {{user.lname}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No users are available.</p>
-{% endif %}
-{% if recent_listings_list %}
-<center><h3>Newest tasks</h3></center>
-<table style="width:80%">
-    <tr>
-        <th>Task</th>
-        <th>Date posted</th>
-        <th>Duration estimate</th>
-    </tr>
-    {% for task in recent_listings_list %}
-    <tr>
-        <td><a href="/task/{{ task.task_id }}/">{{ task.title }}</a></td>
-        <td>{{ task.post_date }}</td>
-        <td>{{ task.time }}</td>
-    </tr>
-    {% endfor %}
+        {% endfor %}
         
+      </div>
 
-{% else %}
-    <p>No tasks are available.</p>
-{% endif %} -->
+
+
+    <div class="col-sm-12">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <h3 class="panel-title">Most Recent Tasks</h3>
+        </div>
+
+        <!-- Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Role</th>
+                    <th>Visit Page </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in recent_listings_list %}
+                <tr>
+                    <td> {{task.title}}</td>
+                    <td> {{task.location}}</td>
+                    <td> {{task.status}}</td>
+                    <td> Owner </td>
+                    <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+{% endblock %}
