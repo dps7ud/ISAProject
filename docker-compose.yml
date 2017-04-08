@@ -14,6 +14,7 @@ exp:
    container_name: isa_exp
    links:
       - models:models-api
+      - es:es
    ports:
       - "8002:8000"
    volumes:
@@ -42,8 +43,13 @@ kafka:
 es:
     image: elasticsearch:2.0
     container_name: es
+    volumes:
+      - ./model_app:/app
     ports:
         - "9200:9200"
+    #command: 'bash -c "cd .. && cd .. && cd .. && cd app && cd model_app && curl -s -H "Content-Type: application/x-ndjson/" -XPOST localhost:9200/_bulk --data-binary "@es.json""'
+    #command: bash -c "cd .. && cd .. && cd .. && cd app && cd model_app"
+
 
 batch:
     image: tp33/django

@@ -83,3 +83,7 @@ $("#create-review-form").on('submit', function(e){
 function createReview(){
     alert("call this on click");
 }
+
+function search(){
+    alert("redirect to task page here");
+}

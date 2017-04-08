@@ -18,6 +18,17 @@ import datetime
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+#Elastic Search Query Creators
+def titleQueryCreator(query):
+    queryObj = {
+        "query": {
+            "match": {
+                "title": query
+            }
+        }
+    }
+    return queryObj
+
 # Create your views here.
 def home(request):
     if request.method == 'GET':
@@ -67,19 +78,37 @@ def task(request, task_id):
         return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
 def task_all(request):
-	if request.method == 'GET':
-		errorStrings = ""
-		try:
-			req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
-			resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
-			resp = json.loads(resp_json)
-			logger.error(resp)
-			return JsonResponse(resp, safe=False)
-		except URLError:
-			return HttpResponse("Timeout")
-		
-	else:
-		return HttpResponse("ERROR: Endpoint only accepts GET requests")
+    if request.method == 'GET':
+
+        try:
+            titleQuery = request.GET['title']
+            logger.error("titleQuery: " + request.GET['title'])
+            esQuery = titleQueryCreator(request.GET['title'])
+            reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES.add_header('Content-Type', 'application/json')
+            respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
+            logger.error("respES_json: " + str(respES_json)) 
+            esResponse = json.loads(respES_json)
+            hitArray = esResponse["hits"]["hits"]
+            finalArray = []
+            for i in hitArray:
+                iDict = i["_source"]
+                iDict["id"] = iDict["task_id"]
+                finalArray.append(iDict)
+            return JsonResponse(finalArray, safe=False)
+        except:
+            logger.error("")
+            errorStrings = ""
+            try:
+                req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
+                resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+                resp = json.loads(resp_json)
+                logger.error(resp)
+                return JsonResponse(resp, safe=False)
+            except URLError:
+                return HttpResponse("Timeout")
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
 def user(request, user_id):
     if request.method == 'GET':
@@ -332,5 +361,6 @@ def createReview(request):
         return HttpResponse("Finished")
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
+
 
 
