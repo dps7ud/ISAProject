@@ -10,35 +10,42 @@
             </h1>
         </div>
         <div class="col-sm-12">
-            <div class="jumbotron" id="searchOptions">
-              <!-- <form class="navbar-form" role="search" action="/task/">
-                <div class="input-group">
-                    <div>
-                        <input type="text" class="form-control" placeholder="Search" name="title" id="title">
-                        <button class="btn btn-default" type="submit">Search</button>
+            <div class="jumbotron" id="searchOptions" style="padding-top:10px; padding-bottom:10px">
+              <div style="display:block;" id="basicSearchBlock">
+                  <h3 style="margin-left:20px">Basic Searching of Task Titles</h3>
+                  <form class="navbar-form" role="search" action="/task/">
+                    <div class="input-group">
+                        <div>
+                            <input type="text" class="form-control" placeholder="Search" name="title" id="title">
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </div>
                     </div>
-                </div>
-              </form>
-              <p> -or- </p>
-              <p><button class="btn btn-default" onclick="switchToAdvanced()">Advanced Search </button></p> -->
+                  </form>
+                  <div style="margin-left:20px">
+                      <p> -or- </p>
+                      <p><button class="btn btn-default" id="switchToAdvanced">Advanced Search </button></p>
+                  </div>
+              </div>
+              <div style="display:none;" id="advancedSearchBlock">
+                  <h3 style="margin-left:20px">Advanced Searching</h3>
+                  <form class="navbar-form" role="search" action="/task/">
+                    <div class="input-group" id="advancedSearchForm" count="1">
+                        <div class="lastInput" id="1">
+                            <input type="text" class="form-control" placeholder="Search" name="title" id="input1">
+                            <select class="form-control fieldInput" id="field1">
+                                <option value="title">Title</option>
+                                <option value="location">Location</option>
+                                <option value="status">Status</option>
+                                <option value="description">Description</option>
+                            </select>
+                        </div>
+                        
 
-              <form class="navbar-form" role="search" action="/task/">
-                <div class="input-group" id="advancedSearchForm" count="1">
-                    <div class="lastInput" id="1">
-                        <input type="text" class="form-control" placeholder="Search" name="title" id="input1">
-                        <select class="form-control fieldInput" id="field1">
-                            <option value="title">Title</option>
-                            <option value="location">Location</option>
-                            <option value="status">Status</option>
-                            <option value="description">Description</option>
-                        </select>
                     </div>
-                    
-
-                </div>
-                <br><button class="btn btn-default" id="addFieldButton">Add Field</button>
-                <br><button class="btn btn-default" type="submit">Search</button>
-              </form>
+                    <br><button class="btn btn-default" id="addFieldButton">Add Field</button>
+                    <button class="btn btn-default" type="submit">Search</button>
+                  </form>
+               </div>
             </div>
         </div>
         <div class="col-sm-12">

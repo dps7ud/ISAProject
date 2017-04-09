@@ -98,6 +98,12 @@ $("#addFieldButton").on('click', function(e){
 
 })
 
+$("#switchToAdvanced").on('click', function(e){
+    $("#basicSearchBlock").css('display', 'none')
+    $("#advancedSearchBlock").css('display', 'block')
+
+})
+
 
 
 // console.log(pathname)
