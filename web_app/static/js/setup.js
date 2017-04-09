@@ -73,6 +73,30 @@ $("#create-review-form").on('submit', function(e){
 
 })
 
+$(".fieldInput").change(function(){
+    var end = this.value;
+    // var id = this.data('id')
+    console.log(end)
+    console.log(this.id)
+    var inputID = "#input" + this.id.substring(5);
+    console.log(inputID)
+    $(inputID).attr("name", this.value)
+})
+//     var input = $(event.relatedTarget)
+//     console.log(input.data('id'))
+// })
+$("#addFieldButton").on('click', function(e){
+    var newCount = parseInt($("#advancedSearchForm").attr("count")) + 1
+    // $(".lastInput").removeClass("lastInput")
+    $("#advancedSearchForm").attr("count", newCount)
+    $("#advancedSearchForm").append(
+        '<div><input type="text" class="form-control" placeholder="Search" name="title" id="input' + newCount + '"><select class="form-control fieldInput" id="field'+ newCount + '"><option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option></select></div>'
+        )
+    return false
+
+
+
+})
 
 
 
@@ -86,4 +110,13 @@ function createReview(){
 
 function search(){
     alert("redirect to task page here");
+}
+
+function switchToAdvanced(){
+    $("#searchOptions").html("<p>Here is the advanced Search Stuff </p>")
+}
+
+function updateInputName(){
+    var input = $(event.relatedTarget)
+    console.log(input.html())
 }

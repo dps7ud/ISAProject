@@ -9,7 +9,39 @@
             {% endif %}
             </h1>
         </div>
+        <div class="col-sm-12">
+            <div class="jumbotron" id="searchOptions">
+              <!-- <form class="navbar-form" role="search" action="/task/">
+                <div class="input-group">
+                    <div>
+                        <input type="text" class="form-control" placeholder="Search" name="title" id="title">
+                        <button class="btn btn-default" type="submit">Search</button>
+                    </div>
+                </div>
+              </form>
+              <p> -or- </p>
+              <p><button class="btn btn-default" onclick="switchToAdvanced()">Advanced Search </button></p> -->
 
+              <form class="navbar-form" role="search" action="/task/">
+                <div class="input-group" id="advancedSearchForm" count="1">
+                    <div class="lastInput" id="1">
+                        <input type="text" class="form-control" placeholder="Search" name="title" id="input1">
+                        <select class="form-control fieldInput" id="field1">
+                            <option value="title">Title</option>
+                            <option value="location">Location</option>
+                            <option value="status">Status</option>
+                            <option value="description">Description</option>
+                        </select>
+                    </div>
+                    
+
+                </div>
+                <br><button class="btn btn-default" id="addFieldButton">Add Field</button>
+                <br><button class="btn btn-default" type="submit">Search</button>
+              </form>
+            </div>
+        </div>
+        <div class="col-sm-12">
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
@@ -40,5 +72,6 @@
                 </tbody>
 
             </table>
+        </div>
         </div>
 {% endblock %}

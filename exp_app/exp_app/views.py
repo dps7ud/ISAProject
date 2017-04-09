@@ -19,14 +19,24 @@ import urllib.request
 logger = logging.getLogger(__name__)
 
 #Elastic Search Query Creators
-def titleQueryCreator(query):
+def titleQueryCreator(title, description, location, status):
     queryObj = {
         "query": {
-            "match": {
-                "title": query
+            "bool": {
+                "should": [
+                ]
             }
         }
     }
+    logger.error("query: " + str(queryObj['query']))
+    if title:
+        queryObj['query']['bool']['should'].append({"match": {"title": title}})
+    if description:
+        queryObj['query']['bool']['should'].append({"match": {"description": description}})
+    if location:
+        queryObj['query']['bool']['should'].append({"match": {"location": location}})
+    if status:
+        queryObj['query']['bool']['should'].append({"match": {"title": status}})
     return queryObj
 
 # Create your views here.
@@ -80,10 +90,35 @@ def task(request, task_id):
 def task_all(request):
     if request.method == 'GET':
 
-        try:
-            titleQuery = request.GET['title']
-            logger.error("titleQuery: " + request.GET['title'])
-            esQuery = titleQueryCreator(request.GET['title'])
+        # try:
+        title = False
+        location = False
+        status = False
+        description = False
+        queryES = False
+        if 'title' in request.GET:
+            title = request.GET['title']
+            queryES = True
+    
+
+        if 'location' in request.GET:
+            location = request.GET['location']
+            queryES = True
+       
+
+        if 'status' in request.GET:
+            status = request.GET['status']
+            queryES = True
+        
+
+        if 'description' in request.GET:
+            description = request.GET['location']
+            queryES = True
+        
+
+        if queryES: 
+            esQuery = titleQueryCreator(title, description, location, status)
+            logger.error("esQuery:" + str(esQuery))
             reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
             reqES.add_header('Content-Type', 'application/json')
             respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
@@ -96,7 +131,7 @@ def task_all(request):
                 iDict["id"] = iDict["task_id"]
                 finalArray.append(iDict)
             return JsonResponse(finalArray, safe=False)
-        except:
+        else:
             logger.error("")
             errorStrings = ""
             try:
