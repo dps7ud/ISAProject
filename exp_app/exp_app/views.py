@@ -58,7 +58,7 @@ def task(request, task_id):
                     + task_id + '/')
             resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
             resp = json.loads(resp_json)
-            logger.error(resp)
+            #logger.error(resp)
             return JsonResponse(resp, safe=False)
         except URLError:
             return HttpResponse("Timeout")
@@ -73,7 +73,7 @@ def task_all(request):
             req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
             resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
             resp = json.loads(resp_json)
-            logger.error(resp)
+            #logger.error(resp)
             return JsonResponse(resp, safe=False)
         except URLError:
             return HttpResponse("Timeout")
@@ -249,18 +249,14 @@ def logout(request):
 
 def createListing(request):
     if request.method == "POST":
-        
         respDict = (request.POST).dict()
-        
         auth = respDict["auth"]
-        
         req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' 
                 + str(auth) + '/', method="GET")
         resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
-        
         if resp == "Auth Incorrect":
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-        logger.error(resp)
+        #logger.error(resp)
         del respDict["auth"]
         if respDict["pricing_type"] == "Lump":
             respDict["pricing_type"] = True
@@ -272,7 +268,6 @@ def createListing(request):
             respDict["remote"] = False
         skillsString = respDict["skills"]
         del respDict["skills"]
-        logger.error(respDict)
         post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
         req2 = urllib.request.Request('http://models-api:8000/api/v1/task/create/', 
                 data=post_encoded, method='POST')
@@ -283,8 +278,12 @@ def createListing(request):
             logger.error("resp_json2")
             logger.error(resp_json2)
             return JsonResponse([False, resp_json2])
-        logger.error("resp2")
-        logger.error(resp2)
+        #  Push json bytes to kafka stream
+        response_as_list = list(resp2)
+        task_json = response_as_list[0]
+        message = json.dumps(resp2).encode('utf-8')
+        kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
+        kafka_producer.send("task_topic", message)
         if skillsString != "":
             skillsArray = skillsString.split(",")
             for i in skillsArray:
@@ -313,22 +312,22 @@ def profile(request, auth):
     try:
         resp2 = json.loads(resp_json2)
     except ValueError:
-        logger.error("resp_json2")
-        logger.error(resp_json2)
+        #logger.error("resp_json2")
+        #logger.error(resp_json2)
         return JsonResponse([False, resp, resp_json2])
 
     return JsonResponse([resp2, resp, False], safe=False)
 
 def createReview(request):
     if request.method == "POST":
-        logger.error("In createReview exp")
+        #logger.error("In createReview exp")
         respDict = (request.POST).dict()
-        logger.error(respDict)
+        #logger.error(respDict)
         post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
         req2 = urllib.request.Request('http://models-api:8000/api/v1/review/create/', 
                 data=post_encoded, method='POST')
         resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
-        logger.error(resp_json2)
+        #logger.error(resp_json2)
         return HttpResponse("Finished")
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")

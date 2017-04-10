@@ -14,6 +14,7 @@ exp:
    container_name: isa_exp
    links:
       - models:models-api
+      - kafka:kafka_container
    ports:
       - "8002:8000"
    volumes:
@@ -51,4 +52,6 @@ batch:
     links:
         - kafka:kafka
         - es:es
-#TODO: write command to run script
+    volumes:
+        - ./batch:/app
+    command: bash -c "python batch_script.py"
