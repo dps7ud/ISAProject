@@ -72,8 +72,8 @@ $("#create-review-form").on('submit', function(e){
     });
 
 })
-
-$(".fieldInput").change(function(){
+$(document).on("change", ".fieldInput", function(e){
+// $(".fieldInput").on('change', function(e){
     var end = this.value;
     // var id = this.data('id')
     console.log(end)
