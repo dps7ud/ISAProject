@@ -27,5 +27,6 @@ urlpatterns = [
 
 
 
+
     url(r'^/?$', views.home, name='home'),
 ] + statics

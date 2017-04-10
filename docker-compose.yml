@@ -48,8 +48,6 @@ es:
       - ./model_app:/app
     ports:
         - "9200:9200"
-    #command: 'bash -c "cd .. && cd .. && cd .. && cd app && cd model_app && curl -s -H "Content-Type: application/x-ndjson/" -XPOST localhost:9200/_bulk --data-binary "@es.json""'
-    #command: bash -c "cd .. && cd .. && cd .. && cd app && cd model_app"
 
 
 batch:
