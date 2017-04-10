@@ -96,21 +96,22 @@ def task(request, task_id):
     return render(request, 'web_app/task.html', context)
 
 def task_all(request):
-	auth = request.COOKIES.get('auth')
-	successString = success_messaging(request)
-	if auth:
-		auth = "yes"
-	else:
-		auth = "no"
-	req = urllib.request.Request('http://exp-api:8000/task/')
-	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-	resp = json.loads(resp_json)
-	context = {
-		'tasks': resp,
-		'auth': auth,
-		'success': successString
-	}
-	return render(request, 'web_app/task_all.html', context)
+    auth = request.COOKIES.get('auth')
+    successString = success_messaging(request)
+    logger.error("task all")
+    if auth:
+        auth = "yes"
+    else:
+        auth = "no"  
+    req = urllib.request.Request('http://exp-api:8000/' + request.get_full_path())
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    context = {
+        'tasks': resp,
+        'auth': auth,
+        'success': successString
+    }
+    return render(request, 'web_app/task_all.html', context)
 
 def user(request, user_id):
     auth = request.COOKIES.get('auth')
