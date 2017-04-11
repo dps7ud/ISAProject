@@ -8,3 +8,73 @@
 {"task_id":4,"title": "Database needs to be sharded","description": "What is the best way to do this?","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
 {"index":{"_index":"tasktic","_type":"task","_id":5}}
 {"task_id":5,"title": "Help me set up this Cassandra database","description": "I need to understand what consistent hashing entails","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
+{"index":{"_index":"tasktic","_type":"user","_id":1}}
+{"user_id":1,"username": "user1","fname": "TDawg","lname": "Pinckney","email": "fake@gmail.com","bio": "I like to program","location": "Charlottesville"}
+{"index":{"_index":"tasktic","_type":"user","_id":2}}
+{"user_id":2,"username": "user2","fname": "Ian","lname": "Zheng","email": "ian@gmail.com","bio": "I like to program well","location": "Charlottesville"}
+{"index":{"_index":"tasktic","_type":"user","_id":3}}
+{"user_id":3,"username": "user3","fname": "Brandon","lname": "Whitfield","email": "brandon@gmail.com","bio": "I like to program","location": "Charlottesville"}
+{"index":{"_index":"tasktic","_type":"user","_id":4}}
+{"user_id":4,"username": "user4","fname": "David","lname": "Stolz","email": "david@gmail.com","bio": "I like to program","location": "Charlottesville"}
+{"index":{"_index":"tasktic","_type":"user","_id":5}}
+{"user_id":5,"username": "user5","fname": "Matt","lname": "Tillman","email": "matt@gmail.com","bio": "I like to program","location": "Charlottesville"}
+{"index":{"_index":"tasktic","_type":"review","_id":1}}
+{"review_id":1,"title": "What a terrible programmer","body": "He couldn't spell his own name","score": 0.42,"task": 1,"poster_user": 1,"postee_user": 2}
+{"index":{"_index":"tasktic","_type":"review","_id":2}}
+{"review_id":2,"title": "Absolute God","body": "Definitely knows what he is doing","score": 5,"task": 1,"poster_user": 2,"postee_user": 1}
+{"index":{"_index":"tasktic","_type":"review","_id":3}}
+{"review_id":3,"title": "Pretty Good","body": "Knew what he was doing","score": 2.5,"task": 2,"poster_user": 3,"postee_user": 4}
+{"index":{"_index":"tasktic","_type":"review","_id":4}}
+{"review_id":4,"title": "Good Partner","body": "Would work with again","score": 4,"task": 2,"poster_user": 4,"postee_user": 3}
+{"index":{"_index":"tasktic","_type":"owner","_id":1}}
+{"owner_id":1,"user": 1,"task": 1}
+{"index":{"_index":"tasktic","_type":"owner","_id":2}}
+{"owner_id":2,"user": 3,"task": 2}
+{"index":{"_index":"tasktic","_type":"owner","_id":3}}
+{"owner_id":3,"user": 1,"task": 3}
+{"index":{"_index":"tasktic","_type":"owner","_id":4}}
+{"owner_id":4,"user": 1,"task": 4}
+{"index":{"_index":"tasktic","_type":"owner","_id":5}}
+{"owner_id":5,"user": 1,"task": 5}
+{"index":{"_index":"tasktic","_type":"taskskill","_id":1}}
+{"taskskill_id":1,"task": 1,"skill": "OOP Design"}
+{"index":{"_index":"tasktic","_type":"taskskill","_id":2}}
+{"taskskill_id":2,"task": 1,"skill": "JavaScript"}
+{"index":{"_index":"tasktic","_type":"taskskill","_id":3}}
+{"taskskill_id":3,"task": 2,"skill": "OOP Design"}
+{"index":{"_index":"tasktic","_type":"taskskill","_id":4}}
+{"taskskill_id":4,"task": 3,"skill": "OOP Design"}
+{"index":{"_index":"tasktic","_type":"taskskill","_id":5}}
+{"taskskill_id":5,"task": 4,"skill": "OOP Design"}
+{"index":{"_index":"tasktic","_type":"taskskill","_id":6}}
+{"taskskill_id":6,"task": 5,"skill": "OOP Design"}
+{"index":{"_index":"tasktic","_type":"userlanguages","_id":1}}
+{"userlanguages_id":1,"user": 1,"spoken_language": "English"}
+{"index":{"_index":"tasktic","_type":"userlanguages","_id":2}}
+{"userlanguages_id":2,"user": 2,"spoken_language": "English"}
+{"index":{"_index":"tasktic","_type":"userlanguages","_id":3}}
+{"userlanguages_id":3,"user": 3,"spoken_language": "English"}
+{"index":{"_index":"tasktic","_type":"userlanguages","_id":4}}
+{"userlanguages_id":4,"user": 4,"spoken_language": "English"}
+{"index":{"_index":"tasktic","_type":"userlanguages","_id":5}}
+{"userlanguages_id":5,"user": 5,"spoken_language": "English"}
+{"index":{"_index":"tasktic","_type":"userskills","_id":1}}
+{"userskills_id":1,"user": 1,"skill": "Java"}
+{"index":{"_index":"tasktic","_type":"userskills","_id":2}}
+{"userskills_id":2,"user": 2,"skill": "Java"}
+{"index":{"_index":"tasktic","_type":"userskills","_id":3}}
+{"userskills_id":3,"user": 3,"skill": "Java"}
+{"index":{"_index":"tasktic","_type":"userskills","_id":4}}
+{"userskills_id":4,"user": 4,"skill": "Java"}
+{"index":{"_index":"tasktic","_type":"userskills","_id":5}}
+{"userskills_id":5,"user": 5,"skill": "Java"}
+{"index":{"_index":"tasktic","_type":"worker","_id":1}}
+{"worker_id":1,"user": 2,"task": 1}
+{"index":{"_index":"tasktic","_type":"worker","_id":2}}
+{"worker_id":2,"user": 4,"task": 2}
+{"index":{"_index":"tasktic","_type":"worker","_id":3}}
+{"worker_id":3,"user": 2,"task": 3}
+{"index":{"_index":"tasktic","_type":"worker","_id":4}}
+{"worker_id":4,"user": 2,"task": 4}
+{"index":{"_index":"tasktic","_type":"worker","_id":5}}
+{"worker_id":5,"user": 2,"task": 5}

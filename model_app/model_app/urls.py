@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^api/v1/user/main/(?P<user_id>[0-9]+)/$', views.user_main, name='user_main'),
     url(r'^api/v1/user/create/$', views.user_create, name='user_create'),
     url(r'^api/v1/user/find/$', views.user_find, name='user_find'),
+    url(r'^api/v1/user/all/$', views.user_all, name='user_all'),
     url(r'^topUsers/$', views.get_top_users, name='get_top_five_users'),
     url(r'^getUserRating/(?P<user_id>[0-9]+)/$', views.get_user_rating, name='get_user_rating'),
     url(r'^recentListings/$', views.get_recent_listings, name='get_recent_listings'),

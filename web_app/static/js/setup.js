@@ -90,9 +90,15 @@ $("#addFieldButton").on('click', function(e){
     var newCount = parseInt($("#advancedSearchForm").attr("count")) + 1
     // $(".lastInput").removeClass("lastInput")
     $("#advancedSearchForm").attr("count", newCount)
-    $("#advancedSearchForm").append(
+    var type = $("#addFieldButton").data("type")
+    if (type == "user"){
+      $("#advancedSearchForm").append(
+        '<div><input type="text" class="form-control" placeholder="Search" name="username" id="input' + newCount + '"><select class="form-control fieldInput" id="field' + newCount + '"><option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="location">Location</option></select></div>')
+    } else{
+      $("#advancedSearchForm").append(
         '<div><input type="text" class="form-control" placeholder="Search" name="title" id="input' + newCount + '"><select class="form-control fieldInput" id="field'+ newCount + '"><option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option></select></div>'
         )
+    }
     return false
 
 

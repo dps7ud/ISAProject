@@ -350,6 +350,12 @@ def user_find(request):
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
 
+def user_all(request):
+    users = Users.objects.all()
+    usersList = []
+    for i in users:
+        usersList.append(model_to_dict(i))
+    return JsonResponse(usersList, safe=False)
 
 
 # ----------------------- For Project 3 ------------------------------------

@@ -19,7 +19,10 @@ import urllib.request
 logger = logging.getLogger(__name__)
 
 #Elastic Search Query Creators
-def titleQueryCreator(title, description, location, status):
+def esQueryCreator(request):
+    if 'type' not in request.GET:
+        return False
+
     queryObj = {
         "query": {
             "bool": {
@@ -28,16 +31,75 @@ def titleQueryCreator(title, description, location, status):
             }
         }
     }
-    logger.error("query: " + str(queryObj['query']))
-    if title:
-        queryObj['query']['bool']['should'].append({"match": {"title": title}})
-    if description:
-        queryObj['query']['bool']['should'].append({"match": {"description": description}})
-    if location:
-        queryObj['query']['bool']['should'].append({"match": {"location": location}})
-    if status:
-        queryObj['query']['bool']['should'].append({"match": {"title": status}})
-    return queryObj
+    queryES = False
+    title = False
+    description = False
+    location = False
+    status = False
+    username = False
+    name = False
+    email = False
+    bio = False
+    location = False
+
+    if request.GET['type'] == 'task':
+        if 'title' in request.GET:
+            title = request.GET['title']
+            queryES = True
+
+
+        if 'location' in request.GET:
+            location = request.GET['location']
+            queryES = True
+       
+
+        if 'status' in request.GET:
+            status = request.GET['status']
+            queryES = True
+        
+
+        if 'description' in request.GET:
+            description = request.GET['location']
+            queryES = True
+
+    if request.GET['type'] == 'user':
+        if 'username' in request.GET:
+            username = request.GET['username']
+            queryES = True
+        if 'name' in request.GET:
+            name = request.GET['name']
+            queryES = True
+        if 'email' in request.GET:
+            email = request.GET['email']
+            queryES = True
+        if 'bio' in request.GET:
+            bio = request.GET['bio']
+            queryES = True
+        if 'location' in request.GET:
+            location = request.GET['location']
+            queryES = True
+
+    if queryES:
+        if title:
+            queryObj['query']['bool']['should'].append({"match": {"title": title}})
+        if description:
+            queryObj['query']['bool']['should'].append({"match": {"description": description}})
+        if location:
+            queryObj['query']['bool']['should'].append({"match": {"location": location}})
+        if status:
+            queryObj['query']['bool']['should'].append({"match": {"title": status}})
+        if username:
+            queryObj['query']['bool']['should'].append({"match": {"username": username}})
+        if name:
+            queryObj['query']['bool']['should'].append({"match": {"fname": name}})
+            queryObj['query']['bool']['should'].append({"match": {"lname": name}})
+        if email:
+            queryObj['query']['bool']['should'].append({"match": {"email": email}})
+        if bio:
+            queryObj['query']['bool']['should'].append({"match": {"bio": bio}})
+        return queryObj
+    else:
+        return False
 
 # Create your views here.
 def home(request):
@@ -89,37 +151,10 @@ def task(request, task_id):
 
 def task_all(request):
     if request.method == 'GET':
+        esQuery = esQueryCreator(request)
 
-        # try:
-        title = False
-        location = False
-        status = False
-        description = False
-        queryES = False
-        if 'title' in request.GET:
-            title = request.GET['title']
-            queryES = True
-    
-
-        if 'location' in request.GET:
-            location = request.GET['location']
-            queryES = True
-       
-
-        if 'status' in request.GET:
-            status = request.GET['status']
-            queryES = True
-        
-
-        if 'description' in request.GET:
-            description = request.GET['location']
-            queryES = True
-        
-
-        if queryES: 
-            esQuery = titleQueryCreator(title, description, location, status)
-            logger.error("esQuery:" + str(esQuery))
-            reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+        if esQuery: 
+            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
             reqES.add_header('Content-Type', 'application/json')
             respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
             logger.error("respES_json: " + str(respES_json)) 
@@ -136,6 +171,37 @@ def task_all(request):
             errorStrings = ""
             try:
                 req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
+                resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+                resp = json.loads(resp_json)
+                logger.error(resp)
+                return JsonResponse(resp, safe=False)
+            except URLError:
+                return HttpResponse("Timeout")
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
+
+def user_all(request):
+    if request.method == 'GET':
+        esQuery = esQueryCreator(request)
+
+        if esQuery: 
+            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES.add_header('Content-Type', 'application/json')
+            respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
+            logger.error("respES_json: " + str(respES_json)) 
+            esResponse = json.loads(respES_json)
+            hitArray = esResponse["hits"]["hits"]
+            finalArray = []
+            for i in hitArray:
+                iDict = i["_source"]
+                iDict["id"] = iDict["user_id"]
+                finalArray.append(iDict)
+            return JsonResponse(finalArray, safe=False)
+        else:
+            logger.error("")
+            errorStrings = ""
+            try:
+                req = urllib.request.Request('http://models-api:8000/api/v1/user/all/')
                 resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
                 resp = json.loads(resp_json)
                 logger.error(resp)

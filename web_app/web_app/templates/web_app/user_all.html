@@ -3,21 +3,17 @@
 {% block content %}
         
         <div class="page-header">
-            <h1>All Tasks 
-            {% if auth == 'yes' %}
-                <a class = "btn btn-primary pull-right" href="/createListing/" role="button">Create New Listing</a>
-            {% endif %}
-            </h1>
+            <h1>All Users </h1>
         </div>
         <div class="col-sm-12">
             <div class="jumbotron" id="searchOptions" style="padding-top:10px; padding-bottom:10px">
               <div style="display:block;" id="basicSearchBlock">
-                  <h3 style="margin-left:20px">Basic Searching of Task Titles</h3>
-                  <form class="navbar-form" role="search" action="/task/">
-                    <input type="hidden" name="type" value="task">
+                  <h3 style="margin-left:20px">Basic Searching of User Names</h3>
+                  <form class="navbar-form" role="search" action="/user/">
+                    <input type="hidden" name="type" value="user">
                     <div class="input-group">
                         <div>
-                            <input type="text" class="form-control" placeholder="Search" name="title" id="title">
+                            <input type="text" class="form-control" placeholder="Search" name="name" id="name">
                             <button class="btn btn-default" type="submit">Search</button>
                         </div>
                     </div>
@@ -29,22 +25,23 @@
               </div>
               <div style="display:none;" id="advancedSearchBlock">
                   <h3 style="margin-left:20px">Advanced Searching</h3>
-                  <form class="navbar-form" role="search" action="/task/">
-                    <input type="hidden" name="type" value="task">
+                  <form class="navbar-form" role="search" action="/user/">
+                    <input type="hidden" name="type" value="user">
                     <div class="input-group" id="advancedSearchForm" count="1">
                         <div class="lastInput" id="1">
-                            <input type="text" class="form-control" placeholder="Search" name="title" id="input1">
+                            <input type="text" class="form-control" placeholder="Search" name="username" id="input1">
                             <select class="form-control fieldInput" id="field1">
-                                <option value="title">Title</option>
+                                <option value="username">Username</option>
+                                <option value="name">Name</option>
+                                <option value="email">Email</option>
+                                <option value="bio">Bio</option>
                                 <option value="location">Location</option>
-                                <option value="status">Status</option>
-                                <option value="description">Description</option>
                             </select>
                         </div>
                         
 
                     </div>
-                    <br><button class="btn btn-default" id="addFieldButton">Add Field</button>
+                    <br><button class="btn btn-default" id="addFieldButton" data-type="user">Add Field</button>
                     <button class="btn btn-default" type="submit">Search</button>
                   </form>
                </div>
@@ -54,27 +51,29 @@
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
-                <h3 class="panel-title">Tasks</h3>
+                <h3 class="panel-title">Users</h3>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Title</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Bio</th>
                         <th>Location</th>
-                        <th>Status</th>
-                        <th>Description</th>
                         <th>Visit Page </th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for task in tasks %}
+                {% for user in users %}
                     <tr>
-                        <td> {{task.title}}</td>
-                        <td> {{task.location}}</td>
-                        <td> {{task.status}}</td>
-                        <td> {{task.description}}</td>
-                        <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                        <td> {{user.username}}</td>
+                        <td> {{user.fname}} {{user.lname}}</td>
+                        <td> {{user.email}}</td>
+                        <td> {{user.bio}}</td>
+                        <td> {{user.location}}</td>
+                        <td> <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a> </td>
 
                     </tr>
                 {% endfor %}

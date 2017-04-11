@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^review/(?P<review_id>[0-9]+)/?$', views.review, name='review'),
     url(r'^signup/?', views.signup, name='signup'),
     url(r'^task/(?P<task_id>[0-9]+)/?$', views.task, name='task'),
+    url(r'^user/?$', views.user_all, name='user_all'),
+
     url(r'^user/(?P<user_id>[0-9]+)/?$', views.user, name='user'),
     url(r'^profile/?', views.profile, name='profile'),
 
