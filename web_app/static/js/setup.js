@@ -67,9 +67,10 @@ $("#create-review-form").on('submit', function(e){
         type: "POST",
         data: $("#create-review-form").serialize(),
         success: function(data){
-            alert("Successfully submitted.")
+          $( location ).attr("href", '/profile/')
         }
     });
+    return false
 
 })
 $(document).on("change", ".fieldInput", function(e){

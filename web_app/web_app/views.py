@@ -297,39 +297,30 @@ def profile(request):
     return render(request, 'web_app/profile.html', context)
 
 def create_review(request):
+    
+    auth = request.COOKIES.get('auth')
+    
+    if not auth:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("profile"))
+
     if request.method == "POST":
         logger.error("In createReview")
         respDict = (request.POST).dict()
+        respDict["auth"] = auth
         logger.error(respDict)
         post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
         req = urllib.request.Request('http://exp-api:8000/createReview/', 
                 data=post_encoded, method='POST')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         logger.error(resp_json)
-        return HttpResponse("Finished")
+        respArray = json.loads(resp_json)
+        if not respArray[0]:
+            return HttpResponse(respArray[1])
+        else:
+            return HttpResponse("Success")
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
-    # successString = success_messaging(request)
-    # auth = request.COOKIES.get('auth')
-
-    # if not auth:
-    #     return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
-
-    # errors = False
-    # if request.method == 'POST':
-    #     form = CreateReviewForm(request.POST)
-    #     if form.is_valid():
-    #         reviewInfo = form.cleaned_data
-    #         reviewInfo["auth"] = auth
-    #         post_encoded = urllib.parse.urlencode(reviewInfo).encode('utf-8')
-    #         req = urllib.request.Request('http://exp-api:8000/createReview/', 
-    #                 data=post_encoded, method='POST')
-    #         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    #         resp = json.loads(resp_json)
-    #         if not resp[0]:
-    #             errors = resp[1]
-    #             if resp[1] == "ERROR: Invalid Auth":
-    #                 return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_review"))
+    
 
 def success_messaging(request):
     try:
