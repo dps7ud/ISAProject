@@ -161,7 +161,7 @@ def task_all(request):
             finalArray = []
             for i in hitArray:
                 iDict = i["_source"]
-                iDict["id"] = iDict["task_id"]
+#                iDict["id"] = iDict["task_id"]
                 finalArray.append(iDict)
             return JsonResponse(finalArray, safe=False)
         else:
@@ -408,6 +408,7 @@ def createListing(request):
         message = json.dumps(resp2).encode('utf-8')
         kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
         kafka_producer.send("task_topic", message)
+
         if skillsString != "":
             skillsArray = skillsString.split(",")
             for i in skillsArray:
@@ -443,35 +444,27 @@ def profile(request, auth):
 def createReview(request):
     if request.method == "POST":
         respDict = (request.POST).dict()
-<<<<<<< HEAD
-=======
         auth = respDict["auth"]
         req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' 
                 + str(auth) + '/', method="GET")
         resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
         if resp == "Auth Incorrect":
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-        #logger.error(resp)
-        #Check to see that the auth is associated with the person who is supposed to be posting the review
+        #Check to see that the auth is associated with the 
+        #person who is supposed to be posting the review
         if not resp == respDict["poster_user"]:
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
         del respDict["auth"]
         #logger.error(respDict)
->>>>>>> 6475cd9a2a095b3a6337940f9b42ab49e5f271f2
         post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
         req2 = urllib.request.Request('http://models-api:8000/api/v1/review/create/', 
                 data=post_encoded, method='POST')
         resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
-<<<<<<< HEAD
-        return HttpResponse("Finished")
-=======
-        #logger.error(resp_json2)
         try:
             resp2 = json.loads(resp_json2)
         except:
             return JsonResponse([False, resp_json2], safe=False)
         return JsonResponse([resp2, False], safe=False)
->>>>>>> 6475cd9a2a095b3a6337940f9b42ab49e5f271f2
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
 

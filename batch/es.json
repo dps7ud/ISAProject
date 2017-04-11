@@ -1,13 +1,13 @@
 {"index":{"_index":"tasktic","_type":"task","_id":1}}
-{"task_id":1,"title": "Make a website","description": "Using your coding skills","location": "Charlottesville","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 0.0,"pricing_type": true,"pricing_info": 0.0}
+{"id":1,"title": "Make a website","description": "Using your coding skills","location": "Charlottesville","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 0.0,"pricing_type": true,"pricing_info": 0.0}
 {"index":{"_index":"tasktic","_type":"task","_id":2}}
-{"task_id":2,"title": "Finish task endpoints","description": "Write out api for getting and posting endpoints","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "ACC.","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
+{"id":2,"title": "Finish task endpoints","description": "Write out api for getting and posting endpoints","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "ACC.","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
 {"index":{"_index":"tasktic","_type":"task","_id":3}}
-{"task_id":3,"title": "Create a node app","description": "Need an expert in node.js","location": "Charlottesville","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 0.0,"pricing_type": true,"pricing_info": 0.0}
+{"id":3,"title": "Create a node app","description": "Need an expert in node.js","location": "Charlottesville","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 0.0,"pricing_type": true,"pricing_info": 0.0}
 {"index":{"_index":"tasktic","_type":"task","_id":4}}
-{"task_id":4,"title": "Database needs to be sharded","description": "What is the best way to do this?","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
+{"id":4,"title": "Database needs to be sharded","description": "What is the best way to do this?","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
 {"index":{"_index":"tasktic","_type":"task","_id":5}}
-{"task_id":5,"title": "Help me set up this Cassandra database","description": "I need to understand what consistent hashing entails","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
+{"id":5,"title": "Help me set up this Cassandra database","description": "I need to understand what consistent hashing entails","location": "Rice","time_to_live": "2017-04-27T01:32:46.097Z","post_date": "2017-04-27T01:32:46.097Z","status": "OPEN","remote": true,"time": 9000.8,"pricing_type": true,"pricing_info": 0.0}
 {"index":{"_index":"tasktic","_type":"user","_id":1}}
 {"user_id":1,"username": "user1","fname": "TDawg","lname": "Pinckney","email": "fake@gmail.com","bio": "I like to program","location": "Charlottesville"}
 {"index":{"_index":"tasktic","_type":"user","_id":2}}
