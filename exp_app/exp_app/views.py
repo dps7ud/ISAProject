@@ -28,7 +28,6 @@ def titleQueryCreator(title, description, location, status):
             }
         }
     }
-    logger.error("query: " + str(queryObj['query']))
     if title:
         queryObj['query']['bool']['should'].append({"match": {"title": title}})
     if description:
@@ -79,7 +78,6 @@ def task(request, task_id):
                     + task_id + '/')
             resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
             resp = json.loads(resp_json)
-            #logger.error(resp)
             return JsonResponse(resp, safe=False)
         except URLError:
             return HttpResponse("Timeout")
@@ -118,11 +116,9 @@ def task_all(request):
 
         if queryES: 
             esQuery = titleQueryCreator(title, description, location, status)
-            logger.error("esQuery:" + str(esQuery))
             reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
             reqES.add_header('Content-Type', 'application/json')
             respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
-            logger.error("respES_json: " + str(respES_json)) 
             esResponse = json.loads(respES_json)
             hitArray = esResponse["hits"]["hits"]
             finalArray = []
@@ -132,13 +128,11 @@ def task_all(request):
                 finalArray.append(iDict)
             return JsonResponse(finalArray, safe=False)
         else:
-            logger.error("")
             errorStrings = ""
             try:
                 req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
                 resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
                 resp = json.loads(resp_json)
-                logger.error(resp)
                 return JsonResponse(resp, safe=False)
             except URLError:
                 return HttpResponse("Timeout")
@@ -320,7 +314,6 @@ def createListing(request):
         resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
         if resp == "Auth Incorrect":
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-        #logger.error(resp)
         del respDict["auth"]
         if respDict["pricing_type"] == "Lump":
             respDict["pricing_type"] = True
@@ -339,8 +332,6 @@ def createListing(request):
         try:
             resp2 = json.loads(resp_json2)
         except ValueError:
-            logger.error("resp_json2")
-            logger.error(resp_json2)
             return JsonResponse([False, resp_json2])
         #  Push json bytes to kafka stream
         response_as_list = list(resp2)
@@ -376,22 +367,17 @@ def profile(request, auth):
     try:
         resp2 = json.loads(resp_json2)
     except ValueError:
-        #logger.error("resp_json2")
-        #logger.error(resp_json2)
         return JsonResponse([False, resp, resp_json2])
 
     return JsonResponse([resp2, resp, False], safe=False)
 
 def createReview(request):
     if request.method == "POST":
-        #logger.error("In createReview exp")
         respDict = (request.POST).dict()
-        #logger.error(respDict)
         post_encoded = urllib.parse.urlencode(respDict).encode('utf-8')
         req2 = urllib.request.Request('http://models-api:8000/api/v1/review/create/', 
                 data=post_encoded, method='POST')
         resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
-        #logger.error(resp_json2)
         return HttpResponse("Finished")
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
