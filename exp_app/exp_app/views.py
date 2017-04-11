@@ -181,7 +181,7 @@ def task_all(request):
         return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
 def user_all(request):
-    if request.method == 'GET':
+    if request.METHOD == 'GET':
         esQuery = esQueryCreator(request)
 
         if esQuery: 
