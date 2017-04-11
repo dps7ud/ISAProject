@@ -116,7 +116,8 @@ def task_all(request):
 
         if queryES: 
             esQuery = titleQueryCreator(title, description, location, status)
-            reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', 
+                    data=json.dumps(esQuery).encode('utf-8'), method='POST')
             reqES.add_header('Content-Type', 'application/json')
             respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
             esResponse = json.loads(respES_json)

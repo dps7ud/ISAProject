@@ -32,5 +32,7 @@ if __name__ == "__main__":
         task_consumer = KafkaConsumer("task_topic", group_id='listing_indexer'
                 , bootstrap_servers=['kafka:9092'])
         for message in task_consumer:
-            #  Push to es instead of logging
-            logger.error(message)
+            new_listing = json.loads((message.value).decode('utf-8'))
+            one = es.index(index='task_index', doc_type='listing', id=new_listing['id']
+                    , body=new_listing)
+            two = es.indices.refresh(index='task_index')
