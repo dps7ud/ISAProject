@@ -29,8 +29,12 @@ if __name__ == "__main__":
             time.sleep(5)
             continue
     while True:
+        #task_consumer = KafkaConsumer("task_topic", group_id='listing_indexer'
+        #        , bootstrap_servers=['kafka:9092'])
         task_consumer = KafkaConsumer("task_topic", group_id='listing_indexer'
                 , bootstrap_servers=['kafka:9092'])
         for message in task_consumer:
-            #  Push to es instead of logging
-            logger.error(message)
+            new_listing = json.loads((message.value).decode('utf-8'))
+            one = es.index(index='tasktic', doc_type='task', id=new_listing['id']
+                    , body=new_listing)
+            two = es.indices.refresh(index='tasktic')

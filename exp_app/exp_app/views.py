@@ -141,7 +141,6 @@ def task(request, task_id):
                     + task_id + '/')
             resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
             resp = json.loads(resp_json)
-            #logger.error(resp)
             return JsonResponse(resp, safe=False)
         except URLError:
             return HttpResponse("Timeout")
@@ -152,28 +151,25 @@ def task(request, task_id):
 def task_all(request):
     if request.method == 'GET':
         esQuery = esQueryCreator(request)
-
         if esQuery: 
-            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] 
+                    + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
             reqES.add_header('Content-Type', 'application/json')
             respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
-            logger.error("respES_json: " + str(respES_json)) 
             esResponse = json.loads(respES_json)
             hitArray = esResponse["hits"]["hits"]
             finalArray = []
             for i in hitArray:
                 iDict = i["_source"]
-                iDict["id"] = iDict["task_id"]
+#                iDict["id"] = iDict["task_id"]
                 finalArray.append(iDict)
             return JsonResponse(finalArray, safe=False)
         else:
-            logger.error("")
             errorStrings = ""
             try:
                 req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
                 resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
                 resp = json.loads(resp_json)
-                logger.error(resp)
                 return JsonResponse(resp, safe=False)
             except URLError:
                 return HttpResponse("Timeout")
@@ -185,7 +181,8 @@ def user_all(request):
         esQuery = esQueryCreator(request)
 
         if esQuery: 
-            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] 
+                    + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
             reqES.add_header('Content-Type', 'application/json')
             respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
             logger.error("respES_json: " + str(respES_json)) 
@@ -386,7 +383,6 @@ def createListing(request):
         resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
         if resp == "Auth Incorrect":
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-        #logger.error(resp)
         del respDict["auth"]
         if respDict["pricing_type"] == "Lump":
             respDict["pricing_type"] = True
@@ -405,8 +401,6 @@ def createListing(request):
         try:
             resp2 = json.loads(resp_json2)
         except ValueError:
-            logger.error("resp_json2")
-            logger.error(resp_json2)
             return JsonResponse([False, resp_json2])
         #  Push json bytes to kafka stream
         response_as_list = list(resp2)
@@ -414,6 +408,7 @@ def createListing(request):
         message = json.dumps(resp2).encode('utf-8')
         kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
         kafka_producer.send("task_topic", message)
+
         if skillsString != "":
             skillsArray = skillsString.split(",")
             for i in skillsArray:
@@ -442,15 +437,12 @@ def profile(request, auth):
     try:
         resp2 = json.loads(resp_json2)
     except ValueError:
-        #logger.error("resp_json2")
-        #logger.error(resp_json2)
         return JsonResponse([False, resp, resp_json2])
 
     return JsonResponse([resp2, resp, False], safe=False)
 
 def createReview(request):
     if request.method == "POST":
-        #logger.error("In createReview exp")
         respDict = (request.POST).dict()
         auth = respDict["auth"]
         req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' 
@@ -458,8 +450,8 @@ def createReview(request):
         resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
         if resp == "Auth Incorrect":
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
-        #logger.error(resp)
-        #Check to see that the auth is associated with the person who is supposed to be posting the review
+        #Check to see that the auth is associated with the 
+        #person who is supposed to be posting the review
         if not resp == respDict["poster_user"]:
             return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
         del respDict["auth"]
@@ -468,7 +460,6 @@ def createReview(request):
         req2 = urllib.request.Request('http://models-api:8000/api/v1/review/create/', 
                 data=post_encoded, method='POST')
         resp_json2 = urllib.request.urlopen(req2, timeout=5).read().decode('utf-8')
-        #logger.error(resp_json2)
         try:
             resp2 = json.loads(resp_json2)
         except:
