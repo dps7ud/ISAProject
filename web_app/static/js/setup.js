@@ -106,9 +106,13 @@ $("#addFieldButton").on('click', function(e){
     } else if(type == "review"){
       $("#advancedSearchForm").append(
         '<div><input type="text" class="form-control" placeholder="Search" name="username" id="input' + newCount + '"><select class="form-control fieldInput" id="field' + newCount + '"><option value="title">Title</option><option value="body">Body</option><option value="score">Score</option></select><button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button></div>')
-    } else{
+    } else if(type == "task"){
       $("#advancedSearchForm").append(
         '<div><input type="text" class="form-control" placeholder="Search" name="title" id="input' + newCount + '"><select class="form-control fieldInput" id="field'+ newCount + '"><option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option></select><button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button></div>'
+        )
+    } else {
+      $("#advancedSearchForm").append(
+        '<div><input type="text" class="form-control" placeholder="Search" name="title" id="input' + newCount + '"><select class="form-control fieldInput" id="field'+ newCount + '"><option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option><option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="body">Body</option><option value="score">Score</option></select><button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button></div>'
         )
     }
     return false
@@ -129,10 +133,38 @@ $("#switchToBasic").on('click', function(e){
 
 })
 
+$(document).on("click", "#allNav", function(e){
+  if($("#allNav").parent().hasClass("active")){
+    return false
+  }
+  $("#allNav").parent().addClass("active")
+  $("#userNav").parent().removeClass("active")
+  $("#taskNav").parent().removeClass("active")
+  $("#reviewNav").parent().removeClass("active")
+
+  $("#usersResultTable").css('display', 'block')
+  $("#tasksResultTable").css('display', 'none')
+  $("#reviewsResultTable").css('display', 'none')
+
+  $("#basicTypeInput").val("all")
+  $("#advancedTypeInput").val("all")
+  $("#addFieldButton").data("type", "all")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "title")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option><option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="body">Body</option><option value="score">Score</option>')
+  })
+
+})
+
 $(document).on("click", "#userNav", function(e){
   if($("#userNav").parent().hasClass("active")){
     return false
   }
+  $("#allNav").parent().removeClass("active")
   $("#userNav").parent().addClass("active")
   $("#taskNav").parent().removeClass("active")
   $("#reviewNav").parent().removeClass("active")
@@ -159,6 +191,7 @@ if($("#starterPage").data("start") == "user"){
   if($("#userNav").parent().hasClass("active")){
     return false
   }
+  $("#allNav").parent().removeClass("active")
   $("#userNav").parent().addClass("active")
   $("#taskNav").parent().removeClass("active")
   $("#reviewNav").parent().removeClass("active")
@@ -185,6 +218,7 @@ $(document).on("click", "#taskNav", function(e){
   if($("#taskNav").parent().hasClass("active")){
     return false
   }
+  $("#allNav").parent().removeClass("active")
   $("#userNav").parent().removeClass("active")
   $("#taskNav").parent().addClass("active")
   $("#reviewNav").parent().removeClass("active")
@@ -206,12 +240,39 @@ $(document).on("click", "#taskNav", function(e){
   })
 })
 
+if($("#starterPage").data("start") == "task"){
+  if($("#taskNav").parent().hasClass("active")){
+    return false
+  }
+  $("#allNav").parent().removeClass("active")
+  $("#userNav").parent().removeClass("active")
+  $("#taskNav").parent().addClass("active")
+  $("#reviewNav").parent().removeClass("active")
+
+  $("#usersResultTable").css('display', 'none')
+  $("#tasksResultTable").css('display', 'block')
+  $("#reviewsResultTable").css('display', 'none')
+
+  $("#basicTypeInput").val("task")
+  $("#advancedTypeInput").val("task")
+  $("#addFieldButton").data("type", "task")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "title")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option>')
+  })
+}
+
 
 
 $(document).on("click", "#reviewNav", function(e){
   if($("#reviewNav").parent().hasClass("active")){
     return false
   }
+  $("#allNav").parent().removeClass("active")
   $("#userNav").parent().removeClass("active")
   $("#taskNav").parent().removeClass("active")
   $("#reviewNav").parent().addClass("active")
@@ -237,6 +298,7 @@ if($("#starterPage").data("start") == "review"){
   if($("#reviewNav").parent().hasClass("active")){
     return false
   }
+  $("#allNav").parent().removeClass("active")
   $("#userNav").parent().removeClass("active")
   $("#taskNav").parent().removeClass("active")
   $("#reviewNav").parent().addClass("active")

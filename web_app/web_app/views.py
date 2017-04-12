@@ -137,12 +137,9 @@ def search(request):
         auth = "yes"
     else:
         auth = "no"
-    starter = "reg"
+    starter = "none"
     if "type" in request.GET:
-        if request.GET["type"] == "user":
-            starter = "user"
-        if request.GET["type"] == "review":
-            starter = "review"
+        starter = request.GET["type"]
 
     req = urllib.request.Request('http://exp-api:8000/' + request.get_full_path())
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')

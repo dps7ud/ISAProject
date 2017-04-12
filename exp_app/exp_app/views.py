@@ -46,62 +46,39 @@ def esQueryCreator(request):
     body = False
     score = False
 
-    if request.GET['type'] == 'task':
-        if 'all' in request.GET:
-            allq = request.GET['all']
-            queryES = True
-        if 'title' in request.GET:
-            title = request.GET['title']
-            queryES = True
-
-
-        if 'location' in request.GET:
-            location = request.GET['location']
-            queryES = True
-       
-
-        if 'status' in request.GET:
-            status = request.GET['status']
-            queryES = True
-        
-
-        if 'description' in request.GET:
-            description = request.GET['location']
-            queryES = True
-
-    if request.GET['type'] == 'user':
-        if 'all' in request.GET:
-            allq = request.GET['all']
-            queryES = True
-        if 'username' in request.GET:
-            username = request.GET['username']
-            queryES = True
-        if 'name' in request.GET:
-            name = request.GET['name']
-            queryES = True
-        if 'email' in request.GET:
-            email = request.GET['email']
-            queryES = True
-        if 'bio' in request.GET:
-            bio = request.GET['bio']
-            queryES = True
-        if 'location' in request.GET:
-            location = request.GET['location']
-            queryES = True
-
-    if request.GET['type'] == 'review':
-        if 'all' in request.GET:
-            allq = request.GET['all']
-            queryES = True
-        if 'title' in request.GET:
-            title = request.GET['title']
-            queryES = True
-        if 'body' in request.GET:
-            body = request.GET['body']
-            queryES = True
-        if 'score' in request.GET:
-            title = request.GET['score']
-            queryES = True
+    if 'all' in request.GET:
+        allq = request.GET['all']
+        queryES = True
+    if 'title' in request.GET:
+        title = request.GET['title']
+        queryES = True
+    if 'location' in request.GET:
+        location = request.GET['location']
+        queryES = True
+    if 'status' in request.GET:
+        status = request.GET['status']
+        queryES = True
+    if 'description' in request.GET:
+        description = request.GET['location']
+        queryES = True
+    if 'username' in request.GET:
+        username = request.GET['username']
+        queryES = True
+    if 'name' in request.GET:
+        name = request.GET['name']
+        queryES = True
+    if 'email' in request.GET:
+        email = request.GET['email']
+        queryES = True
+    if 'bio' in request.GET:
+        bio = request.GET['bio']
+        queryES = True
+    if 'body' in request.GET:
+        body = request.GET['body']
+        queryES = True
+    if 'score' in request.GET:
+        title = request.GET['score']
+        queryES = True
 
     if queryES:
         if allq:
@@ -273,24 +250,45 @@ def search(request):
         tasks = False
         users = False
         reviews = False
-        if esQuery: 
-            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] 
-                    + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
-            reqES.add_header('Content-Type', 'application/json')
-            respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
-            logger.error("respES_json: " + str(respES_json)) 
-            esResponse = json.loads(respES_json)
-            hitArray = esResponse["hits"]["hits"]
-            finalArray = []
-            for i in hitArray:
-                iDict = i["_source"]
-                finalArray.append(iDict)
-            if request.GET['type'] == 'task':
-                tasks = finalArray
-            elif request.GET['type'] == 'user':
-                users = finalArray
+        if esQuery:
+            if request.GET['type'] == 'all':
+                reqES = urllib.request.Request('http://es:9200/tasktic/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+                reqES.add_header('Content-Type', 'application/json')
+                respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
+                logger.error("respES_json: " + str(respES_json)) 
+                esResponse = json.loads(respES_json)
+                hitArray = esResponse["hits"]["hits"]
+                tasks = []
+                users = []
+                reviews = []
+                for i in hitArray:
+                    iDict = i["_source"]
+                    if i["_type"] == "task":
+                        tasks.append(iDict)
+                    if i["_type"] == "user":
+                        users.append(iDict)
+                    if i["_type"] == "review":
+                        reviews.append(iDict)
+                return JsonResponse([tasks, users, reviews], safe=False)
             else:
-                reviews = finalArray
+                reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+                reqES.add_header('Content-Type', 'application/json')
+                respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
+                logger.error("respES_json: " + str(respES_json)) 
+                esResponse = json.loads(respES_json)
+                hitArray = esResponse["hits"]["hits"]
+                finalArray = []
+                for i in hitArray:
+                    iDict = i["_source"]
+                    finalArray.append(iDict)
+                if request.GET['type'] == 'task':
+                    return JsonResponse([finalArray, False, False], safe=False)
+                elif request.GET['type'] == 'user':
+                    return JsonResponse([False, finalArray, False], safe=False)
+                else:
+                    return JsonResponse([False, False, finalArray], safe=False)
+        else:
+            return JsonResponse([[],[],[]], safe=False)
         if not tasks:
             try:
                 req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')

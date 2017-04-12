@@ -7,7 +7,8 @@
         </div>
         <div class="col-sm-12">
         <ul class="nav nav-tabs">
-          <li role="presentation" class="active"><a id="taskNav">Tasks</a></li>
+          <li role="presentation" class="active"><a id="allNav">All</a></li>
+          <li role="presentation"><a id="taskNav">Tasks</a></li>
           <li role="presentation"><a id="userNav">Users</a></li>
           <li role="presentation"><a id="reviewNav">Reviews</a></li>
         </ul>
@@ -17,7 +18,7 @@
               <div style="display:block;" id="basicSearchBlock">
                   <h3 style="margin-left:20px">Basic Searching</h3>
                   <form class="navbar-form" role="search" action="/search/">
-                    <input type="hidden" name="type" value="task" id="basicTypeInput">
+                    <input type="hidden" name="type" value="all" id="basicTypeInput">
                     <div class="input-group">
                         <div>
                             <input type="text" class="form-control" placeholder="Search" name="all" id="all">
@@ -33,7 +34,7 @@
               <div style="display:none;" id="advancedSearchBlock">
                   <h3 style="margin-left:20px">Advanced Searching</h3>
                   <form class="navbar-form" role="search" action="/search/">
-                    <input type="hidden" name="type" value="task" id="advancedTypeInput">
+                    <input type="hidden" name="type" value="all" id="advancedTypeInput">
                     <div class="input-group" id="advancedSearchForm" count="1">
                         <div class="lastInput" id="1">
                             <input type="text" class="form-control fieldText" placeholder="Search" name="username" id="input1">
@@ -42,13 +43,19 @@
                                 <option value="location">Location</option>
                                 <option value="status">Status</option>
                                 <option value="description">Description</option>
+                                <option value="username">Username</option>
+                                <option value="name">Name</option>
+                                <option value="email">Email</option>
+                                <option value="bio">Bio</option>
+                                <option value="body">Body</option>
+                                <option value="score">Score</option>
                             </select>
                             <button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button>
                         </div>
                         
 
                     </div>
-                    <br><button class="btn btn-default" id="addFieldButton" data-type="task">Add Field</button>
+                    <br><button class="btn btn-default" id="addFieldButton" data-type="all">Add Field</button>
                     <button class="btn btn-default" type="submit">Search</button>
                   </form>
                   <div style="margin-left:20px">
@@ -57,7 +64,109 @@
                   </div>
                </div>
             </div>
-          <div id="tasksResultTable" style="display:block;">
+          {% if start == 'all' %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">All Results</h3>
+                </div>
+
+                <table class="table table-striped">
+                    
+                    <tbody>
+                    {% for task in tasks %}
+                        
+                        <tr>
+                          <div class="row" style="margin-left:0px">
+                            <div class="col-sm-12">
+                            <h4><b>Task: </b><h4>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-left:0px">
+                            <div class="col-sm-3">
+                            <b>Title: </b>{{task.title}}
+                            </div>
+                            <div class="col-sm-2">
+                            <b>Location: </b>{{task.location}}
+                            </div>
+                            <div class="col-sm-5">
+                            <b>Description: </b>{{task.description}}
+                            </div>
+                            <div class="col-sm-1">
+                            <b>Status: </b>{{task.status}}
+                            </div>
+                            <div class="col-sm-1">
+                            <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a>
+                            </div>
+                          </div>
+                    
+
+                        </tr>
+                    {% endfor %}
+                    {% for user in users %}
+
+                        <tr>
+                        <div class="row" style="margin-left:0px">
+                          <div class="col-sm-12">
+                          <h4><b>User: </b><h4>
+                          </div>
+                        </div>
+                        <div class="row" style="margin-left:0px">
+                          <div class="col-sm-2">
+                          <b>Username: </b>{{user.username}}
+                          </div>
+                          <div class="col-sm-2">
+                          <b>Name: </b>{{user.fname}} {{user.lname}}
+                          </div>
+                          <div class="col-sm-2">
+                          <b>Email: </b>{{user.email}}
+                          </div>
+                          <div class="col-sm-3">
+                          <b>Bio: </b>{{user.bio}}
+                          </div>
+                          <div class="col-sm-2">
+                          <b>Location: </b>{{user.location}}
+                          </div>
+                          <div class="col-sm-1">
+                          <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a>
+                          </div>
+                        </div>
+                    
+
+                        </tr>
+                    {% endfor %}
+                    {% for review in reviews %}
+                        <tr>
+                        <!-- <div class="row" style="margin-left:0px">
+                          <div class="col-sm-12">
+                          <h4><b>Review: </b><h4>
+                          </div>
+                        </div> -->
+                        <div class="row" style="margin-left:0px;">
+                          <div class="col-sm-3">
+                          <b>Title: </b>{{review.title}}
+                          </div>
+                          <div class="col-sm-6">
+                          <b>Body: </b>{{review.body}}
+                          </div>
+                          <div class="col-sm-2">
+                          <b>Score: </b>{{review.score}}
+                          </div>
+                          <div class="col-sm-1">
+                          <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button">Go</a>
+                          </div>
+                        </div>
+                    
+
+                        </tr>
+                        
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+          {% endif %}
+          {% if start == 'task' %}
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
@@ -85,12 +194,13 @@
 
                         </tr>
                     {% endfor %}
+                    
                     </tbody>
 
                 </table>
             </div>
-          </div>
-          <div id="usersResultTable" style="display:none;">
+          {% endif %}
+          {% if start == 'user' %}
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
@@ -124,8 +234,8 @@
 
                 </table>
             </div>
-          </div>
-          <div id="reviewsResultTable" style="display:none;">
+          {% endif %}
+          {% if start == 'review' %}
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
@@ -155,7 +265,7 @@
 
                 </table>
             </div>
-          </div>
+          {% endif %}
 
         </div>
         </div>
