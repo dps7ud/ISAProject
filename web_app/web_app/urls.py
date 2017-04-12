@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^home/?', views.home, name='home'),
     url(r'^login/?', views.login, name='login'),
     url(r'^logout/?', views.logout, name='logout'),
+    url(r'^review/?$', views.review_all, name='review_all'),
     url(r'^review/(?P<review_id>[0-9]+)/?$', views.review, name='review'),
     url(r'^signup/?', views.signup, name='signup'),
     url(r'^task/(?P<task_id>[0-9]+)/?$', views.task, name='task'),

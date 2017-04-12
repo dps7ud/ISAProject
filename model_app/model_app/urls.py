@@ -31,6 +31,7 @@ urlpatterns = [
         name='authenticator'),
     url(r'^api/v1/review/info/(?P<review_id>[0-9]+)/$', views.review_info, name='review_info'),
     url(r'^api/v1/review/create/$', views.review_create, name='review_create'),
+    url(r'^api/v1/review/all/$', views.review_all, name='review_all'),
     url(r'^api/v1/task/info/(?P<task_id>[0-9]+)/$', views.task_info, name='task_info'),
     url(r'^api/v1/task/main/(?P<task_id>[0-9]+)/$', views.task_main, name='task_main'),
     url(r'^api/v1/task/create/$', views.task_create, name='task_create'),

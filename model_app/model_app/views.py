@@ -190,6 +190,13 @@ def review_create(request):
     else:
         return HttpResponse("ERROR: Review Creation endpoint must be POSTed") 
 
+def review_all(request):
+    reviews = Review.objects.all()
+    reviewsList = []
+    for i in reviews:
+        reviewsList.append(model_to_dict(i))
+    return JsonResponse(reviewsList, safe=False)
+
 def task_query(request):
     """ Allows GET requests to access model instances by filtering"""
     if request.method == 'GET':

@@ -42,6 +42,9 @@ def esQueryCreator(request):
     email = False
     bio = False
     location = False
+    title = False
+    body = False
+    score = False
 
     if request.GET['type'] == 'task':
         if 'all' in request.GET:
@@ -86,6 +89,20 @@ def esQueryCreator(request):
             location = request.GET['location']
             queryES = True
 
+    if request.GET['type'] == 'review':
+        if 'all' in request.GET:
+            allq = request.GET['all']
+            queryES = True
+        if 'title' in request.GET:
+            title = request.GET['title']
+            queryES = True
+        if 'body' in request.GET:
+            body = request.GET['body']
+            queryES = True
+        if 'score' in request.GET:
+            title = request.GET['score']
+            queryES = True
+
     if queryES:
         if allq:
             queryObj['query']['bool']['should'].append({"match": {"_all": allq}})
@@ -106,6 +123,10 @@ def esQueryCreator(request):
             queryObj['query']['bool']['should'].append({"match": {"email": email}})
         if bio:
             queryObj['query']['bool']['should'].append({"match": {"bio": bio}})
+        if body:
+            queryObj['query']['bool']['should'].append({"match": {"body": body}})
+        if score:
+            queryObj['query']['bool']['should'].append({"match": {"score": float(score)}})
         return queryObj
     else:
         return False
@@ -206,6 +227,37 @@ def user_all(request):
             errorStrings = ""
             try:
                 req = urllib.request.Request('http://models-api:8000/api/v1/user/all/')
+                resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+                resp = json.loads(resp_json)
+                logger.error(resp)
+                return JsonResponse(resp, safe=False)
+            except URLError:
+                return HttpResponse("Timeout")
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
+
+def review_all(request):
+    if request.method == 'GET':
+        esQuery = esQueryCreator(request)
+
+        if esQuery: 
+            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] 
+                    + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES.add_header('Content-Type', 'application/json')
+            respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
+            logger.error("respES_json: " + str(respES_json)) 
+            esResponse = json.loads(respES_json)
+            hitArray = esResponse["hits"]["hits"]
+            finalArray = []
+            for i in hitArray:
+                iDict = i["_source"]
+                finalArray.append(iDict)
+            return JsonResponse(finalArray, safe=False)
+        else:
+            logger.error("")
+            errorStrings = ""
+            try:
+                req = urllib.request.Request('http://models-api:8000/api/v1/review/all/')
                 resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
                 resp = json.loads(resp_json)
                 logger.error(resp)

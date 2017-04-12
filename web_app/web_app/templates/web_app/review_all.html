@@ -1,0 +1,84 @@
+{% extends 'web_app/base.html' %}
+
+{% block content %}
+        
+        <div class="page-header">
+            <h1>All Reviews </h1>
+        </div>
+        <div class="col-sm-12">
+            <div class="jumbotron" id="searchOptions" style="padding-top:10px; padding-bottom:10px">
+              <div style="display:block;" id="basicSearchBlock">
+                  <h3 style="margin-left:20px">Basic Searching</h3>
+                  <form class="navbar-form" role="search" action="/review/">
+                    <input type="hidden" name="type" value="review">
+                    <div class="input-group">
+                        <div>
+                            <input type="text" class="form-control" placeholder="Search" name="all" id="all">
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </div>
+                    </div>
+                  </form>
+                  <div style="margin-left:20px">
+                      <p> -or- </p>
+                      <p><button class="btn btn-default" id="switchToAdvanced">Advanced Search </button></p>
+                  </div>
+              </div>
+              <div style="display:none;" id="advancedSearchBlock">
+                  <h3 style="margin-left:20px">Advanced Searching</h3>
+                  <form class="navbar-form" role="search" action="/review/">
+                    <input type="hidden" name="type" value="review">
+                    <div class="input-group" id="advancedSearchForm" count="1">
+                        <div class="lastInput" id="1">
+                            <input type="text" class="form-control" placeholder="Search" name="title" id="input1">
+                            <select class="form-control fieldInput" id="field1">
+                                <option value="title">Title</option>
+                                <option value="body">Body</option>
+                                <option value="score">Score</option>
+                            </select>
+                            <button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button>
+                        </div>
+                        
+
+                    </div>
+                    <br><button class="btn btn-default" id="addFieldButton" data-type="review">Add Field</button>
+                    <button class="btn btn-default" type="submit">Search</button>
+                  </form>
+                  <div style="margin-left:20px">
+                      <p> -or- </p>
+                      <p><button class="btn btn-default" id="switchToBasic">Basic Search </button></p>
+                  </div>
+               </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">Reviews</h3>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Body</th>
+                        <th>Score</th>
+                        <th>Visit Page </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for review in reviews %}
+                    <tr>
+                        <td> {{review.title}}</td>
+                        <td> {{review.body}}</td>
+                        <td> {{review.score}}</td>
+                        <td> <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button">Go</a> </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        </div>
+{% endblock %}
