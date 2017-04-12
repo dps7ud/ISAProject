@@ -310,6 +310,10 @@ def signup(request):
             resp = json.loads(resp_json)
         except ValueError:
             return JsonResponse([False, False, resp_json], safe=False)
+        #ADD IN KAFKA FOR USERS HERE
+        message = json.dumps([resp, 'user']).encode('utf-8')
+        kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
+        kafka_producer.send("task_topic", message)
         auth_encoded = urllib.parse.urlencode({"username": resp["username"]}).encode('utf-8')
         req2 = urllib.request.Request('http://models-api:8000/api/v1/authenticator/create/', 
                 data=auth_encoded, method='POST')
@@ -416,7 +420,7 @@ def createListing(request):
         resp2['post_date'] = str(resp2['post_date'])
         logger.error("resp2")
         logger.error(resp2)
-        message = json.dumps(resp2).encode('utf-8')
+        message = json.dumps([resp2, 'task']).encode('utf-8')
         kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
         kafka_producer.send("task_topic", message)
 

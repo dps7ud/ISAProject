@@ -35,6 +35,6 @@ if __name__ == "__main__":
                 , bootstrap_servers=['kafka:9092'])
         for message in task_consumer:
             new_listing = json.loads((message.value).decode('utf-8'))
-            one = es.index(index='tasktic', doc_type='task', id=new_listing['id']
-                    , body=new_listing)
+            one = es.index(index='tasktic', doc_type=new_listing[1], id=new_listing[0]['id']
+                    , body=new_listing[0])
             two = es.indices.refresh(index='tasktic')
