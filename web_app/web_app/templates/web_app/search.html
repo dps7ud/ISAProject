@@ -71,22 +71,27 @@
                 </div>
 
                 <table class="table table-striped">
-                    
+
                     <tbody>
                     {% for task in tasks %}
                         
                         <tr>
                           <div class="row" style="margin-left:0px">
+                            
                             <div class="col-sm-12">
-                            <h4><b>Task: </b><h4>
+                              <div style='border-top:1px solid #ccc; width:100%;'>
+                                <h4><b>Task: </b><h4>
+                              </div>
                             </div>
                           </div>
-                          <div class="row" style="margin-left:0px">
+                          <div class="row" style="margin-left:0px; border-bottom: thick;">
                             <div class="col-sm-3">
-                            <b>Title: </b>{{task.title}}
+                              
+                              <b>Title: </b>{{task.title}}
+                              
                             </div>
                             <div class="col-sm-2">
-                            <b>Location: </b>{{task.location}}
+                                <b>Location: </b>{{task.location}}
                             </div>
                             <div class="col-sm-5">
                             <b>Description: </b>{{task.description}}
@@ -95,7 +100,7 @@
                             <b>Status: </b>{{task.status}}
                             </div>
                             <div class="col-sm-1">
-                            <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a>
+                            <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button" style="margin-bottom:10px">Go</a>
                             </div>
                           </div>
                     
@@ -107,7 +112,9 @@
                         <tr>
                         <div class="row" style="margin-left:0px">
                           <div class="col-sm-12">
-                          <h4><b>User: </b><h4>
+                            <div style='border-top:1px solid #ccc; width:100%;'>
+                              <h4><b>User: </b></h4>
+                            </div>
                           </div>
                         </div>
                         <div class="row" style="margin-left:0px">
@@ -127,7 +134,7 @@
                           <b>Location: </b>{{user.location}}
                           </div>
                           <div class="col-sm-1">
-                          <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a>
+                          <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button" style="margin-bottom:10px">Go</a>
                           </div>
                         </div>
                     
@@ -136,11 +143,13 @@
                     {% endfor %}
                     {% for review in reviews %}
                         <tr>
-                        <!-- <div class="row" style="margin-left:0px">
+                        <div class="row" style="margin-left:0px">
                           <div class="col-sm-12">
-                          <h4><b>Review: </b><h4>
+                            <div style='border-top:1px solid #ccc; width:100%;'>
+                              <h4><b>Review: </b></h4>
+                            </div>
                           </div>
-                        </div> -->
+                        </div>
                         <div class="row" style="margin-left:0px;">
                           <div class="col-sm-3">
                           <b>Title: </b>{{review.title}}
@@ -152,7 +161,7 @@
                           <b>Score: </b>{{review.score}}
                           </div>
                           <div class="col-sm-1">
-                          <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button">Go</a>
+                          <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button" style="margin-bottom:10px">Go</a>
                           </div>
                         </div>
                     
