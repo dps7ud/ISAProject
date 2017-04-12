@@ -8,12 +8,12 @@
         <div class="col-sm-12">
             <div class="jumbotron" id="searchOptions" style="padding-top:10px; padding-bottom:10px">
               <div style="display:block;" id="basicSearchBlock">
-                  <h3 style="margin-left:20px">Basic Searching of User Names</h3>
+                  <h3 style="margin-left:20px">Basic Searching</h3>
                   <form class="navbar-form" role="search" action="/user/">
                     <input type="hidden" name="type" value="user">
                     <div class="input-group">
                         <div>
-                            <input type="text" class="form-control" placeholder="Search" name="name" id="name">
+                            <input type="text" class="form-control" placeholder="Search" name="all" id="all">
                             <button class="btn btn-default" type="submit">Search</button>
                         </div>
                     </div>
@@ -37,6 +37,7 @@
                                 <option value="bio">Bio</option>
                                 <option value="location">Location</option>
                             </select>
+                            <button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button>
                         </div>
                         
 
@@ -44,6 +45,10 @@
                     <br><button class="btn btn-default" id="addFieldButton" data-type="user">Add Field</button>
                     <button class="btn btn-default" type="submit">Search</button>
                   </form>
+                  <div style="margin-left:20px">
+                      <p> -or- </p>
+                      <p><button class="btn btn-default" id="switchToBasic">Basic Search </button></p>
+                  </div>
                </div>
             </div>
         </div>

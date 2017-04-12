@@ -17,7 +17,7 @@
                     <input type="hidden" name="type" value="task">
                     <div class="input-group">
                         <div>
-                            <input type="text" class="form-control" placeholder="Search" name="title" id="title">
+                            <input type="text" class="form-control" placeholder="Search" name="all" id="all">
                             <button class="btn btn-default" type="submit">Search</button>
                         </div>
                     </div>
@@ -40,6 +40,7 @@
                                 <option value="status">Status</option>
                                 <option value="description">Description</option>
                             </select>
+                            <button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button>
                         </div>
                         
 
@@ -47,6 +48,10 @@
                     <br><button class="btn btn-default" id="addFieldButton">Add Field</button>
                     <button class="btn btn-default" type="submit">Search</button>
                   </form>
+                  <div style="margin-left:20px">
+                      <p> -or- </p>
+                      <p><button class="btn btn-default" id="switchToBasic">Basic Search </button></p>
+                  </div>
                </div>
             </div>
         </div>

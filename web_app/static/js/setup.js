@@ -83,6 +83,9 @@ $(document).on("change", ".fieldInput", function(e){
     console.log(inputID)
     $(inputID).attr("name", this.value)
 })
+$(document).on("click", ".removeField", function(e){
+  $(this).parent().remove()
+})
 //     var input = $(event.relatedTarget)
 //     console.log(input.data('id'))
 // })
@@ -93,10 +96,10 @@ $("#addFieldButton").on('click', function(e){
     var type = $("#addFieldButton").data("type")
     if (type == "user"){
       $("#advancedSearchForm").append(
-        '<div><input type="text" class="form-control" placeholder="Search" name="username" id="input' + newCount + '"><select class="form-control fieldInput" id="field' + newCount + '"><option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="location">Location</option></select></div>')
+        '<div><input type="text" class="form-control" placeholder="Search" name="username" id="input' + newCount + '"><select class="form-control fieldInput" id="field' + newCount + '"><option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="location">Location</option></select><button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button></div>')
     } else{
       $("#advancedSearchForm").append(
-        '<div><input type="text" class="form-control" placeholder="Search" name="title" id="input' + newCount + '"><select class="form-control fieldInput" id="field'+ newCount + '"><option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option></select></div>'
+        '<div><input type="text" class="form-control" placeholder="Search" name="title" id="input' + newCount + '"><select class="form-control fieldInput" id="field'+ newCount + '"><option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option></select><button class="btn btn-default removeField" type="button" id="remove1">Remove Field</button></div>'
         )
     }
     return false
@@ -108,6 +111,12 @@ $("#addFieldButton").on('click', function(e){
 $("#switchToAdvanced").on('click', function(e){
     $("#basicSearchBlock").css('display', 'none')
     $("#advancedSearchBlock").css('display', 'block')
+
+})
+
+$("#switchToBasic").on('click', function(e){
+    $("#basicSearchBlock").css('display', 'block')
+    $("#advancedSearchBlock").css('display', 'none')
 
 })
 

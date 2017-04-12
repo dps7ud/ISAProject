@@ -32,6 +32,7 @@ def esQueryCreator(request):
         }
     }
     queryES = False
+    allq = False
     title = False
     description = False
     location = False
@@ -43,6 +44,9 @@ def esQueryCreator(request):
     location = False
 
     if request.GET['type'] == 'task':
+        if 'all' in request.GET:
+            allq = request.GET['all']
+            queryES = True
         if 'title' in request.GET:
             title = request.GET['title']
             queryES = True
@@ -63,6 +67,9 @@ def esQueryCreator(request):
             queryES = True
 
     if request.GET['type'] == 'user':
+        if 'all' in request.GET:
+            allq = request.GET['all']
+            queryES = True
         if 'username' in request.GET:
             username = request.GET['username']
             queryES = True
@@ -80,6 +87,8 @@ def esQueryCreator(request):
             queryES = True
 
     if queryES:
+        if allq:
+            queryObj['query']['bool']['should'].append({"match": {"_all": allq}})
         if title:
             queryObj['query']['bool']['should'].append({"match": {"title": title}})
         if description:
@@ -161,7 +170,6 @@ def task_all(request):
             finalArray = []
             for i in hitArray:
                 iDict = i["_source"]
-#                iDict["id"] = iDict["task_id"]
                 finalArray.append(iDict)
             return JsonResponse(finalArray, safe=False)
         else:
@@ -177,7 +185,7 @@ def task_all(request):
         return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
 def user_all(request):
-    if request.METHOD == 'GET':
+    if request.method == 'GET':
         esQuery = esQueryCreator(request)
 
         if esQuery: 
@@ -191,7 +199,6 @@ def user_all(request):
             finalArray = []
             for i in hitArray:
                 iDict = i["_source"]
-                iDict["id"] = iDict["user_id"]
                 finalArray.append(iDict)
             return JsonResponse(finalArray, safe=False)
         else:
@@ -405,6 +412,10 @@ def createListing(request):
         #  Push json bytes to kafka stream
         response_as_list = list(resp2)
         task_json = response_as_list[0]
+        resp2['time_to_live'] = str(resp2['time_to_live'])
+        resp2['post_date'] = str(resp2['post_date'])
+        logger.error("resp2")
+        logger.error(resp2)
         message = json.dumps(resp2).encode('utf-8')
         kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
         kafka_producer.send("task_topic", message)
