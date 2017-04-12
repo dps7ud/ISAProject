@@ -211,6 +211,19 @@ class TestReview(TestCase):
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Review Creation endpoint must be POSTed")
 
+    # -----------------------Testing "review_all"------------------------------------
+    def test_post_review_all(self):
+        response = self.client.post(reverse('review_all'), {})
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Endpoint only accepts GET requests")
+
+    def test_get_review_all(self):
+        response = self.client.get(reverse('review_all'))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        reviewFields = tuple(field.name for field in Review._meta.fields)
+        for i in resp_json:
+            for j in reviewFields:
+                self.assertEquals(j in i, True)
     #tearDown method is called after each test
     def tearDown(self):
         pass #nothing to tear down

@@ -134,6 +134,20 @@ class TestTask(TestCase):
         self.assertTrue(resp_json.startswith("Missing required fields:"))
 
 
+    # -----------------------Testing "task_all"------------------------------------
+    def test_post_task_all(self):
+        response = self.client.post(reverse('task_all'), {})
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Endpoint only accepts GET requests")
+
+    def test_get_task_all(self):
+        response = self.client.get(reverse('task_all'))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        taskFields = tuple(field.name for field in Task._meta.fields)
+        for i in resp_json:
+            for j in taskFields:
+                self.assertEquals(j in i, True)
+
     # -----------------------Testing "task_skills" ------------------------------
     def test_post_task_skills(self):
         response = self.client.post(reverse('task_skills', args=[1]), {})

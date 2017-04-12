@@ -244,7 +244,17 @@ class TestUtility(TestCase):
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: Task object does not exist")
 
+    #------------------------Testing "get_user_needed_reviews" -------------------------------
+    def test_post_get_user_needed_reviews(self):
+        response = self.client.post(reverse('get_user_needed_reviews', args=[1]), {})
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Endpoint only accepts GET requests")
 
+    def test_get_user_needed_reviews(self):
+        response = self.client.get(reverse('get_user_needed_reviews', args=[1]))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        for i in resp_json:
+            self.assertEquals(len(i), 2)
 
 
 

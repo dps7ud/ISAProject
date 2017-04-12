@@ -1,8 +1,15 @@
 As a user, I should be able to search for task listings relevant to myself.
-As a user, I should be able to limit these searches by the following:
-    Job poster, description and title keywords, location, time requirements,
-    due date and post date, completed-ness, payment information and requirements.
+	As a user, I should be able to limit these searches by the following:
+    	Job Title, description, completed-ness.
 As a user, I should be able to search for user listings relevant to myself.
-As a user, I should be able to limit these searches by the following:
-    Review score, tasks completed, username, skills and  bio keywords and location
-As a user, I should be able to post new listings and have them appear in search results
+	As a user, I should be able to limit these searches by the following:
+    	Username, First Name/ Last Name, Location, Bio, and Email
+As a user, I should be able to search for reviews relevant to myself.
+	As a user, I should be able to limit these searches by the following:
+		Review Title, Review Body, Review Score
+As a user, I should be able to post new tasks and have them appear in search results
+As a user, my information should be added to search results as soon as I sign up
+As a user, reviews I create should appear in search results
+As a user, I should be able tivew a profile page to complete things such as creating new reviews and new tasks
+	As a user, I want to be able to view all the reviews I need to complete in a table on the profile page
+As a user, I want to be able to do a general search from any page, using a search bar found in the navigation bar at the top of every page

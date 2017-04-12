@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from model_app.models import Task, Review
+from model_app.models import Task, Review, Users
 
 import json
 
@@ -147,6 +147,21 @@ class TestUser(TestCase):
         response = self.client.get(reverse('user_create'))
         resp_json = (response.content).decode("utf-8")
         self.assertEquals(resp_json, "ERROR: User creation endpoint must be posted")
+
+    # -----------------------Testing "user_all"------------------------------------
+    def test_post_user_all(self):
+        response = self.client.post(reverse('user_all'),{})
+        resp_json = (response.content).decode("utf-8")
+        self.assertEquals(resp_json, "ERROR: Endpoint only accepts GET requests")
+
+    def test_get_user_all(self):
+        response = self.client.get(reverse('user_all'))
+        resp_json = json.loads((response.content).decode("utf-8"))
+        userFields = tuple(field.name for field in Users._meta.fields)
+        for i in resp_json:
+            for j in userFields:
+                self.assertEquals(j in i, True)
+
 
     # -----------------------Testing "user_languages"------------------------------
     def test_post_user_languages(self):

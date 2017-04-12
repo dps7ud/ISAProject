@@ -191,11 +191,15 @@ def review_create(request):
         return HttpResponse("ERROR: Review Creation endpoint must be POSTed") 
 
 def review_all(request):
-    reviews = Review.objects.all()
-    reviewsList = []
-    for i in reviews:
-        reviewsList.append(model_to_dict(i))
-    return JsonResponse(reviewsList, safe=False)
+    if request.method == 'GET':
+        reviews = Review.objects.all()
+        reviewsList = []
+        for i in reviews:
+            reviewsList.append(model_to_dict(i))
+        return JsonResponse(reviewsList, safe=False)
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
+
 
 def task_query(request):
     """ Allows GET requests to access model instances by filtering"""
@@ -213,11 +217,14 @@ def task_query(request):
         return HttpResponse("ERROR: Posted to task_query")
 
 def task_all(request):
-    tasks = Task.objects.all()
-    tasksList = []
-    for i in tasks:
-        tasksList.append(model_to_dict(i))
-    return JsonResponse(tasksList, safe=False)
+    if request.method == 'GET':
+        tasks = Task.objects.all()
+        tasksList = []
+        for i in tasks:
+            tasksList.append(model_to_dict(i))
+        return JsonResponse(tasksList, safe=False)
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
 def task_create(request):
     """Accepts post request containing a single json object
@@ -358,11 +365,14 @@ def user_find(request):
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
 
 def user_all(request):
-    users = Users.objects.all()
-    usersList = []
-    for i in users:
-        usersList.append(model_to_dict(i))
-    return JsonResponse(usersList, safe=False)
+    if request.method == 'GET':
+        users = Users.objects.all()
+        usersList = []
+        for i in users:
+            usersList.append(model_to_dict(i))
+        return JsonResponse(usersList, safe=False)
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
 
 # ----------------------- For Project 3 ------------------------------------
@@ -698,48 +708,51 @@ def task_main(request, task_id):
     return JsonResponse(responseArray, safe=False)
 
 def get_user_needed_reviews(request, user_id):
-    logger.error("user_id")
-    logger.error(user_id)
-    needed_pairs = []
-    tasks = Task.objects.filter(worker__user=user_id)
-    logger.error(tasks)
-    for i in tasks:
-        workers = Users.objects.filter(worker__task=i.pk)
-        for j in workers:
-            if int(j.pk) != int(user_id):
-                logger.error("j.pk")
-                logger.error(j.pk)
-                try:
-                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
-                except Review.DoesNotExist:
-                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
-        owners = Users.objects.filter(owner__task = i.pk)
-        for j in owners:
-            if int(j.pk) != int(user_id):
-                logger.error("j.pk")
-                logger.error(j.pk)
-                try:
-                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
-                except Review.DoesNotExist:
-                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
-    tasks = Task.objects.filter(owner__user=user_id)
-    for i in tasks:
-        workers = Users.objects.filter(worker__task=i.pk)
-        for j in workers:
-            if int(j.pk) != int(user_id):
-                logger.error("j.pk")
-                logger.error(j.pk)
-                try:
-                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
-                except Review.DoesNotExist:
-                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
-        owners = Users.objects.filter(owner__task = i.pk)
-        for j in owners:
-            if int(j.pk) != int(user_id):
-                logger.error("j.pk")
-                logger.error(j.pk)
-                try:
-                    reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
-                except Review.DoesNotExist:
-                    needed_pairs.append([model_to_dict(i), model_to_dict(j)])
-    return JsonResponse(needed_pairs, safe=False)
+    if request.method == "GET":
+        logger.error("user_id")
+        logger.error(user_id)
+        needed_pairs = []
+        tasks = Task.objects.filter(worker__user=user_id)
+        logger.error(tasks)
+        for i in tasks:
+            workers = Users.objects.filter(worker__task=i.pk)
+            for j in workers:
+                if int(j.pk) != int(user_id):
+                    logger.error("j.pk")
+                    logger.error(j.pk)
+                    try:
+                        reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                    except Review.DoesNotExist:
+                        needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+            owners = Users.objects.filter(owner__task = i.pk)
+            for j in owners:
+                if int(j.pk) != int(user_id):
+                    logger.error("j.pk")
+                    logger.error(j.pk)
+                    try:
+                        reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                    except Review.DoesNotExist:
+                        needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+        tasks = Task.objects.filter(owner__user=user_id)
+        for i in tasks:
+            workers = Users.objects.filter(worker__task=i.pk)
+            for j in workers:
+                if int(j.pk) != int(user_id):
+                    logger.error("j.pk")
+                    logger.error(j.pk)
+                    try:
+                        reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                    except Review.DoesNotExist:
+                        needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+            owners = Users.objects.filter(owner__task = i.pk)
+            for j in owners:
+                if int(j.pk) != int(user_id):
+                    logger.error("j.pk")
+                    logger.error(j.pk)
+                    try:
+                        reviewAttempts = Review.objects.get(task=i.pk, postee_user=j.pk, poster_user=user_id)
+                    except Review.DoesNotExist:
+                        needed_pairs.append([model_to_dict(i), model_to_dict(j)])
+        return JsonResponse(needed_pairs, safe=False)
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
