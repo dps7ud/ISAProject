@@ -130,6 +130,34 @@ def user_all(request):
     }
     return render(request, 'web_app/user_all.html', context)
 
+def search(request):
+    auth = request.COOKIES.get('auth')
+    successString = success_messaging(request)
+    if auth:
+        auth = "yes"
+    else:
+        auth = "no"
+    starter = "reg"
+    if "type" in request.GET:
+        if request.GET["type"] == "user":
+            starter = "user"
+        if request.GET["type"] == "review":
+            starter = "review"
+
+    req = urllib.request.Request('http://exp-api:8000/' + request.get_full_path())
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    context = {
+        'tasks': resp[0],
+        'users': resp[1],
+        'reviews': resp[2],
+        'start': starter,
+        'auth': auth,
+        'success': successString
+    }
+    return render(request, 'web_app/search.html', context)
+
+
 def review_all(request):
     auth = request.COOKIES.get('auth')
     successString = success_messaging(request)

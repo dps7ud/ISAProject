@@ -32,5 +32,7 @@ urlpatterns = [
     url(r'^createListing/$', views.createListing, name='create_listing'),
     url(r'^createReview/$', views.createReview, name='create_review'),
     url(r'^profile/(?P<auth>\w+)/$$', views.profile, name='profile'),
+    url(r'^search/$', views.search, name='search'),
+
     url(r'^admin/', admin.site.urls),
 ]

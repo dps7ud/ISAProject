@@ -34,6 +34,9 @@ if (pathname.indexOf("/signup") >= 0){
 if (pathname.indexOf("/profile") >= 0){
     $("#nav6").parent().addClass("active");
 }
+if (pathname.indexOf("/search") >= 0){
+    $("#nav7").parent().addClass("active");
+}
 
 $('#reviewModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
@@ -123,7 +126,134 @@ $("#switchToBasic").on('click', function(e){
 
 })
 
+$(document).on("click", "#userNav", function(e){
+  if($("#userNav").parent().hasClass("active")){
+    return false
+  }
+  $("#userNav").parent().addClass("active")
+  $("#taskNav").parent().removeClass("active")
+  $("#reviewNav").parent().removeClass("active")
 
+  $("#usersResultTable").css('display', 'block')
+  $("#tasksResultTable").css('display', 'none')
+  $("#reviewsResultTable").css('display', 'none')
+
+  $("#basicTypeInput").val("user")
+  $("#advancedTypeInput").val("user")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "username")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="location">Location</option>')
+  })
+
+  $("#addFieldButton").data("type", "user")
+})
+
+if($("#starterPage").data("start") == "user"){
+  if($("#userNav").parent().hasClass("active")){
+    return false
+  }
+  $("#userNav").parent().addClass("active")
+  $("#taskNav").parent().removeClass("active")
+  $("#reviewNav").parent().removeClass("active")
+
+  $("#usersResultTable").css('display', 'block')
+  $("#tasksResultTable").css('display', 'none')
+  $("#reviewsResultTable").css('display', 'none')
+
+  $("#basicTypeInput").val("user")
+  $("#advancedTypeInput").val("user")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "username")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="username">Username</option><option value="name">Name</option><option value="email">Email</option><option value="bio">Bio</option><option value="location">Location</option>')
+  })
+
+  $("#addFieldButton").data("type", "user")
+}
+
+$(document).on("click", "#taskNav", function(e){
+  if($("#taskNav").parent().hasClass("active")){
+    return false
+  }
+  $("#userNav").parent().removeClass("active")
+  $("#taskNav").parent().addClass("active")
+  $("#reviewNav").parent().removeClass("active")
+
+  $("#usersResultTable").css('display', 'none')
+  $("#tasksResultTable").css('display', 'block')
+  $("#reviewsResultTable").css('display', 'none')
+
+  $("#basicTypeInput").val("task")
+  $("#advancedTypeInput").val("task")
+  $("#addFieldButton").data("type", "task")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "title")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="title">Title</option><option value="location">Location</option><option value="status">Status</option><option value="description">Description</option>')
+  })
+})
+
+
+
+$(document).on("click", "#reviewNav", function(e){
+  if($("#reviewNav").parent().hasClass("active")){
+    return false
+  }
+  $("#userNav").parent().removeClass("active")
+  $("#taskNav").parent().removeClass("active")
+  $("#reviewNav").parent().addClass("active")
+
+  $("#usersResultTable").css('display', 'none')
+  $("#tasksResultTable").css('display', 'none')
+  $("#reviewsResultTable").css('display', 'block')
+
+  $("#basicTypeInput").val("review")
+  $("#advancedTypeInput").val("review")
+  $("#addFieldButton").data("type", "review")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "title")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="title">Title</option><option value="body">Body</option><option value="score">Score</option>')
+  })
+})
+
+if($("#starterPage").data("start") == "review"){
+  if($("#reviewNav").parent().hasClass("active")){
+    return false
+  }
+  $("#userNav").parent().removeClass("active")
+  $("#taskNav").parent().removeClass("active")
+  $("#reviewNav").parent().addClass("active")
+
+  $("#usersResultTable").css('display', 'none')
+  $("#tasksResultTable").css('display', 'none')
+  $("#reviewsResultTable").css('display', 'block')
+
+  $("#basicTypeInput").val("review")
+  $("#advancedTypeInput").val("review")
+  $("#addFieldButton").data("type", "review")
+
+  $(".fieldText").each(function(){
+    $(this).attr("name", "title")
+  })
+
+  $(".fieldInput").each(function(){
+    $(this).html('<option value="title">Title</option><option value="body">Body</option><option value="score">Score</option>')
+  })
+}
 
 // console.log(pathname)
 

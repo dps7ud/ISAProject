@@ -267,6 +267,60 @@ def review_all(request):
     else:
         return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
+def search(request):
+    if request.method == 'GET':
+        esQuery = esQueryCreator(request)
+        tasks = False
+        users = False
+        reviews = False
+        if esQuery: 
+            reqES = urllib.request.Request('http://es:9200/tasktic/' + request.GET['type'] 
+                    + '/_search?pretty', data=json.dumps(esQuery).encode('utf-8'), method='POST')
+            reqES.add_header('Content-Type', 'application/json')
+            respES_json = urllib.request.urlopen(reqES, timeout=5).read().decode('utf-8')
+            logger.error("respES_json: " + str(respES_json)) 
+            esResponse = json.loads(respES_json)
+            hitArray = esResponse["hits"]["hits"]
+            finalArray = []
+            for i in hitArray:
+                iDict = i["_source"]
+                finalArray.append(iDict)
+            if request.GET['type'] == 'task':
+                tasks = finalArray
+            elif request.GET['type'] == 'user':
+                users = finalArray
+            else:
+                reviews = finalArray
+        if not tasks:
+            try:
+                req = urllib.request.Request('http://models-api:8000/api/v1/task/all/')
+                resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+                resp = json.loads(resp_json)
+                tasks = resp
+            except URLError:
+                tasks = "ERROR: Server Timeout"
+        if not users:
+            try:
+                req = urllib.request.Request('http://models-api:8000/api/v1/user/all/')
+                resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+                resp = json.loads(resp_json)
+                logger.error(resp)
+                users = resp
+            except URLError:
+                users = "ERROR: Server Timeout"
+        if not reviews:
+            try:
+                req = urllib.request.Request('http://models-api:8000/api/v1/review/all/')
+                resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+                resp = json.loads(resp_json)
+                logger.error(resp)
+                reviews = resp
+            except URLError:
+                reviews = "Error: ServerTimeout"
+        return JsonResponse([tasks, users, reviews], safe=False)
+    else:
+        return HttpResponse("ERROR: Endpoint only accepts GET requests")
+
 def user(request, user_id):
     if request.method == 'GET':
         errorStrings = ""
@@ -531,6 +585,9 @@ def createReview(request):
             resp2 = json.loads(resp_json2)
         except:
             return JsonResponse([False, resp_json2], safe=False)
+        message = json.dumps([resp2, 'review']).encode('utf-8')
+        kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
+        kafka_producer.send("task_topic", message)
         return JsonResponse([resp2, False], safe=False)
     else:
         return HttpResponse("ERROR: Endpoint only accepts POST requests")
