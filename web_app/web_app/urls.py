@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^404/?', views.four_oh_four, ),
 	url(r'^user/(?P<user_id>[0-9]+)/?$', views.user, name='user'),
     url(r'^task/?$', views.task_all, name='task_all'),
-    url(r'^createListing/?', views.create_listing, name='create_listing'),
+    url(r'^createTask/?', views.create_task, name='create_task'),
     url(r'^createReview/?', views.create_review, name='create_review'),
     url(r'^home/?', views.home, name='home'),
     url(r'^login/?', views.login, name='login'),

@@ -13,7 +13,7 @@ if($("#authPresent").data("auth") == "yes"){
     console.log("if statement")
     $("#nav5").html("Logout")
     $("#nav5").attr("href", "/logout")
-    $("#navBodyBar").html("<li><a href='/profile/' id='nav6'>Profile</a></li>" + $("#navBodyBar").html())
+    $("#navBodyBar").html("<li><a href='/profile/' id='nav6'>Profile</a></li><li><a href='/createTask/' id='nav8'>Create Task</a></li>" + $("#navBodyBar").html())
     //$("#profileNav").html("<li><a href='/profile/' id='nav6'>Profile</a></li>")
 } 
 if (pathname.indexOf("/task") >= 0){
@@ -36,6 +36,9 @@ if (pathname.indexOf("/profile") >= 0){
 }
 if (pathname.indexOf("/search") >= 0){
     $("#nav7").parent().addClass("active");
+}
+if (pathname.indexOf("/createTask") >= 0){
+    $("#nav8").parent().addClass("active");
 }
 
 $('#reviewModal').on('show.bs.modal', function (event) {

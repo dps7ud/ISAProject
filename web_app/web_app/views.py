@@ -285,12 +285,12 @@ def logout(request):
     response.delete_cookie("auth")
     return response
 
-def create_listing(request):
+def create_task(request):
     successString = success_messaging(request)
     auth = request.COOKIES.get('auth')
     
     if not auth:
-        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_task"))
 
     errors = False
     authString = "yes"
@@ -323,7 +323,7 @@ def create_listing(request):
     else:
         form = CreateListingForm()
 
-    return render(request, 'web_app/createlisting.html', 
+    return render(request, 'web_app/createtask.html', 
             {
                 'form': form,
                 'auth':  authString,
