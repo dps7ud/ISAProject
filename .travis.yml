@@ -40,8 +40,9 @@ script:
   # - ^D
   # - ^Z
   - docker cp ./createUser.sql mysql:/
-  - docker exec mysql bash -c "mysql -uroot -p'$3cureUS' -h db < /createUser.sql" 
-  - docker-compose up
+  - docker exec mysql bash -c "mysql -uroot -p'$3cureUS' < /createUser.sql" 
+  - docker-compose up -d
+  - docker exec isa_models bash -c "python manage.py test" 
 
 notifications: 
   email:    
