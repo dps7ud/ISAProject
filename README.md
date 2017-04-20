@@ -13,6 +13,11 @@ Members of the Team
 Project 5 Notes
 -------------
 - User Stories: User stories can be found in "UserStories_5.txt" in the docs directory.
+- Profile Page: Used to see what reviews a user needs to create, as well as create a new listing. It can be reached from the top navbar, but the user must be logged in
+- Review Creation: Reviews now able to be created from a modal on the profile page, by clicking the create review button next to a needed review on that page
+- Task Creation: Reached through a button on the profile page, or through the navbar, still need to be authenticated to create a task
+- Searching: General searching of all fields can be done through the nav bar, you can go to the search page to further narrow down the search to tasks, users, or reviews, and you can further narrow this down by going to advance searching in order to search by specific fields
+- Additional Tests created for some helper endpoints in the models layers
 
 Project 4 Notes
 -------------
