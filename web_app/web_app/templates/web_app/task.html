@@ -63,7 +63,7 @@
                         <td> {{user.email}}</td>
                         <td> {{user.location}}</td>
                         <td> Owner </td>
-                        <td> <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a> </td>
+                        <td> <a class = "btn btn-primary task-user" href="/user/{{ user.id }}/" role="button">Go</a> </td>
                     </tr>
                 {% endfor %}
                 {% for user in workers %}
@@ -101,7 +101,7 @@
                     <tr>
                         <td> {{review.title}}</td>
                         <td> {{review.score}}</td>
-                        <td> <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button">Go</a> </td>
+                        <td> <a class = "btn btn-primary task-review" href="/review/{{ review.id }}/" role="button">Go</a> </td>
                     </tr>
                 {% endfor %}
                 </tbody>

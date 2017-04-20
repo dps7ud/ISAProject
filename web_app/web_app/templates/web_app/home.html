@@ -3,7 +3,7 @@
 {% block content %}
     <div class="col-sm-12">
     <div class="jumbotron">
-      <h1>TaskTic</h1>
+      <h1 id="tasktic">TaskTic</h1>
       <p>A Micro-Consulting Service</p>
     </div>
     </div>
@@ -21,7 +21,7 @@
                     <b>Name: </b> {{ user.fname }} {{user.lname }} <br/>
                     <b>Email: </b> {{ user.email}} <br/>
                     <b>Location: </b> {{user.location}} <br/>
-                    <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Visit Page</a>
+                    <a class = "btn btn-primary top-user" href="/user/{{ user.id }}/" role="button">Visit Page</a>
                 </div>
             
                  
@@ -59,7 +59,7 @@
                     <td> {{task.location}}</td>
                     <td> {{task.status}}</td>
                     <td> Owner </td>
-                    <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                    <td> <a class = "btn btn-primary recent-task" href="/task/{{ task.id }}/" role="button">Go</a> </td>
                 </tr>
             {% endfor %}
             </tbody>

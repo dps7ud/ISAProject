@@ -84,7 +84,7 @@
                         <td> {{task.location}}</td>
                         <td> {{task.status}}</td>
                         <td> Owner </td>
-                        <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                        <td> <a class = "btn btn-primary user-task" href="/task/{{ task.id }}/" role="button">Go</a> </td>
                     </tr>
                 {% endfor %}
                 {% for task in worker %}

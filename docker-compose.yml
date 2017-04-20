@@ -3,6 +3,8 @@ models:
     container_name: isa_models
     external_links:
       -  mysql:db
+    # links:
+    #   - selenium:selenium
     volumes:
       - ./model_app:/app
     ports:
@@ -16,6 +18,7 @@ exp:
       - models:models-api
       - kafka:kafka_container
       - es:es
+      # - selenium:selenium
    ports:
       - "8002:8000"
    volumes:
@@ -27,11 +30,12 @@ web:
    container_name: isa_web
    links:
       - exp:exp-api
+      - selenium:selenium
    ports:
       - "8000:8000"
    volumes:
       - ./web_app:/app
-   command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
+   command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
 
 kafka:
     image: spotify/kafka
@@ -49,7 +53,6 @@ es:
     ports:
         - "9200:9200"
 
-
 batch:
     image: tp33/django
     container_name: batch
@@ -59,3 +62,18 @@ batch:
     volumes:
         - ./batch:/app
     command: bash -c "python batch_script.py"
+
+selenium:
+    image: selenium/standalone-firefox:3.3.1-cesium
+    container_name: selenium
+    # links:
+    #     - web:web-app
+    ports:
+        - "4444:4444"
+    # environment:
+    #     ADVERTISED_HOST: selenium
+    #     ADVERTISED_PORT: 4444
+    # hostname: selenium
+    volumes:
+        - ./selenium:/dev/shm
+

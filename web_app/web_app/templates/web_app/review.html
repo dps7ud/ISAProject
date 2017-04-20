@@ -25,7 +25,7 @@
 				    	<b>Name: </b> {{ poster.fname }} {{poster.lname }} <br/>
 				    	<b>Email: </b> {{ poster.email}} <br/>
 				    	<b>Location: </b> {{poster.location}} <br/>
-					    <a class = "btn btn-primary" href="/user/{{ poster.id }}/" role="button">Visit Page</a>
+					    <a class = "btn btn-primary poster-user" href="/user/{{ poster.id }}/" role="button">Visit Page</a>
 					{% else %}
 					    <p>No Poster is available.</p>
 					{% endif %}
@@ -64,7 +64,7 @@
 			    	<b>Description: </b> {{ task.description}} <br/>
 			    	<b>Location: </b> {{task.location}} <br/>
 			    	<b>Status: </b> {{task.status}} <br/>
-				    <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Visit Page</a>
+				    <a class = "btn btn-primary review-task" href="/task/{{ task.id }}/" role="button">Visit Page</a>
 				{% else %}
 				    <p>No Postee is available.</p>
 				{% endif %}
