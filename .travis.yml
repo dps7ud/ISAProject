@@ -32,13 +32,15 @@ script:
   - mkdir -p ~/cs4501/app
   - mkdir -p ~/cs4501/db
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
-  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash 
-  - mysql -uroot -p'$3cureUS' -h db
-  - create user 'www'@'%' identified by '$3cureUS';
-  - create database cs4501 character set utf8;
-  - grant all on cs4501.* to 'www'@'%';
-  - ^D
-  - ^Z
+  # - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash 
+  # - mysql -uroot -p'$3cureUS' -h db
+  # - create user 'www'@'%' identified by '$3cureUS';
+  # - create database cs4501 character set utf8;
+  # - grant all on cs4501.* to 'www'@'%';
+  # - ^D
+  # - ^Z
+  - docker cp ./createUser.sql mysql:/
+  - docker exec mysql bash -c "mysql -uroot -p'$3cureUS' -h db < /createUser.sql" 
   - docker-compose up
 
 notifications: 
