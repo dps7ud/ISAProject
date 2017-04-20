@@ -3,10 +3,31 @@ language: python
 services:
   - docker
 
-env:
-  DOCKER_COMPOSE_VERSION: 1.4.2
+# env:
+#   DOCKER_COMPOSE_VERSION: 1.4.2
 
-before_install:
+# before_install:
+#   - docker pull mysql:5.7.14
+#   - mkdir -p ~/cs4501/app
+#   - mkdir -p ~/cs4501/db
+#   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
+#   - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash 
+#   - mysql -uroot -p'$3cureUS' -h db
+#   - create user 'www'@'%' identified by '$3cureUS';
+#   - create database cs4501 character set utf8;
+#   - grant all on cs4501.* to 'www'@'%';
+#   - ^D
+#   - ^Z
+#   - sudo rm /usr/local/bin/docker-compose
+#   - curl -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > docker-compose
+#   - chmod +x docker-compose
+#   - sudo mv docker-compose /usr/local/bin
+#   - docker-compose up 
+
+install:
+  - sudo pip install docker-compose
+
+script:
   - docker pull mysql:5.7.14
   - mkdir -p ~/cs4501/app
   - mkdir -p ~/cs4501/db
@@ -18,8 +39,8 @@ before_install:
   - grant all on cs4501.* to 'www'@'%';
   - ^D
   - ^Z
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose up 
+  - docker-compose up
+
+notifications: 
+  email:    
+    - bjw4ph@virginia.edu
