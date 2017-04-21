@@ -18,8 +18,8 @@ models:
     container_name: isa_models
     external_links:
       -  mysql:db
-    depends_on:
-      - "mysql-cmdline"
+    links:
+      - mysql-cmdline:mysql-cmdline
     # links:
     #   - selenium:selenium
     volumes:
