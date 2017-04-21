@@ -33,7 +33,7 @@ script:
   - mkdir -p ~/cs4501/db
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
   # - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash
-  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash -c "echo 'drop user '\''www'\''@'\''%'\''; create user '\''www'\''@'\''%'\'' identified by '\''$3cureUS'\'';drop database cs4501; create database cs4501 character set utf8;grant all on cs4501.* to '\''www'\''@'\''%'\'';' > createUser.sql && cat createUser.sql && mysql -uroot -p'\''$3cureUS'\'' -h db < createUser.sql"
+  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash -c "echo 'drop user '\''www'\''@'\''%'\'';create user '\''www'\''@'\''%'\'' identified by '\''\$3cureUS'\'';drop database cs4501;create database cs4501 character set utf8;grant all on cs4501.* to '\''www'\''@'\''%'\'';' > createUser.sql && cat createUser.sql && mysql -uroot -p'\$3cureUS' -h db < createUser.sql"
   # - mysql -uroot -p'$3cureUS' -h db
   # - create user 'www'@'%' identified by '$3cureUS';
   # - create database cs4501 character set utf8;
@@ -43,6 +43,7 @@ script:
   # - docker cp ./createUser.sql mysql-cmdline:/
   # - docker exec mysql-cmdline bash -c "mysql -uroot -p'$3cureUS' -h db < /createUser.sql" 
   - docker-compose up -d
+  - docker-compose ps
   - sleep 120
   - docker exec isa_models bash -c "python manage.py test" 
 
