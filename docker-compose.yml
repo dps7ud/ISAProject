@@ -18,13 +18,15 @@ models:
     container_name: isa_models
     external_links:
       -  mysql:db
+    depends_on:
+      - "mysql-cmdline"
     # links:
     #   - selenium:selenium
     volumes:
       - ./model_app:/app
     ports:
       - "8001:8000"
-    command: bash -c "python manage.py makemigrations model_app && python manage.py migrate && python manage.py loaddata ./model_app/db.json &&  mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/model_app/wsgi.py"
+    command: bash -c "sleep 10 && python manage.py makemigrations model_app && python manage.py migrate && python manage.py loaddata ./model_app/db.json &&  mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/model_app/wsgi.py"
 
 exp:
    image: tp33/django

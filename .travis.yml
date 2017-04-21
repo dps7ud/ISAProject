@@ -44,7 +44,7 @@ script:
   # - ^Z
   # - docker cp ./createUser.sql mysql-cmdline:/
   # - docker exec mysql-cmdline bash -c "mysql -uroot -p'$3cureUS' -h db < /createUser.sql" 
-  - docker-compose up -d
+  - docker-compose up
   - docker ps -a
   - sleep 120
   - docker exec isa_models bash -c "python manage.py test" 
