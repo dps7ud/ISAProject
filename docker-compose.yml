@@ -1,3 +1,18 @@
+# mysql:
+#     image: mysql:5.7.17
+#     container_name: mysql
+#     volumes:
+#       - ./db:/var/lib/mysql
+#     environment:
+#       - MYSQL_ROOT_PASSWORD='$$3cureUS'
+
+mysql-cmdline:
+    image: mysql:5.7.17
+    container_name: mysql-cmdline
+    external_links:
+      - mysql:db
+    command: bash -c "echo 'drop user '\''www'\''@'\''%'\'';create user '\''www'\''@'\''%'\'' identified by '\''$$3cureUS'\'';drop database cs4501;create database cs4501 character set utf8;grant all on cs4501.* to '\''www'\''@'\''%'\'';' > createUser.sql && cat createUser.sql && mysql -uroot -p'$$3cureUS' -h db < createUser.sql"
+
 models:
     image: tp33/django
     container_name: isa_models
