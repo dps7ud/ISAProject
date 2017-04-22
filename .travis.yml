@@ -49,7 +49,8 @@ script:
   - sleep 120
   - docker exec isa_models bash -c "python manage.py test" 
   - pip install selenium
-  - python unitTestSel.py
+  - WEB_APP_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' isa_web)
+  - python unitTestSel.py ${WEB_APP_IP}
 
 notifications: 
   email:    

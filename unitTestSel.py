@@ -9,13 +9,15 @@ import sys
 class ExampleTestCase(unittest.TestCase):
 
     def setUp(self):
+        
         self.driver = webdriver.Remote(
             #command_executor='http://192.168.99.100:4444/wd/hub', 
-            command_executor='http://localhost:4444/wd/hub',
+            command_executor='http://' + str(sys.argv[1]) + ':4444/wd/hub',
             desired_capabilities=DesiredCapabilities.FIREFOX)
         self.driver.implicitly_wait(7)
         #self.address = 'http://192.168.99.100:8000'
-        self.address = 'http://localhost:8000'
+        self.address = 'http://' + str(sys.argv[1]) + ':8000'
+        print("Address: " + self.address)
         self.auth = 'e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6'
 
     # def test_example(self):
@@ -25,6 +27,7 @@ class ExampleTestCase(unittest.TestCase):
     #     self.assertEqual(title.text, "TaskTic")
 
     def test_button_redirects(self):
+        print("Address: " + self.address)
         selenium = self.driver
         selenium.get(self.address)
         
@@ -303,37 +306,10 @@ class ExampleTestCase(unittest.TestCase):
             print("No Task Redirect: " + selenium.find_element_by_id('errorMessaging').text)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def tearDown(self):
         self.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main()
+    print("Command Line Argument: " + sys.argv[1])
+    opt = sys.argv[1]
+    unittest.main(argv=[opt])
