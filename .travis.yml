@@ -33,7 +33,6 @@ script:
   - mkdir -p ~/cs4501/db
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
   - docker ps -a
-  - sleep 5
   # - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash
   # - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash -c "echo 'drop user '\''www'\''@'\''%'\'';create user '\''www'\''@'\''%'\'' identified by '\''\$3cureUS'\'';drop database cs4501;create database cs4501 character set utf8;grant all on cs4501.* to '\''www'\''@'\''%'\'';' > createUser.sql && cat createUser.sql && mysql -uroot -p'\$3cureUS' -h db < createUser.sql"
   # - mysql -uroot -p'$3cureUS' -h db
@@ -46,11 +45,13 @@ script:
   # - docker exec mysql-cmdline bash -c "mysql -uroot -p'$3cureUS' -h db < /createUser.sql" 
   - docker-compose up -d
   - docker ps -a
-  - sleep 120
-  - docker exec isa_models bash -c "python manage.py test" 
+  - sleep 75
+  - docker exec isa_models bash -c "python manage.py test"
+  - docker ps -a 
   - pip install selenium
   - WEB_APP_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' isa_web)
-  - python unitTestSel.py ${WEB_APP_IP}
+  - SELENIUM_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' selenium)
+  - python unitTestSel.py ${SELENIUM_IP} ${WEB_APP_IP}
 
 notifications: 
   email:    

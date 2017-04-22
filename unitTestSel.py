@@ -16,7 +16,7 @@ class ExampleTestCase(unittest.TestCase):
             desired_capabilities=DesiredCapabilities.FIREFOX)
         self.driver.implicitly_wait(7)
         #self.address = 'http://192.168.99.100:8000'
-        self.address = 'http://' + str(sys.argv[1]) + ':8000'
+        self.address = 'http://' + str(sys.argv[2]) + ':8000'
         print("Address: " + self.address)
         self.auth = 'e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6'
 
@@ -312,4 +312,5 @@ class ExampleTestCase(unittest.TestCase):
 if __name__ == "__main__":
     print("Command Line Argument: " + sys.argv[1])
     opt = sys.argv[1]
+    opt2 = sys.argv[2]
     unittest.main(argv=[opt])
