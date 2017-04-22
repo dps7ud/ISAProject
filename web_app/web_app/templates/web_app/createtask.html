@@ -3,7 +3,7 @@
 {% block content %}
         
         <div class="page-header">
-            <h1>Create Task</h1>
+            <h1 id="createtask_title">Create Task</h1>
         </div>
         <div class="col-sm-12">
             <div class="panel panel-default">
@@ -22,19 +22,23 @@
                         {% elif field.label == "remote" %}
                             <div class="form-group">
                                 <label for="remote">Remote: </label><br>
-                                <input type="radio" name="remote" id="remote" value="remote"> Yes<br>
-                                <input id="remote" type="radio" name="remote" value="no"> No<br>
+                                <input type="radio" name="remote" id="remote-yes" value="remote"> Yes<br>
+                                <input id="remote-no" type="radio" name="remote" value="no"> No<br>
                             </div>
                         {% elif field.label == "pricing_type" %}
                             <div class="form-group">
                                 <label for="pricing_type">Pricing Type: </label><br>
-                                <input type="radio" name="pricing_type" id="pricing_type" value="Lump"> Lump Sum<br>
-                                <input id="pricing_type" type="radio" name="pricing_type" value="Hourly"> Hourly<br>
+                                <input type="radio" name="pricing_type" id="pricing_type_lump" value="Lump"> Lump Sum<br>
+                                <input id="pricing_type_hourly" type="radio" name="pricing_type" value="Hourly"> Hourly<br>
                             </div>
                         {% else %}
                             <div class="form-group">
                                 <label for="{{field.name}}">{{field.label}}: </label>
-                                <input id="{{field.name}}" type="text" name="{{field.name}}" class="form-control">
+                                {% if field.value != None %}
+                                    <input id="{{field.name}}" type="text" name="{{field.name}}" class="form-control" value="{{field.value}}">
+                                {% else %}
+                                    <input id="{{field.name}}" type="text" name="{{field.name}}" class="form-control">
+                                {% endif %}
                             </div>
                         {% endif %}
                     {% endfor%}
@@ -42,7 +46,7 @@
                         <label for="required_skills">Required Skills: </label><br>
                         <input id="required_skills" type="text" name="required_skills" class="form-control" data-role="tagsinput" style="width:100%"><br>
                     </div>
-                    <input type="submit" value="OK">
+                    <input type="submit" value="OK" id="createtask_submit">
                 </form>
               </div>
             </div>

@@ -26,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/">TaskTic</a>
+              <a class="navbar-brand" href="/" id="homeNav">TaskTic</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -59,7 +59,7 @@
         <div id="authPresent" data-auth={{auth}}></div>
 
         {% if errors %}
-                <div class="alert alert-danger" role="alert" style="margin-top:70px">{{errors}}</div>
+                <div class="alert alert-danger" role="alert" style="margin-top:70px" id="errorMessaging">{{errors}}</div>
         {% endif %}
 
         {% if success %}

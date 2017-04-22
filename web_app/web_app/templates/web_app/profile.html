@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="page-header">
-        <h1>Profile
+        <h1 id="profile_title">Profile
           {% if auth == 'yes' %}
                 <a class = "btn btn-primary pull-right" href="/createTask/" role="button">Create New Task</a>
             {% endif %}
@@ -26,13 +26,13 @@
                 </thead>
                 <tbody>
                 {% for pair in neededReviews %}
-                    <tr>
+                    <tr class="neededReview">
                         <td> {{pair.0.title}}</td>
                         <td> {{pair.1.fname}} {{pair.1.lname}}</td>
                         <!-- <td>1</td>
                         <td>2</td> -->
 
-                        <td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" data-poster="{{userID}}" data-postee="{{pair.1.id}}" data-task="{{pair.0.id}}">Create</button> </td>
+                        <td> <button type="button" class="btn btn-primary createReviewButton" data-toggle="modal" data-target="#reviewModal" data-poster="{{userID}}" data-postee="{{pair.1.id}}" data-task="{{pair.0.id}}">Create</button> </td>
                     </tr>
                 {% endfor %}
                 
@@ -77,7 +77,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary" value="Create Review">
+                <input type="submit" class="btn btn-primary" value="Create Review" id="create_review">
               </div>
           </form>
         </div>

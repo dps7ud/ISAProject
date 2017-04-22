@@ -76,6 +76,8 @@ db.opt
 *.log
 *.pot
 **/migrations/**
+selenium/*
+
 
 # compiled python
 *.pyc

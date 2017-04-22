@@ -172,10 +172,10 @@ class TestUtility(TestCase):
         self.assertEquals(resp_json[0]["authenticator"], "e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6")
 
     #----------------------Testing "authenticator" ---------------------------
-    # def test_authenticator_get(self):
-    #     response = self.client.get(reverse('authenticator', args=["e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6"]))
-    #     resp_json = (response.content).decode("utf-8")
-    #     self.assertNotEquals(resp_json, "Auth Incorrect")
+    def test_authenticator_get(self):
+        response = self.client.get(reverse('authenticator', args=["e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6"]))
+        resp_json = (response.content).decode("utf-8")
+        self.assertNotEquals(resp_json, "Auth Incorrect")
 
     def test_authenticator_get_no_result(self):
         response = self.client.get(reverse('authenticator', args=["wrong"]))

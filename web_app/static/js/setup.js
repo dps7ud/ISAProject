@@ -14,6 +14,7 @@ if($("#authPresent").data("auth") == "yes"){
     $("#nav5").html("Logout")
     $("#nav5").attr("href", "/logout")
     $("#navBodyBar").html("<li><a href='/profile/' id='nav6'>Profile</a></li><li><a href='/createTask/' id='nav8'>Create Task</a></li>" + $("#navBodyBar").html())
+    $("#nav4").parent().remove()
     //$("#profileNav").html("<li><a href='/profile/' id='nav6'>Profile</a></li>")
 } 
 if (pathname.indexOf("/task") >= 0){

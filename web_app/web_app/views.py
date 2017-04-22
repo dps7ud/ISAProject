@@ -231,7 +231,7 @@ def signup(request):
                 return response         
         else:
             # Better to allow some data missing and indicate required fields.
-            errors = "Missing data"
+            errors = form.errors
     else:
         form = SignUpForm()
     
