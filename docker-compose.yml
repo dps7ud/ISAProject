@@ -52,6 +52,18 @@ web:
       - ./web_app:/app
    command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
 
+web2:
+   image: tp33/django
+   container_name: isa_web2
+   links:
+      - exp:exp-api
+      - selenium:selenium
+   ports:
+      - "8003:8000"
+   volumes:
+      - ./web_app:/app
+   command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
+
 kafka:
     image: spotify/kafka
     container_name: kafka
