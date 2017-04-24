@@ -23,7 +23,6 @@ if __name__ == "__main__":
         reqES.add_header('Content-Type', 'application/x-ndjson/')
         try:
             respES_json = urllib.request.urlopen(reqES).read().decode('utf-8')
-            logger.error("respES_json: " + str(respES_json)) 
             break
         except:
             time.sleep(5)
