@@ -96,10 +96,13 @@ selenium:
     volumes:
         - ./selenium:/dev/shm
 
-    #hap_balance:
-    #    image: my-haproxy
-    #    container_name: hap_balance
-    #    volumes:
-    #        - ./haproxy:/app
-    #    ports:
-    #        - "80:80"
+hap_balance:
+    image: my-haproxy
+    container_name: hap_balance
+    links:
+        - web:web
+        - web2:web2
+    volumes:
+        - ./haproxy:/app
+    ports:
+        - "80:80"
