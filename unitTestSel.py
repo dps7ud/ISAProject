@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import unittest
 import sys
+import time
 
 class ExampleTestCase(unittest.TestCase):
 
@@ -205,6 +206,7 @@ class ExampleTestCase(unittest.TestCase):
         print("Count: " + str(count))
         button = selenium.find_element_by_css_selector(".createReviewButton")
         button.click()
+        time.sleep(5)
         selenium.find_element_by_id('create_review').click()
         alert = selenium.switch_to_alert()
         print("Fill Title Error: " + alert.text)
@@ -238,7 +240,7 @@ class ExampleTestCase(unittest.TestCase):
             selenium.find_element_by_id('errorMessaging')
         except:
             self.assertTrue(False, "Error messages should appear")
-        selenium.find_element_by_id('username').send_keys('b')
+        selenium.find_element_by_id('username').send_keys('c')
         selenium.find_element_by_id('fname').send_keys('j')
         selenium.find_element_by_id('lname').send_keys('j')
         selenium.find_element_by_id('location').send_keys('j')
@@ -287,16 +289,19 @@ class ExampleTestCase(unittest.TestCase):
         selenium.find_element_by_id('title').send_keys('m')
         selenium.find_element_by_id('description').send_keys('m')
         selenium.find_element_by_id('location').send_keys('m')
-        selenium.find_element_by_id('remote-yes').click
+        selenium.find_element_by_id('remote-yes').click()
+        selenium.find_element_by_id('remote-no').click()
         selenium.find_element_by_id('time').send_keys('m')
-        selenium.find_element_by_id('pricing_type_lump').click
+        selenium.find_element_by_id('pricing_type_lump').click()
+        selenium.find_element_by_id('pricing_type_hourly').click()
         selenium.find_element_by_id('pricing_info').send_keys('m')
         selenium.find_element_by_id('createtask_submit').click()
         print(selenium.current_url) 
         #Stay on page because pricing_info requires int
         title = selenium.find_element_by_id('createtask_title')
         self.assertTrue(title.text.startswith('Create Task'))
-        selenium.find_element_by_id('pricing_info').send_keys('1')
+        selenium.find_element_by_id('pricing_info').clear()
+        selenium.find_element_by_id('pricing_info').send_keys('12')
         selenium.find_element_by_id('createtask_submit').click()
         print(selenium.current_url)
         try: 
@@ -304,6 +309,40 @@ class ExampleTestCase(unittest.TestCase):
             self.assertTrue(title.text.startswith('Task'))
         except:
             print("No Task Redirect: " + selenium.find_element_by_id('errorMessaging').text)
+
+    def test_search(self):
+        selenium = self.driver
+        selenium.get(self.address)
+        selenium.find_element_by_id('navSearch').send_keys('5')
+        selenium.find_element_by_id('navSearchSubmit').click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('search_title')
+        self.assertTrue(title.text.startswith('Search'))
+        #With that search query, you should get one task, user, and review if kafka loaded es correctly
+        reviewSearchResult = selenium.find_element_by_css_selector(".reviewSearchResult")
+        reviewSearchResult.click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('review_title')
+        self.assertTrue(title.text.startswith('Review'))
+        selenium.back()
+        taskSearchResult = selenium.find_element_by_css_selector(".taskSearchResult")
+        taskSearchResult.click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('task_title')
+        self.assertTrue(title.text.startswith('Task'))
+        selenium.back()
+        userSearchResult = selenium.find_element_by_css_selector(".userSearchResult")
+        userSearchResult.click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('user_title')
+        self.assertTrue(title.text.startswith('User'))
+        
+
+
+
+
+
+
 
 
     def tearDown(self):

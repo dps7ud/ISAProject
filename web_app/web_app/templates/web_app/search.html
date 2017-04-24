@@ -3,7 +3,7 @@
 {% block content %}
         <div id="starterPage" data-start={{start}}></div>
         <div class="page-header">
-            <h1>Search</h1>
+            <h1 id="search_title">Search</h1>
         </div>
         <div class="col-sm-12">
         <ul class="nav nav-tabs">
@@ -100,7 +100,7 @@
                             <b>Status: </b>{{task.status}}
                             </div>
                             <div class="col-sm-1">
-                            <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button" style="margin-bottom:10px">Go</a>
+                            <a class = "btn btn-primary taskSearchResult" href="/task/{{ task.id }}/" role="button" style="margin-bottom:10px">Go</a>
                             </div>
                           </div>
                     
@@ -134,7 +134,7 @@
                           <b>Location: </b>{{user.location}}
                           </div>
                           <div class="col-sm-1">
-                          <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button" style="margin-bottom:10px">Go</a>
+                          <a class = "btn btn-primary userSearchResult" href="/user/{{ user.id }}/" role="button" style="margin-bottom:10px">Go</a>
                           </div>
                         </div>
                     
@@ -161,7 +161,7 @@
                           <b>Score: </b>{{review.score}}
                           </div>
                           <div class="col-sm-1">
-                          <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button" style="margin-bottom:10px">Go</a>
+                          <a class = "btn btn-primary reviewSearchResult" href="/review/{{ review.id }}/" role="button" style="margin-bottom:10px">Go</a>
                           </div>
                         </div>
                     
