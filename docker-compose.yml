@@ -14,8 +14,6 @@ models:
     #   - selenium:selenium
     volumes:
       - ./model_app:/app
-    ports:
-      - "8001:8000"
     command: bash -c "sleep 30 && python manage.py makemigrations model_app && python manage.py migrate && python manage.py loaddata ./model_app/db.json &&  mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/model_app/wsgi.py"
 
 exp:
@@ -26,8 +24,6 @@ exp:
       - kafka:kafka_container
       - es:es
       # - selenium:selenium
-   ports:
-      - "8002:8000"
    volumes:
       - ./exp_app:/app
    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/exp_app/wsgi.py"
@@ -38,8 +34,6 @@ web:
    links:
       - exp:exp-api
       - selenium:selenium
-   ports:
-      - "8000:8000"
    volumes:
       - ./web_app:/app
    command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
@@ -50,8 +44,6 @@ web2:
    links:
       - exp:exp-api
       - selenium:selenium
-   ports:
-      - "8003:8000"
    volumes:
       - ./web_app:/app
    command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
@@ -69,8 +61,6 @@ es:
     container_name: es
     volumes:
       - ./model_app:/app
-    ports:
-        - "9200:9200"
 
 batch:
     image: tp33/django
@@ -87,8 +77,6 @@ selenium:
     container_name: selenium
     # links:
     #     - web:web-app
-    ports:
-        - "4444:4444"
     # environment:
     #     ADVERTISED_HOST: selenium
     #     ADVERTISED_PORT: 4444
