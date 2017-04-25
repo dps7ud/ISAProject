@@ -55,7 +55,7 @@ script:
   - docker exec isa_models bash -c "python manage.py test"
   - docker ps -a 
   - pip install selenium
-  - WEB_APP_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' isa_web)
+  - WEB_APP_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' hap_balance)
   - SELENIUM_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' selenium)
   - python unitTestSel.py ${SELENIUM_IP} ${WEB_APP_IP}
 
