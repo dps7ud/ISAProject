@@ -29,6 +29,7 @@ install:
 
 script:
   - docker pull mysql:5.7.17
+  - docker pull haproxy:1.7
   - mkdir -p ~/cs4501/app
   - mkdir -p ~/cs4501/db
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
