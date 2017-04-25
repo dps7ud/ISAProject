@@ -26,7 +26,9 @@ def home(request):
     successString = success_messaging(request)
     
     req = urllib.request.Request('http://exp-api:8000/home/')
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    stream = urllib.request.urlopen(req)
+    lines = stream.read()
+    resp_json = lines.decode('utf-8')
     resp = json.loads(resp_json)
     if resp[2] == "":
         errorString = False
