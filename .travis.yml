@@ -23,6 +23,8 @@ services:
 #   - chmod +x docker-compose
 #   - sudo mv docker-compose /usr/local/bin
 #   - docker-compose up 
+# before_install:
+#   - pip install --user codecov    #Install codecov
 
 install:
   - sudo pip install docker-compose
@@ -53,9 +55,12 @@ script:
   - docker exec isa_models bash -c "python manage.py test"
   - docker ps -a 
   - pip install selenium
-  - WEB_APP_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' isa_web)
+  - WEB_APP_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' hap_balance)
   - SELENIUM_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' selenium)
   - python unitTestSel.py ${SELENIUM_IP} ${WEB_APP_IP}
+
+# after_success:
+#   - codecov             
 
 notifications: 
   email:    

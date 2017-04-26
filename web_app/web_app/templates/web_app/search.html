@@ -56,7 +56,7 @@
 
                     </div>
                     <br><button class="btn btn-default" id="addFieldButton" data-type="all">Add Field</button>
-                    <button class="btn btn-default" type="submit">Search</button>
+                    <button class="btn btn-default" type="submit" id="advancedSearchSubmit">Search</button>
                   </form>
                   <div style="margin-left:20px">
                       <p> -or- </p>
@@ -199,7 +199,7 @@
                             <td> {{task.location}}</td>
                             <td> {{task.status}}</td>
                             <td> {{task.description}}</td>
-                            <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                            <td> <a class = "btn btn-primary taskSpecificSearchResult" href="/task/{{ task.id }}/" role="button" >Go</a> </td>
 
                         </tr>
                     {% endfor %}
@@ -235,7 +235,7 @@
                             <td> {{user.email}}</td>
                             <td> {{user.bio}}</td>
                             <td> {{user.location}}</td>
-                            <td> <a class = "btn btn-primary" href="/user/{{ user.id }}/" role="button">Go</a> </td>
+                            <td> <a class = "btn btn-primary userSpecificSearchResult" href="/user/{{ user.id }}/" role="button">Go</a> </td>
 
                         </tr>
                     {% endfor %}
@@ -266,7 +266,7 @@
                             <td> {{review.title}}</td>
                             <td> {{review.body}}</td>
                             <td> {{review.score}}</td>
-                            <td> <a class = "btn btn-primary" href="/review/{{ review.id }}/" role="button">Go</a> </td>
+                            <td> <a class = "btn btn-primary reviewSpecificSearchResult" href="/review/{{ review.id }}/" role="button">Go</a> </td>
 
                         </tr>
                     {% endfor %}

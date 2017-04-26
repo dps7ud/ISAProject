@@ -22,14 +22,22 @@
                         {% elif field.label == "remote" %}
                             <div class="form-group">
                                 <label for="remote">Remote: </label><br>
-                                <input type="radio" name="remote" id="remote-yes" value="remote"> Yes<br>
-                                <input id="remote-no" type="radio" name="remote" value="no"> No<br>
+                                <select id="remote" type="text" name="remote" class="form-control">
+                                    <option value="remote">Yes</option>
+                                    <option value="no">No</option>
+                                </select><br>
+                                <!-- <input type="radio" name="remote" id="remote-yes" value="remote"> Yes<br>
+                                <input id="remote-no" type="radio" name="remote" value="no"> No<br> -->
                             </div>
                         {% elif field.label == "pricing_type" %}
                             <div class="form-group">
                                 <label for="pricing_type">Pricing Type: </label><br>
-                                <input type="radio" name="pricing_type" id="pricing_type_lump" value="Lump"> Lump Sum<br>
-                                <input id="pricing_type_hourly" type="radio" name="pricing_type" value="Hourly"> Hourly<br>
+                                <select id="pricing_type" type="text" name="pricing_type" class="form-control">
+                                    <option value="Lump">Lump Sum </option>
+                                    <option value="Hourly">Hourly</option>
+                                </select><br>
+                                <!--<input type="radio" name="pricing_type" id="pricing_type_lump" value="Lump"> Lump Sum<br>
+                                <input id="pricing_type_hourly" type="radio" name="pricing_type" value="Hourly"> Hourly<br> -->
                             </div>
                         {% else %}
                             <div class="form-group">

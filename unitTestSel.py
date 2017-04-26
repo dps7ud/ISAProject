@@ -17,7 +17,7 @@ class ExampleTestCase(unittest.TestCase):
             desired_capabilities=DesiredCapabilities.FIREFOX)
         self.driver.implicitly_wait(7)
         #self.address = 'http://192.168.99.100:8000'
-        self.address = 'http://' + str(sys.argv[2]) + ':8000'
+        self.address = 'http://' + str(sys.argv[2])
         print("Address: " + self.address)
         self.auth = 'e1409c29a2833860a761821d53d703e32345dabaef9e3588f8755b0b2e133ad6'
 
@@ -86,66 +86,7 @@ class ExampleTestCase(unittest.TestCase):
         print(selenium.current_url)
         title = selenium.find_element_by_id('task_title')
         self.assertTrue(title.text.startswith('Task'))
-
-    # def test_recent_task_redirect(self):
-    #     selenium = self.driver
-    #     selenium.get(self.address)
-    #     recentTask = selenium.find_element_by_css_selector(".recent-task")
-    #     recentTask.click()
-    #     selenium.implicitly_wait(2)
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('task_title')
-    #     self.assertTrue(title.text.startswith('Task'))
-
-    # def test_user_page_to_task_redirect(self):
-    #     selenium = self.driver
-    #     selenium.get(self.address + '/user/1/')
-    #     userTask = selenium.find_element_by_css_selector(".user-task")
-    #     userTask.click()
-    #     selenium.implicitly_wait(2)
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('task_title')
-    #     self.assertTrue(title.text.startswith('Task'))
-
-    # def test_task_page_to_user_redirect(self):
-    #     selenium = self.driver
-    #     selenium.get(self.address + '/task/1/')
-    #     userTask = selenium.find_element_by_css_selector(".task-user")
-    #     userTask.click()
-    #     selenium.implicitly_wait(2)
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('user_title')
-    #     self.assertTrue(title.text.startswith('User'))
-
-    # def test_task_page_to_review_redirect(self):
-    #     selenium = self.driver
-    #     selenium.get(self.address + '/task/1/')
-    #     taskReview = selenium.find_element_by_css_selector(".task-review")
-    #     taskReview.click()
-    #     selenium.implicitly_wait(2)
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('review_title')
-    #     self.assertTrue(title.text.startswith('Review'))
-
-    # def test_review_page_to_user_redirect(self):
-    #     selenium = self.driver
-    #     selenium.get(self.address + '/review/1/')
-    #     reviewPoster = selenium.find_element_by_css_selector(".poster-user")
-    #     reviewPoster.click()
-    #     selenium.implicitly_wait(2)
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('user_title')
-    #     self.assertTrue(title.text.startswith('User'))
-
-    # def test_review_page_to_task_redirect(self):
-    #     selenium = self.driver
-    #     selenium.get(self.address + '/review/1/')
-    #     reviewTask = selenium.find_element_by_css_selector(".review-task")
-    #     reviewTask.click()
-    #     selenium.implicitly_wait(2)
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('task_title')
-    #     self.assertTrue(title.text.startswith('Task'))
+ 
 
     def test_login(self):
         selenium = self.driver
@@ -153,10 +94,6 @@ class ExampleTestCase(unittest.TestCase):
         selenium.find_element_by_id("username").send_keys('user1')
         selenium.find_element_by_id("pw").send_keys('m')
         selenium.find_element_by_id("submit_login").click()
-        # try:
-        #     title = WebDriverWait(selenium, 10).until(EC.presence_of_element_located((By.ID, "tasktic")))
-        # finally:
-        #     self.assertTrue(False, "Title Page never loaded")
         print(selenium.current_url)
         title = selenium.find_element_by_id('tasktic') 
         self.assertEqual(title.text, "TaskTic")
@@ -177,7 +114,7 @@ class ExampleTestCase(unittest.TestCase):
         if not logged_in:
             self.assertTrue(False, "auth token not set")
 
-    def test_need_login_redirect_profile_create_review(self):
+    def test_need_login_redirect_profile_create_review_then_search(self):
         selenium = self.driver
         selenium.get(self.address + '/profile')
         print(selenium.current_url)
@@ -189,15 +126,6 @@ class ExampleTestCase(unittest.TestCase):
         print(selenium.current_url)
         title = selenium.find_element_by_id('profile_title')
         self.assertTrue(title.text.startswith('Profile'))
-
-    # def test_profile_create_review(self):
-    #     selenium = self.driver
-    #     cookie = {'name': 'auth', 'value': self.auth}
-    #     selenium.add_cookie(cookie)
-    #     selenium.get(self.address + '/profile')
-    #     print(selenium.current_url)
-    #     title = selenium.find_element_by_id('profile_title')
-    #     self.assertTrue(title.text.startswith('Profile'))
         try:
             reviews = selenium.find_elements_by_css_selector(".neededReview")
             count = len(reviews)
@@ -221,9 +149,18 @@ class ExampleTestCase(unittest.TestCase):
         selenium.find_element_by_id('message-text').send_keys('Guy')
         selenium.find_element_by_id('create_review').click()
         print(selenium.current_url)
-        reviews = selenium.find_elements_by_css_selector(".neededReview")
-        # newCount = len(reviews)
-        # self.assertEqual(count, newCount + 1)
+        #Search for the user
+        selenium.get(self.address + '/search')
+        selenium.find_element_by_id('reviewNav').click()
+        selenium.find_element_by_id('switchToAdvanced').click()
+        selenium.find_element_by_css_selector('.fieldText').send_keys('Good')
+        selenium.find_element_by_id('advancedSearchSubmit').click()
+        time.sleep(5)
+        selenium.find_element_by_css_selector('.reviewSpecificSearchResult').click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('review_title')
+        self.assertTrue(title.text.startswith('Review'))
+
 
     def test_signup(self):
         selenium = self.driver
@@ -240,7 +177,7 @@ class ExampleTestCase(unittest.TestCase):
             selenium.find_element_by_id('errorMessaging')
         except:
             self.assertTrue(False, "Error messages should appear")
-        selenium.find_element_by_id('username').send_keys('c')
+        selenium.find_element_by_id('username').send_keys('rand')
         selenium.find_element_by_id('fname').send_keys('j')
         selenium.find_element_by_id('lname').send_keys('j')
         selenium.find_element_by_id('location').send_keys('j')
@@ -263,9 +200,24 @@ class ExampleTestCase(unittest.TestCase):
         print(selenium.current_url)
         title = selenium.find_element_by_id('tasktic')
         self.assertEqual(title.text, "TaskTic")
+        #Search for the user
+        selenium.get(self.address + '/search')
+        selenium.find_element_by_id('userNav').click()
+        selenium.find_element_by_id('switchToAdvanced').click()
+        selenium.find_element_by_id('addFieldButton').click()
+        selenium.find_element_by_id('addFieldButton').click()
+        selenium.find_element_by_css_selector('.removeField').click()
+        selenium.find_element_by_css_selector('.removeField').click()
+        selenium.find_element_by_css_selector('.fieldText').send_keys('rand')
+        selenium.find_element_by_id('advancedSearchSubmit').click()
+        time.sleep(5)
+        selenium.find_element_by_css_selector('.userSpecificSearchResult').click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('user_title')
+        self.assertTrue(title.text.startswith('User'))
         
 
-    def test_create_task(self):
+    def test_create_task_with_search(self):
         selenium = self.driver
         selenium.get(self.address + '/createTask')
         print(selenium.current_url)
@@ -286,14 +238,10 @@ class ExampleTestCase(unittest.TestCase):
             selenium.find_element_by_id('errorMessaging')
         except:
             self.assertTrue(False, "Error messages should appear")
-        selenium.find_element_by_id('title').send_keys('m')
+        selenium.find_element_by_id('title').send_keys('specific')
         selenium.find_element_by_id('description').send_keys('m')
         selenium.find_element_by_id('location').send_keys('m')
-        selenium.find_element_by_id('remote-yes').click()
-        selenium.find_element_by_id('remote-no').click()
         selenium.find_element_by_id('time').send_keys('m')
-        selenium.find_element_by_id('pricing_type_lump').click()
-        selenium.find_element_by_id('pricing_type_hourly').click()
         selenium.find_element_by_id('pricing_info').send_keys('m')
         selenium.find_element_by_id('createtask_submit').click()
         print(selenium.current_url) 
@@ -309,8 +257,21 @@ class ExampleTestCase(unittest.TestCase):
             self.assertTrue(title.text.startswith('Task'))
         except:
             print("No Task Redirect: " + selenium.find_element_by_id('errorMessaging').text)
+        #Do an advanced search to make sure it is loaded by Kafka to ES
+        selenium.get(self.address + '/search')
+        selenium.find_element_by_id('taskNav').click()
+        selenium.find_element_by_id('switchToAdvanced').click()
+        selenium.find_element_by_css_selector('.fieldText').send_keys('specific')
+        selenium.find_element_by_id('advancedSearchSubmit').click()
+        time.sleep(5)
+        selenium.find_element_by_css_selector('.taskSpecificSearchResult').click()
+        print(selenium.current_url)
+        title = selenium.find_element_by_id('task_title')
+        self.assertTrue(title.text.startswith('Task'))
 
-    def test_search(self):
+
+
+    def test_search_fixtures_from_batch_script(self):
         selenium = self.driver
         selenium.get(self.address)
         selenium.find_element_by_id('navSearch').send_keys('5')
