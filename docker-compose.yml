@@ -36,7 +36,7 @@ web:
       - selenium:selenium
    volumes:
       - ./web_app:/app
-   command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
+   command: bash -c "pip install selenium && mod_wsgi-express start-server --url-alias /static static --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
 
 web2:
    image: tp33/django
@@ -46,7 +46,7 @@ web2:
       - selenium:selenium
    volumes:
       - ./web_app:/app
-   command: bash -c "pip install selenium && mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
+   command: bash -c "pip install selenium && mod_wsgi-express start-server --url-alias /static static --log-to-terminal --working-directory /app --reload-on-changes /app/web_app/wsgi.py"
 
 kafka:
     image: spotify/kafka
