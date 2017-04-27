@@ -10,8 +10,6 @@ models:
     container_name: isa_models
     external_links:
       -  mysql:db
-    # links:
-    #   - selenium:selenium
     volumes:
       - ./model_app:/app
     command: bash -c "sleep 30 && python manage.py makemigrations model_app && python manage.py migrate && python manage.py loaddata ./model_app/db.json &&  mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/model_app/wsgi.py"
@@ -23,7 +21,6 @@ exp:
       - models:models-api
       - kafka:kafka_container
       - es:es
-      # - selenium:selenium
    volumes:
       - ./exp_app:/app
    command: bash -c "mod_wsgi-express start-server --log-to-terminal --working-directory /app --reload-on-changes /app/exp_app/wsgi.py"
@@ -75,14 +72,10 @@ batch:
 selenium:
     image: selenium/standalone-firefox:3.3.1-cesium
     container_name: selenium
-    # links:
-    #     - web:web-app
-    # environment:
-    #     ADVERTISED_HOST: selenium
-    #     ADVERTISED_PORT: 4444
-    # hostname: selenium
     volumes:
         - ./selenium:/dev/shm
+    ports:
+        - "4444:4444"
 
 hap_balance:
     image: my-haproxy
