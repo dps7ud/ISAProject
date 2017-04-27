@@ -33,7 +33,11 @@ class ExampleTestCase(unittest.TestCase):
         selenium.get(self.address)
         
         #Test Home PAge -> Top User
-        topUser = selenium.find_element_by_css_selector(".top-user")
+        time.sleep(5)
+        try:
+            topUser = selenium.find_element_by_css_selector(".top-user")
+        except:
+            print(selenium.page_source)
         topUser.click()
         print(selenium.current_url)
         title = selenium.find_element_by_id('user_title')
@@ -91,7 +95,11 @@ class ExampleTestCase(unittest.TestCase):
     def test_login(self):
         selenium = self.driver
         selenium.get(self.address + '/login')
-        selenium.find_element_by_id("username").send_keys('user1')
+        time.sleep(5)
+        try:
+            selenium.find_element_by_id("username").send_keys('user1')
+        except:
+            print(selenium.page_source)
         selenium.find_element_by_id("pw").send_keys('m')
         selenium.find_element_by_id("submit_login").click()
         print(selenium.current_url)
@@ -118,7 +126,11 @@ class ExampleTestCase(unittest.TestCase):
         selenium = self.driver
         selenium.get(self.address + '/profile')
         print(selenium.current_url)
-        title = selenium.find_element_by_id('login_title')
+        time.sleep(5)
+        try:
+            title = selenium.find_element_by_id('login_title')
+        except:
+            print(selenium.page_source)
         self.assertTrue(title.text.startswith('Login'))
         selenium.find_element_by_id("username").send_keys('user1')
         selenium.find_element_by_id("pw").send_keys('m')
@@ -165,7 +177,11 @@ class ExampleTestCase(unittest.TestCase):
     def test_signup(self):
         selenium = self.driver
         selenium.get(self.address)
-        signUpNav = selenium.find_element_by_id('nav4')
+        time.sleep(5)
+        try:
+            signUpNav = selenium.find_element_by_id('nav4')
+        except:
+            print(selenium.page_source)
         signUpNav.click()
         title = selenium.find_element_by_id('signup_title')
         self.assertEqual(title.text, "Sign Up")
@@ -221,7 +237,11 @@ class ExampleTestCase(unittest.TestCase):
         selenium = self.driver
         selenium.get(self.address + '/createTask')
         print(selenium.current_url)
-        title = selenium.find_element_by_id('login_title')
+        time.sleep(5)
+        try:
+            title = selenium.find_element_by_id('login_title')
+        except:
+            print(selenium.page_source)
         self.assertTrue(title.text.startswith('Login'))
         selenium.find_element_by_id("username").send_keys('user1')
         selenium.find_element_by_id("pw").send_keys('m')
@@ -274,7 +294,11 @@ class ExampleTestCase(unittest.TestCase):
     def test_search_fixtures_from_batch_script(self):
         selenium = self.driver
         selenium.get(self.address)
-        selenium.find_element_by_id('navSearch').send_keys('5')
+        time.sleep(5)
+        try:
+            selenium.find_element_by_id('navSearch').send_keys('5')
+        except:
+            print(selenium.page_source)
         selenium.find_element_by_id('navSearchSubmit').click()
         print(selenium.current_url)
         title = selenium.find_element_by_id('search_title')
