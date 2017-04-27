@@ -27,7 +27,8 @@ DEBUG = False
 
 # Allowed hosts correspod to how other docker containers reference
 #   instances of this container
-ALLOWED_HOSTS = ['exp-api']
+#ALLOWED_HOSTS = ['exp-api']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 

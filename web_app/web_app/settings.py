@@ -25,7 +25,8 @@ SECRET_KEY = 'imasx(oui*8p0o)-g&j#%=if8nm*dmg1s50ljpoekuf4n94lyl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['104.131.95.232']
+#ALLOWED_HOSTS = ['104.131.95.232']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
