@@ -140,8 +140,24 @@ def home(request):
     else:
         return HttpResponse("ERROR: Endpoint only accepts GET requests")
 
-def task(request, task_id):
+def task(request, task_id, auth):
     if request.method == 'GET':
+        # auth = request.COOKIES.get('auth')
+        if auth != 'none':
+            print("auth: " + str(auth))
+            req = urllib.request.Request('http://models-api:8000/api/v1/authenticator/' 
+                    + str(auth) + '/', method="GET")
+            resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+            print("REsp: " + str(resp))
+            if str(resp) != "Auth Incorrect":
+                print("Sending message to Kafka")
+                # return JsonResponse([False, "ERROR: Invalid Auth"], safe=False)
+                message = json.dumps([{'user': str(resp), 'task': str(task_id)}, 'coview']).encode('utf-8')
+                kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
+                kafka_producer.send("task_topic", message)
+                # message = json.dumps([{"user": resp, "task": task_id}, "coview"]).encode('utf-8')
+                # kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092');
+                # kafka_producer.send("coview_topic", message)
         errorStrings = ""
         try:
             req = urllib.request.Request('http://models-api:8000/api/v1/task/main/' 

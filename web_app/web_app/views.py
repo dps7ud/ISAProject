@@ -72,11 +72,12 @@ def task(request, task_id):
     auth = request.COOKIES.get('auth')
     successString = success_messaging(request)
     if auth:
-        auth = "yes"
+        authString = "yes"
     else:
-        auth = "no"
+        authString = "no"
+        auth = "none"
     logger.error("In task method")
-    req = urllib.request.Request('http://exp-api:8000/task/' + task_id + '/')
+    req = urllib.request.Request('http://exp-api:8000/task/' + task_id + '/' + auth + '/')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     if resp[5] == "":
@@ -90,7 +91,7 @@ def task(request, task_id):
         'skills': resp[1],
         'reviews': resp[4],
         'errors': errorString,
-        'auth': auth,
+        'auth': authString,
         'success': successString
     }
     return render(request, 'web_app/task.html', context)

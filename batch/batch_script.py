@@ -34,6 +34,24 @@ if __name__ == "__main__":
                 , bootstrap_servers=['kafka:9092'])
         for message in task_consumer:
             new_listing = json.loads((message.value).decode('utf-8'))
-            one = es.index(index='tasktic', doc_type=new_listing[1], id=new_listing[0]['id']
-                    , body=new_listing[0])
-            two = es.indices.refresh(index='tasktic')
+            if new_listing[1] == "coview":
+                print("CONSUMING COVIEW MESSAGE")
+                log_string = new_listing[0]['user'] + "\t" + new_listing[0]['task'] + "\n"
+                print(log_string)
+                with open('logfile.txt', 'a') as file:
+                    file.write(log_string)
+            else:
+                one = es.index(index='tasktic', doc_type=new_listing[1], id=new_listing[0]['id']
+                        , body=new_listing[0])
+                two = es.indices.refresh(index='tasktic')
+
+        # coview_consumer = KafkaConsumer("coview_topic", group_id='listing_indexer'
+        #         , bootstrap_servers=['kafka:9092'])
+        # for message in coview_consumer:
+        #     print("CONSUMING COVIEW MESSAGE")
+        #     print(message)
+        #     new_coview = json.loads((message.value).decode('utf-8'))
+        #     log_string = new_coview["user"] + "\t" + new_coview["task"]
+        #     print(log_string)
+        #     with open('data/logfile.txt', 'a') as file:
+        #         file.write(log_string)
