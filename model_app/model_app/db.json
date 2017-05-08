@@ -408,6 +408,14 @@
       "user": 2,
       "task": 5
     }
+  },
+  {
+    "model": "model_app.recommendation",
+    "pk": 1,
+    "fields": {
+      "task_first": 1,
+      "task_second": 2
+    }
   }
 
 

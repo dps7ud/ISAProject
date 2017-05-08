@@ -65,3 +65,7 @@ class UserSkills(models.Model):
 class Worker(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+class Recommendation(models.Model):
+    task_first = models.ForeignKey(Task, related_name='%(class)s_first')
+    task_second = models.ForeignKey(Task, related_name='%(class)s_second')
