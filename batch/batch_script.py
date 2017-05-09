@@ -38,8 +38,8 @@ if __name__ == "__main__":
                 print("CONSUMING COVIEW MESSAGE")
                 log_string = new_listing[0]['user'] + "\t" + new_listing[0]['task'] + "\n"
                 print(log_string)
-                with open('logfile.txt', 'a') as file:
-                    file.write(log_string)
+                with open('logfile.txt', 'a') as coview_log_file:
+                    coview_log_file.write(log_string)
             else:
                 one = es.index(index='tasktic', doc_type=new_listing[1], id=new_listing[0]['id']
                         , body=new_listing[0])
