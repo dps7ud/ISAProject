@@ -1,24 +1,17 @@
+from itertools import combinations
 from pyspark import SparkContext
-# import _mysql
-# import MySQLdb
 import urllib.parse
 import urllib.request
+# import _mysql
+# import MySQLdb
 
 #http://stackoverflow.com/questions/5106228/getting-every-possible-combination-in-a-list
-def make_combos(listInput):
-    tuples = [(x,y) for x in listInput for y in listInput if x != y ]
-    for entry in tuples:
-        if (entry[1], entry[0]) in tuples:
-            if entry[1] < entry[0]:
-                tuples.remove(entry)
-            else:
-                tuples.remove((entry[1], entry[0]))
-    return tuples
+def make_combos(list_input):
+    return combinations(list_input, 2)
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 # each worker loads a piece of the data file
 data = sc.textFile("/tmp/data/logfile.txt", 2)
-# tell each worker to split each line of it's partition
 
 # (uid_1, tid)
 pairs = data.map(lambda line: line.split(","))  
@@ -29,7 +22,7 @@ pairs2 = pairs.groupByKey().mapValues(list)
 # (uid_1, [(tid1, tid2), (tid1, tid3),...]
 pairs3 = pairs2.map(lambda x: (x[0], make_combos(x[1])))
 
-# (uid_1, (tid1, tid2)), (uid_2, (tidx, tidy))
+# (uid_1, (tid1, tid2)), (uid_2, (tidx, tidy)), ...
 pairs4 = pairs3.flatMapValues(lambda x: x)
 
 # ((tid1, tid2), uid_1), ((tidx, tidy), uid_2)
