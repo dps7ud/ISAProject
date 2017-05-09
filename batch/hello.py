@@ -18,22 +18,34 @@ def make_combos(listInput):
 def f(x): return x
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
+# each worker loads a piece of the data file
+data = sc.textFile("/tmp/data/logfile.txt", 2)
+# tell each worker to split each line of it's partition
 
-data = sc.textFile("/tmp/data/logfile.txt", 2)     # each worker loads a piece of the data file
+# (uid_1, tid)
+pairs = data.map(lambda line: line.split(","))  
 
-pairs = data.map(lambda line: line.split("\t"))   # tell each worker to split each line of it's partition
+# (uid_1, [tid1, ...])
 pairs2 = pairs.groupByKey().mapValues(list)
-pairs3 = pairs2.map(lambda x: (x[0], make_combos(x[1])))
-pairs4 = pairs3.flatMapValues(f)
-pairs5 = pairs4.map(lambda x: reversed(x))
-pairs6 = pairs5.groupByKey().mapValues(list)
-pairs7 = pairs6.map(lambda x: (x[0], len(x[1])))
-pairs8 = pairs7.filter(lambda x: x[1] > 2)
-#pages = pairs.map(lambda pair: (pair[1], 1))      # re-layout the data to ignore the user id
-#count = pages.reduceByKey(lambda x,y: int(x)+int(y))        # shuffle the data so that each key is only on one worker
-                                                  # and then reduce all the values by adding them together
 
-output = pairs8.collect()                          # bring the data back to the master node so we can print it out
+# (uid_1, [(tid1, tid2), (tid1, tid3),...]
+pairs3 = pairs2.map(lambda x: (x[0], make_combos(x[1])))
+
+# (uid_1, (tid1, tid2)), (uid_2, (tidx, tidy))
+pairs4 = pairs3.flatMapValues(f)
+
+# ((tid1, tid2), uid_1), ((tidx, tidy), uid_2)
+pairs5 = pairs4.map(lambda x: reversed(x))
+
+# ((tid1, tid2), [uid_1, ..., uid_n])
+pairs6 = pairs5.groupByKey().mapValues(list)
+
+# ((tid1, tid2), n)
+pairs7 = pairs6.map(lambda x: (x[0], len(x[1])))
+
+# ((tid1, tid2), n), where n > 2
+pairs8 = pairs7.filter(lambda x: x[1] > 2)
+output = pairs8.collect() # bring the data back to the master node so we can print it out
 recoDict = {}
 counter = 1
 for page_id, count in output:

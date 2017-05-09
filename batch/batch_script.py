@@ -36,7 +36,7 @@ if __name__ == "__main__":
             new_listing = json.loads((message.value).decode('utf-8'))
             if new_listing[1] == "coview":
                 print("CONSUMING COVIEW MESSAGE")
-                log_string = new_listing[0]['user'] + "\t" + new_listing[0]['task'] + "\n"
+                log_string = new_listing[0]['user'] + "," + new_listing[0]['task'] + "\n"
                 print(log_string)
                 with open('logfile.txt', 'a') as coview_log_file:
                     coview_log_file.write(log_string)
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         #     print("CONSUMING COVIEW MESSAGE")
         #     print(message)
         #     new_coview = json.loads((message.value).decode('utf-8'))
-        #     log_string = new_coview["user"] + "\t" + new_coview["task"]
+        #     log_string = new_coview["user"] + "," + new_coview["task"]
         #     print(log_string)
         #     with open('data/logfile.txt', 'a') as coview_log_file:
         #         coview_log_file.write(log_string)
