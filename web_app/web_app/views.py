@@ -80,16 +80,17 @@ def task(request, task_id):
     req = urllib.request.Request('http://exp-api:8000/task/' + task_id + '/' + auth + '/')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
-    if resp[5] == "":
+    if resp[6] == "":
         errorString = False
     else:
-        errorString = resp[5]
+        errorString = resp[6]
     context = {
         'task': resp[0],
         'owners': resp[2],
         'workers': resp[3],
         'skills': resp[1],
         'reviews': resp[4],
+        'recommendations': resp[5],
         'errors': errorString,
         'auth': authString,
         'success': successString

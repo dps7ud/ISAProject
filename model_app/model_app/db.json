@@ -416,6 +416,14 @@
       "task_first": 1,
       "task_second": 2
     }
+  },
+  {
+    "model": "model_app.recommendation",
+    "pk": 2,
+    "fields": {
+      "task_first": 3,
+      "task_second": 1
+    }
   }
 
 

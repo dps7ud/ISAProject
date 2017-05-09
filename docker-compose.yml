@@ -112,8 +112,10 @@ spark-master:
   command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
   container_name: spark-master
   hostname: spark-master
-  external_links:
-      -  mysql:db
+  links:
+      - models:models-api
+  # external_links:
+  #     -  mysql:db
   environment:
     MASTER: spark://spark-master:7077
     SPARK_CONF_DIR: /conf

@@ -702,10 +702,40 @@ def task_main(request, task_id):
         reviewsList.append(model_to_dict(i))
     responseArray.append(reviewsList)
 
+    recommendationList = []
+    recommendation1 = Task.objects.filter(recommendation_second__task_first=task_id)
+    for i in recommendation1:
+        newReco = model_to_dict(i)
+        if str(newReco['id']) != str(task_id):
+            recommendationList.append(newReco)
+    recommendation2 = Task.objects.filter(recommendation_first__task_second=task_id)
+    for j in recommendation2:
+        newReco = model_to_dict(j)
+        if str(newReco['id']) != str(task_id):
+            recommendationList.append(newReco)
+    responseArray.append(recommendationList)
+
+
     responseArray.append(errorString)
     logger.error("responseArray")
     logger.error(responseArray)
     return JsonResponse(responseArray, safe=False)
+
+def recommendations_spark(request):
+    if request.method == "POST":
+        Recommendation.objects.all().delete()
+        respDict = (request.POST).dict()
+        for key, value in respDict.items():
+            chunks = value.split()
+            task1 = Task.objects.get(pk=chunks[0])
+            task2 = Task.objects.get(pk=chunks[1])
+            newReco = Recommendation()
+            newReco.task_first = task1
+            newReco.task_second = task2
+            newReco.save()
+        return HttpResponse("Success")
+    else:
+        return HttpResponse("Endpoint only accepts POST requests")
 
 def get_user_needed_reviews(request, user_id):
     if request.method == "GET":

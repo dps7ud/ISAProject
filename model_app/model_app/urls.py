@@ -64,5 +64,6 @@ urlpatterns = [
     url(r'^api/v1/userReviews/(?P<user_id>[0-9]+)/$', views.user_reviews, name='user_reviews'),
     url(r'^api/v1/userReviewed/(?P<user_id>[0-9]+)/$', views.user_reviewed, name='user_reviewed'),
     url(r'^api/v1/user/neededReviews/(?P<user_id>[0-9]+)/$', views.get_user_needed_reviews, name='get_user_needed_reviews'),
+    url(r'^api/v1/recommendationsSpark/$', views.recommendations_spark, name='recommendations_spark')
 
 ]
