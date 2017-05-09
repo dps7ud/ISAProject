@@ -1,8 +1,8 @@
 from pyspark import SparkContext
-# import _mysql
-# import MySQLdb
-import urllib.parse
-import urllib.request
+import _mysql
+import MySQLdb
+# import urllib.parse
+# import urllib.request
 
 #http://stackoverflow.com/questions/5106228/getting-every-possible-combination-in-a-list
 def make_combos(listInput):
@@ -44,30 +44,32 @@ print ("Popular items done")
 
 sc.stop()
 
-# #db = _mysql.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
-# db = MySQLdb.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
-# #db.query("""TRUNCATE TABLE model_app_recommendation""")
-# c = db.cursor()
-# # c.execute("""TRUNCATE TABLE model_app_recommendation""")
-# count = 3
-# # recoList = []
-# for page_id, outputCount in output:
-# 	# recoList.append((count, page_id[0], page_id[1]))
-# 	c.execute("""INSERT INTO model_app_recommendation (id, task_first_id, task_second_id) VALUES (%s, %s, %s)""", (count, page_id[0], page_id[1]))
-# 	# c.commit()
-# 	count = count + 1
-# #c.executemany("""INSERT INTO model_app_recommendation VALUES (%s, %s, %s)""", recoList)
-# # db.query("""SELECT * FROM model_app_recommendation""")
-# # r = db.store_result()
-# # print(r.fetch_row(maxrows=0))
-# c.execute("""SELECT * FROM model_app_recommendation""")
-# print(c.fetchall())
+#db = _mysql.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
+db = MySQLdb.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
+#db.query("""TRUNCATE TABLE model_app_recommendation""")
+c = db.cursor()
+c.execute("""TRUNCATE TABLE model_app_recommendation""")
+count = 1
+# recoList = []
+for page_id, outputCount in output:
+	# recoList.append((count, page_id[0], page_id[1]))
+	c.execute("""INSERT INTO model_app_recommendation (id, task_first_id, task_second_id) VALUES (%s, %s, %s)""", (count, page_id[0], page_id[1]))
+	# c.commit()
+	count = count + 1
+#c.executemany("""INSERT INTO model_app_recommendation VALUES (%s, %s, %s)""", recoList)
+# db.query("""SELECT * FROM model_app_recommendation""")
+# r = db.store_result()
+# print(r.fetch_row(maxrows=0))
+c.execute("""SELECT * FROM model_app_recommendation""")
+print(c.fetchall())
 
-# c.close()
-# db.close()
-print(recoDict)
-post_encoded = urllib.parse.urlencode(recoDict).encode('utf-8')
-req = urllib.request.Request('http://models-api:8000/api/v1/recommendationsSpark/', 
-        data=post_encoded, method='POST')
-resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
-print(resp_json)
+c.close()
+db.commit()
+db.close()
+
+# print(recoDict)
+# post_encoded = urllib.parse.urlencode(recoDict).encode('utf-8')
+# req = urllib.request.Request('http://models-api:8000/api/v1/recommendationsSpark/', 
+#         data=post_encoded, method='POST')
+# resp_json = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
+# print(resp_json)

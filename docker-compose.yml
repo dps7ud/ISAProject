@@ -114,8 +114,8 @@ spark-master:
   hostname: spark-master
   links:
       - models:models-api
-  # external_links:
-  #     -  mysql:db
+  external_links:
+      -  mysql:db
   environment:
     MASTER: spark://spark-master:7077
     SPARK_CONF_DIR: /conf
