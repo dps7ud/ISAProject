@@ -15,8 +15,6 @@ def make_combos(listInput):
                 tuples.remove((entry[1], entry[0]))
     return tuples
 
-def f(x): return x
-
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 # each worker loads a piece of the data file
 data = sc.textFile("/tmp/data/logfile.txt", 2)
@@ -32,7 +30,7 @@ pairs2 = pairs.groupByKey().mapValues(list)
 pairs3 = pairs2.map(lambda x: (x[0], make_combos(x[1])))
 
 # (uid_1, (tid1, tid2)), (uid_2, (tidx, tidy))
-pairs4 = pairs3.flatMapValues(f)
+pairs4 = pairs3.flatMapValues(lambda x: x)
 
 # ((tid1, tid2), uid_1), ((tidx, tidy), uid_2)
 pairs5 = pairs4.map(lambda x: reversed(x))
