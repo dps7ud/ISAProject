@@ -57,7 +57,7 @@ count = 1
 # recoList = []
 for page_id, outputCount in output:
 	# recoList.append((count, page_id[0], page_id[1]))
-	c.execute("""INSERT INTO model_app_recommendation (id, task_first_id, task_second_id) VALUES (%s, %s, %s)""", (count, page_id[0], page_id[1]))
+	c.execute("""INSERT INTO model_app_recommendation (id, task_first_id, task_second_id) VALUES (%s, %s, %s)""", (str(count), page_id[0], page_id[1]))
 	# c.commit()
 	count = count + 1
 #c.executemany("""INSERT INTO model_app_recommendation VALUES (%s, %s, %s)""", recoList)

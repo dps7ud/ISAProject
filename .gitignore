@@ -85,6 +85,3 @@ selenium/*
 
 # vim swap files
 *.swp
-
-# Click logs are dependent on the database (because of u_id).
-logfile.txt
