@@ -17,8 +17,8 @@ if __name__ == "__main__":
         except NodeNotReadyError:
             continue
     while True:
-        with open('es.json', mode='rb') as file: # b is important -> binary
-            fileContent = file.read()
+        with open('es.json', mode='rb') as es_fixtures_file: # b is important -> binary
+            fileContent = es_fixtures_file.read()
         reqES = urllib.request.Request('http://es:9200/_bulk', data=fileContent, method='POST')
         reqES.add_header('Content-Type', 'application/x-ndjson/')
         try:
@@ -53,5 +53,5 @@ if __name__ == "__main__":
         #     new_coview = json.loads((message.value).decode('utf-8'))
         #     log_string = new_coview["user"] + "\t" + new_coview["task"]
         #     print(log_string)
-        #     with open('data/logfile.txt', 'a') as file:
-        #         file.write(log_string)
+        #     with open('data/logfile.txt', 'a') as coview_log_file:
+        #         coview_log_file.write(log_string)
