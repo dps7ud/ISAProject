@@ -71,6 +71,15 @@ c.close()
 db.commit()
 db.close()
 
+# Lets try again after the commit
+db = MySQLdb.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
+c = db.cursor()
+c.execute("""SELECT * FROM model_app_recommendation""")
+print(c.fetchall())
+c.close()
+db.commit()
+db.close()
+
 # print(recoDict)
 # post_encoded = urllib.parse.urlencode(recoDict).encode('utf-8')
 # req = urllib.request.Request('http://models-api:8000/api/v1/recommendationsSpark/', 
