@@ -15,7 +15,46 @@
             </div>
         </div>
 
-         
+        <div class="col-sm-12">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">User Who Viewed This Task Also Visited</h3>
+            </div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Visit Page </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for task in recommendations %}
+                    <tr>
+                        <td> {{task.title}}</td>
+                        <td> {{task.location}}</td>
+                        <td> {{task.status}}</td>
+                        <td> <a class = "btn btn-primary user-task" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                    </tr>
+                {% endfor %}
+                {% for task in worker %}
+                    <tr>
+                        <td> {{task.title}}</td>
+                        <td> {{task.location}}</td>
+                        <td> {{task.status}}</td>
+                        <td> <a class = "btn btn-primary" href="/task/{{ task.id }}/" role="button">Go</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        </div>
+
         <div class="col-sm-12">
             <div class="panel panel-default">
               <div class="panel-heading">

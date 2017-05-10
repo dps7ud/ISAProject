@@ -15,10 +15,10 @@ sc = SparkContext("spark://spark-master:7077", "PopularItems")
 data = sc.textFile("/tmp/data/logfile.txt", 2)
 
 # (uid_1, tid)
-pairs = data.map(lambda line: line.split(","))  
+pairs = data.distinct().map(lambda line: line.split(",")) 
 
 # (uid_1, [tid1, ...])
-pairs2 = pairs.groupByKey().mapValues(list)
+pairs2 = pairs.groupByKey().mapValues(list).map(lambda x: (x[0], sorted(x[1])))
 
 # (uid_1, [(tid1, tid2), (tid1, tid3),...]
 pairs3 = pairs2.map(lambda x: (x[0], make_combos(x[1])))
