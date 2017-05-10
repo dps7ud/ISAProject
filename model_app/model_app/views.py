@@ -721,22 +721,6 @@ def task_main(request, task_id):
     logger.error(responseArray)
     return JsonResponse(responseArray, safe=False)
 
-def recommendations_spark(request):
-    if request.method == "POST":
-        Recommendation.objects.all().delete()
-        respDict = (request.POST).dict()
-        for key, value in respDict.items():
-            chunks = value.split()
-            task1 = Task.objects.get(pk=chunks[0])
-            task2 = Task.objects.get(pk=chunks[1])
-            newReco = Recommendation()
-            newReco.task_first = task1
-            newReco.task_second = task2
-            newReco.save()
-        return HttpResponse("Success")
-    else:
-        return HttpResponse("Endpoint only accepts POST requests")
-
 def get_user_needed_reviews(request, user_id):
     if request.method == "GET":
         logger.error("user_id")
